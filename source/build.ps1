@@ -38,8 +38,8 @@ try {
             if ($LASTEXITCODE -ne 0) { throw "XeLaTeX pass $pass failed." }
         }
     }
-    Copy-Item -LiteralPath 'main.pdf' -Destination '../fix_chi_Trang_KM_AUC_luot_8.pdf' -Force
-    Write-Output 'PDF created: ../fix_chi_Trang_KM_AUC_luot_8.pdf'
+    Copy-Item -LiteralPath 'main.pdf' -Destination '../Nguyen_Phuong_Nam_Thesis_UET.pdf' -Force
+    Write-Output 'PDF created: ../Nguyen_Phuong_Nam_Thesis_UET.pdf'
 } finally {
     $env:FONTCONFIG_FILE = $previousFontConfig
     Pop-Location

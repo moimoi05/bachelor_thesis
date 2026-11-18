@@ -1,0 +1,12 @@
+/source/.build/
+/source/main.aux
+/source/main.blg
+/source/main.lof
+/source/main.log
+/source/main.lot
+/source/main.out
+/source/main.pdf
+/source/main.synctex.gz
+/source/main.toc
+/source/main.xdv
+__pycache__/

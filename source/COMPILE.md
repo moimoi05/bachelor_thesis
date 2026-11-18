@@ -1,4 +1,4 @@
-# Biên dịch và dựng lại hình — lượt 8
+# Biên dịch và dựng lại hình
 
 Chạy từ thư mục `source/`:
 
@@ -32,9 +32,9 @@ chỉ xuất Hình 4.3. `build_empirical.py` và chế độ dựng bảng của
 
 Tectonic có thể tải gói TeX khi chạy lần đầu nếu bộ nhớ đệm chưa có.
 
-## Đầu ra và kiểm tra lượt 8
+## Đầu ra
 
-PDF đầu ra ở thư mục cha: `fix_chi_Trang_KM_AUC_luot_8.pdf`.
+PDF đầu ra ở thư mục cha: `Nguyen_Phuong_Nam_Thesis_UET.pdf`.
 Các hình PDF vector, SVG và PNG 300 DPI được lưu trong `image/`;
 `academic_style.py` chứa quy chuẩn thiết kế dùng chung.
 Cài Python với `numpy`, `pandas`, `matplotlib` và `Pillow` khi cần dựng hình.
@@ -48,9 +48,7 @@ trong khi hình có thể dùng `λ` (U+03BB); cần nhận diện cả hai khi 
 ## Đối chiếu phát hành
 
 ```powershell
-python figures_source/check_release.py --reference C:\path\source-luot-8 --pdf main.pdf --render C:\path\thesis-qa
+python figures_source/check_release.py --pdf main.pdf --render C:\path\thesis-qa
 ```
 
-`--reference` trỏ tới thư mục `source/` của ZIP lượt 8 nguyên gốc.
-Kiểm tra bao gồm 21 hình và liên kết danh mục hình, hướng trang phụ lục,
-định dạng xuất và SHA-256 của dữ liệu và bảng.
+Kiểm tra bao gồm 21 hình và liên kết danh mục hình, hướng trang phụ lục và định dạng xuất.

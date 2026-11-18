@@ -53,7 +53,7 @@ def cohort():
         (56, 'Không đạt tiêu chí MCI'),
         (212, 'Tiến triển tại hoặc trước $L$'),
         (95, 'Thiếu theo dõi sau $L$'),
-        (177, 'Thiếu ba thời điểm MRI'),
+        (177, 'Chưa đủ ba thời điểm MRI'),
     ]
     text(ax, .035, .957, 'Sàng lọc người tham gia', 11, 'bold', ha='left')
     text(ax, .615, .957, 'Loại khỏi nghiên cứu', 11, 'bold', ha='left')
@@ -85,7 +85,7 @@ def cohort():
     text(ax, .035, .187, 'Chuẩn bị dữ liệu', 11, 'bold', ha='left')
     stages = [
         (.150, .230, 'Ghép ba nguồn\n theo lần khám', FUSION),
-        (.498, .354, 'Chia tập theo RID\nHuấn luyện 251  ·  Xác thực 54\nKiểm tra 54', SURVIVAL),
+        (.498, .354, 'Chia tập theo RID\nHuấn luyện 251  ·  Xác thực 54\nKiểm tra (hậu nghiệm) 54', SURVIVAL),
         (.847, .230, 'Tiền xử lý dựa trên\n tập huấn luyện', CLINICAL),
     ]
     for x, width, label, fill in stages:
@@ -127,7 +127,7 @@ def outer():
     arrow(ax, (.787, .3985), (.787, .3065), lw=.95)
     box(ax, .787, .219, .353, .175, 'MLP\n1024 → 128 → 64', FUSION, 11)
     arrow(ax, (.787, .1315), (.787, .070), lw=.95)
-    text(ax, .787, .018, r'$E_{\mathrm{mr}}\in\mathbb{R}^{64}$', 10.5)
+    text(ax, .787, .018, r'$E_{\mathrm{MR}}\in\mathbb{R}^{64}$', 10.5)
     emit(fig, 'mr-outer-product')
 
 

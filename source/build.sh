@@ -11,4 +11,4 @@ else
     xelatex -interaction=nonstopmode -halt-on-error main.tex
     xelatex -interaction=nonstopmode -halt-on-error main.tex
 fi
-cp main.pdf "../fix_chi_Trang_KM_AUC_luot_8.pdf"
+cp main.pdf "../Nguyen_Phuong_Nam_Thesis_UET.pdf"

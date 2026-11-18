@@ -1,6 +1,6 @@
 \begin{table}[H]
 \centering\small
-\caption[Các nhóm đặc trưng radiomics]{Bảy nhóm đặc trưng trích từ ảnh và mặt nạ toàn não trong cấu hình đã dùng. Ví dụ là tên đặc trưng thực tế, không phải toàn bộ danh sách.}
+\caption[Các nhóm đặc trưng radiomics]{Bảy nhóm đặc trưng radiomics trích từ ảnh và mặt nạ toàn não. Cột cuối nêu ví dụ thuộc từng nhóm.}
 \label{tab:radiomics-groups}
 \begin{tabularx}{\linewidth}{@{}L{2.7cm}r Y Y@{}}
 \toprule
@@ -14,7 +14,7 @@ GLSZM & 16 & Kích thước vùng liên thông cùng mức xám & SmallAreaEmpha
 GLDM & 14 & Mức phụ thuộc cường độ giữa voxel và lân cận & DependenceEntropy, DependenceVariance \\
 NGTDM & 5 & Chênh lệch cường độ với lân cận & Coarseness, Contrast, Busyness, Complexity, Strength \\
 \midrule
-Tổng & 107 & Loại Maximum, Minimum, Range: còn 104 & PCA giữ 16 thành phần \\
+Tổng & 107 & Còn 104 sau khi loại Maximum, Minimum và Range & PCA giữ 16 thành phần \\
 \bottomrule
 \end{tabularx}
 \end{table}

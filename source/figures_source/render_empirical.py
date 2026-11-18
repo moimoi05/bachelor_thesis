@@ -19,7 +19,7 @@ SEED_STYLE = {
     20260729: ('#23715B', (0, (3, 1, 1, 1)), '^'),
 }
 HORIZONS = (2, 3, 5)
-SPLITS = (('val', 'Xác thực'), ('test', 'Kiểm tra hậu nghiệm'))
+SPLITS = (('val', 'Xác thực'), ('test', 'Kiểm tra (hậu nghiệm)'))
 
 
 def plot_style():
@@ -138,8 +138,8 @@ def build_training(evidence=EVIDENCE):
             ranking.scatter(summary['stop_epoch'], trajectory.val_cindex.iloc[-1], marker='s',
                             s=22, color=color)
         loss.set(title='(a) Hàm mất mát Cox', xlabel='Vòng huấn luyện',
-                 ylabel='Huấn luyện: trung bình loss theo lô')
-        valid_loss.set_ylabel('Xác thực: loss toàn tập (nét đứt)')
+                 ylabel='Mất mát huấn luyện trung bình theo lô')
+        valid_loss.set_ylabel('Mất mát trên toàn tập xác thực (nét đứt)')
         ranking.set(title='(b) C-index xác thực', xlabel='Vòng huấn luyện', ylabel='C-index', ylim=(.4, 1))
         for ax in (loss, ranking):
             ax.grid(alpha=.15)
