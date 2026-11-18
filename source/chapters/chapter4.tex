@@ -5,11 +5,11 @@ Chương này đánh giá khả năng phân biệt nguy cơ của các mô hình
 
 \section{Thiết lập thực nghiệm}
 \label{sec:experimental-protocol}
-Nhóm nghiên cứu gồm 359 người với 1\,077 lần chụp MRI, mỗi người có ba lần chụp. Tập huấn luyện gồm 251 người (74 biến cố), tập xác thực và tập kiểm tra mỗi tập gồm 54 người (16 biến cố). Các bước điền thiếu, chuẩn hóa và PCA sử dụng tham số ước lượng từ tập huấn luyện. Quy trình đánh giá sử dụng trọng số mô hình đã lưu.
+Bộ dữ liệu gồm 359 người tham gia, mỗi người có ba lần chụp MRI, với tổng cộng 1\,077 ảnh. Tôi chia dữ liệu theo RID thành ba tập. Tập huấn luyện gồm 251 người với 74 biến cố, còn tập xác thực và tập kiểm tra mỗi tập gồm 54 người với 16 biến cố. Để tránh rò rỉ thông tin giữa các tập, các tham số dùng cho điền thiếu, chuẩn hóa và PCA được ước lượng trên tập huấn luyện rồi áp dụng cho hai tập còn lại. Các kết quả đánh giá được tính từ trọng số mô hình đã lưu trong quá trình huấn luyện.
 
-Mô hình sử dụng bộ tối ưu AdamW \cite{loshchilov2019adamw} với tốc độ học ban đầu $10^{-4}$, hệ số suy giảm trọng số $10^{-4}$ và $(\beta_1,\beta_2)=(0.9,0.999)$. Mỗi lô gồm tối đa sáu người. Quy trình huấn luyện tích lũy gradient qua hai bước và sử dụng độ chính xác hỗn hợp FP16 để tiết kiệm bộ nhớ \cite{micikevicius2018mixed}. Riêng phép tính hàm mất mát Cox sử dụng FP32 và log-sum-exp để duy trì độ ổn định số học. Giới hạn chuẩn gradient là 1.0 và số vòng huấn luyện tối đa là 100. Khi hàm mất mát Cox trên tập xác thực ngừng cải thiện, ReduceLROnPlateau giảm một nửa tốc độ học với thời gian chờ năm vòng và mức sàn $10^{-6}$.
+Tôi huấn luyện mô hình bằng bộ tối ưu AdamW \cite{loshchilov2019adamw} với tốc độ học ban đầu $10^{-4}$, hệ số suy giảm trọng số $10^{-4}$ và $(\beta_1,\beta_2)=(0.9,0.999)$. Với tối đa sáu người trong mỗi lô, quy trình huấn luyện tích lũy gradient qua hai bước và sử dụng độ chính xác hỗn hợp FP16 để tiết kiệm bộ nhớ \cite{micikevicius2018mixed}. Riêng hàm mất mát Cox được tính bằng FP32 và log-sum-exp để duy trì độ ổn định số học. Chuẩn gradient được giới hạn ở mức 1.0 và quá trình huấn luyện kéo dài tối đa 100 vòng. Khi hàm mất mát Cox trên tập xác thực ngừng cải thiện, ReduceLROnPlateau giảm một nửa tốc độ học với thời gian chờ năm vòng và mức sàn $10^{-6}$.
 
-Sau 10 vòng đầu, quy tắc dừng sớm theo dõi C-index xác thực với ngưỡng cải thiện 0.002 và thời gian chờ 20 vòng. Quy trình lưu mô hình có C-index xác thực cao nhất. Dù gradient được tích lũy qua hai bước, mỗi lô có tập nguy cơ $\mathcal R_k$ riêng. Bộ lấy mẫu sử dụng các cặp có thể so sánh theo tiêu chí Cox để tạo lô và đưa mỗi người vào đúng một lô trong mỗi vòng. Qua ba lần khởi tạo, cả 4\,032 lô đều hợp lệ, với 42 lô mỗi vòng. Khi đánh giá, tập nguy cơ được xác định trên toàn bộ tập dữ liệu tương ứng.
+Sau 10 vòng đầu, quy tắc dừng sớm theo dõi C-index xác thực với ngưỡng cải thiện 0.002 và thời gian chờ 20 vòng, còn tiêu chí lưu mô hình là C-index xác thực cao nhất. Để tạo lô, bộ lấy mẫu sử dụng các cặp có thể so sánh theo tiêu chí Cox sao cho mỗi người xuất hiện trong đúng một lô ở mỗi vòng. Dù gradient được tích lũy qua hai bước, tập nguy cơ $\mathcal R_k$ vẫn được xác định riêng cho từng lô. Qua ba lần khởi tạo, cả 4\,032 lô đều hợp lệ, với 42 lô mỗi vòng. Khi đánh giá, tập nguy cơ được xác định trên toàn bộ tập dữ liệu tương ứng.
 
 Ba lần huấn luyện sử dụng lần lượt các giá trị khởi tạo ngẫu nhiên (seed) 20260727, 20260728 và 20260729 trên cùng cách chia dữ liệu. Theo quy ước ở Mục~\ref{sec:survival-evaluation}, có 480 cặp có thể so sánh trên tập xác thực và 528 cặp trên tập kiểm tra. Các bảng tổng hợp báo cáo trung bình và độ lệch chuẩn mẫu (SD) của ba lần chạy.
 
@@ -20,14 +20,14 @@ Ba lần huấn luyện sử dụng lần lượt các giá trị khởi tạo n
 \label{fig:empirical-training}
 \end{figure}
 
-Hình~\ref{fig:empirical-training} cho thấy hàm mất mát huấn luyện giảm từ khoảng 1.33--1.37 ở vòng đầu xuống 0.22--0.31 ở vòng cuối. Trong cùng thời gian, hàm mất mát xác thực tăng từ 3.24--3.28 lên 3.99--4.53. Hai hàm mất mát có thang giá trị khác nhau do kích thước tập nguy cơ khác nhau. Xu hướng giảm trên tập huấn luyện và tăng trên tập xác thực cho thấy dấu hiệu quá khớp theo mục tiêu Cox. Với cỡ lô nhỏ, mỗi lần cập nhật chỉ dựa trên một số ít cặp có thể so sánh.
+Qua ba lần khởi tạo, hàm mất mát trên tập huấn luyện giảm từ khoảng 1.33--1.37 ở vòng đầu xuống 0.22--0.31 ở vòng cuối, trong khi giá trị tương ứng trên tập xác thực tăng từ 3.24--3.28 lên 3.99--4.53 (Hình~\ref{fig:empirical-training}). Dù kích thước tập nguy cơ khác nhau khiến hai hàm mất mát có thang giá trị khác nhau, xu hướng biến thiên trái chiều cho thấy mô hình có dấu hiệu quá khớp theo mục tiêu Cox. Đặc biệt, với cỡ lô nhỏ, mỗi lần cập nhật chỉ dựa trên một số ít cặp có thể so sánh, điều này có thể ảnh hưởng đến độ ổn định của quá trình tối ưu.
 
-Với ba seed theo thứ tự trên, mô hình được chọn ở vòng 16, 7 và 25, đạt C-index xác thực tương ứng 0.8417, 0.8542 và 0.8083. Các lượt chạy dừng ở vòng 36, 30 và 30. Quy trình lưu trọng số mỗi khi C-index xác thực đạt giá trị cao nhất mới, còn bộ đếm dừng sớm chỉ đặt lại khi mức cải thiện vượt 0.002. Vì vậy, ở lượt thứ ba, mô hình được lưu tại vòng 25 và quá trình huấn luyện kết thúc ở vòng 30. Ở mỗi lượt chạy, mô hình đã chọn được dùng để tính C-index trên tập kiểm tra hậu nghiệm.
+Theo thứ tự ba seed đã nêu, các mô hình được chọn ở vòng 16, 7 và 25 với C-index xác thực tương ứng là 0.8417, 0.8542 và 0.8083, còn các lượt chạy kết thúc ở vòng 36, 30 và 30. Ở lượt thứ ba, việc lưu mô hình tại vòng 25 và dừng huấn luyện ở vòng 30 phản ánh hai tiêu chí khác nhau. Trọng số được lưu mỗi khi C-index xác thực đạt giá trị cao nhất mới, còn bộ đếm dừng sớm chỉ đặt lại khi mức cải thiện vượt 0.002. Mô hình được chọn ở mỗi lượt chạy sau đó được dùng để tính C-index trên tập kiểm tra hậu nghiệm.
 
 \section{So sánh các mô hình qua ba lần khởi tạo}
 \label{sec:standardized-benchmark}
 \label{sec:paper-adaptation-results}
-Các thí nghiệm trả lời ba câu hỏi khác nhau. Loạt thăm dò khảo sát dữ liệu đầu vào ở một lần khởi tạo (Bảng~\ref{tab:exploratory}). Đối chứng ghép nối và tích ngoài khảo sát riêng phép hợp nhất bằng cách giữ cùng cấu hình huấn luyện và trọng số khởi tạo của các khối chung (Bảng~\ref{tab:matched-fusion}). Loạt chính so sánh C-index xác thực và số tham số của từng kiến trúc qua ba lần khởi tạo (Bảng~\ref{tab:standard-bench}).
+Tôi tổ chức thí nghiệm theo ba mục đích. Để khảo sát dữ liệu đầu vào, loạt thăm dò so sánh các cấu hình ở một lần khởi tạo (Bảng~\ref{tab:exploratory}). Để khảo sát riêng phép hợp nhất, đối chứng giữa ghép nối và tích ngoài giữ nguyên cấu hình huấn luyện và trọng số khởi tạo của các khối chung (Bảng~\ref{tab:matched-fusion}). Trong loạt chính, các kiến trúc được so sánh về C-index xác thực và số tham số qua ba lần khởi tạo (Bảng~\ref{tab:standard-bench}).
 \input{tables/benchmark.tex}
 
 Trong loạt chính, Full Outer-Product và RC-Free đạt C-index xác thực trung bình lần lượt là 0.8344 và 0.8347. RC-Free sử dụng hai cặp tương tác và bốn nhánh truyền, so với ba cặp và sáu nhánh của Full Outer-Product. Với CNN--PCA--T-LSTM, số thành phần PCA ở ba lần chạy lần lượt là 38, 69 và 2, tương ứng với C-index xác thực 0.6625, 0.7708 và 0.7917. Lượt chạy giữ ít thành phần nhất đạt C-index cao nhất trong ba lượt.
@@ -52,7 +52,7 @@ Với seed 20260727, mô hình dùng MRI cuối và mô hình kết hợp chuỗ
 
 \subsection{Ghép nối và tích ngoài trong điều kiện kiểm soát}
 \label{sec:matched-fusion}
-Đối chứng giữ nguyên ResNet-18 3D, T-LSTM với kích thước ẩn 128, cơ chế attention, hàm mất mát Cox với quy tắc Breslow và cấu hình huấn luyện. Trong mỗi cặp mô hình, các khối chung sử dụng cùng trọng số ban đầu. Vì điều kiện khởi tạo khác với loạt chính, Bảng~\ref{tab:matched-fusion} báo cáo riêng kết quả của đối chứng này.
+Để đối chiếu hai phép hợp nhất, tôi giữ nguyên ResNet-18 3D, T-LSTM với kích thước ẩn 128, cơ chế attention, hàm mất mát Cox với quy tắc Breslow và cấu hình huấn luyện. Trong mỗi cặp mô hình, các khối chung cũng sử dụng cùng trọng số ban đầu. Do điều kiện khởi tạo khác với loạt chính, kết quả đối chứng được trình bày riêng trong Bảng~\ref{tab:matched-fusion}.
 
 \begin{table}[H]
 \centering\small
@@ -68,19 +68,19 @@ Full Outer-Product (đối chứng kiểm soát) & $0.8285\pm0.0272$ \\
 \end{tabularx}
 \end{table}
 
-Trong đối chứng có kiểm soát, tích ngoài đạt C-index xác thực trung bình cao hơn ghép nối 0.0135, tính từ các giá trị chưa làm tròn. Tích ngoài đạt C-index cao hơn ở seed 20260728, còn ghép nối đạt C-index cao hơn ở hai seed còn lại. Các thí nghiệm về CP và RC-Free sử dụng điều kiện khởi tạo của loạt chính.
+Tính từ các giá trị chưa làm tròn, C-index xác thực trung bình của tích ngoài cao hơn ghép nối 0.0135 trong đối chứng có kiểm soát. Xét từng lần khởi tạo, tích ngoài chỉ đạt C-index cao hơn ở seed 20260728, còn ghép nối cho kết quả cao hơn ở hai seed còn lại. Các thí nghiệm tiếp theo về CP và RC-Free sử dụng điều kiện khởi tạo của loạt chính.
 
 \section{CP và lựa chọn cấu trúc RC-Free}
 \label{sec:cp-results}
 \label{sec:ablation-results}
 \label{sec:rcfree-multiseed}
-Phân rã CP thay đổi cách tham số hóa lớp song tuyến đầu của mỗi khối tương tác. Các bộ mã hóa, kích thước đầu ra và khối xử lý thời gian được giữ nguyên. Hạng CP của các cặp MR, MC và RC lần lượt là 8, 8 và 4.
+Phân rã CP thay đổi cách tham số hóa lớp song tuyến đầu của mỗi khối tương tác, trong khi các bộ mã hóa, kích thước đầu ra và khối xử lý thời gian vẫn được giữ nguyên. Hạng CP của các cặp MR, MC và RC lần lượt là 8, 8 và 4.
 
 \subsection{Mức giảm tham số}
 \label{sec:computational-efficiency}
 \begin{table}[H]
 \centering\small
-\caption[Tham số tương tác và toàn mạng]{Số tham số ở ba phạm vi, bao gồm cả hệ số chệch. M biểu thị triệu tham số.}
+\caption[Tham số tương tác và toàn mạng]{Số tham số ở ba phạm vi, bao gồm cả hệ số chệch.}
 \label{tab:interaction-parameters}
 \begin{tabularx}{\linewidth}{@{}Y r r@{}}
 \toprule
@@ -88,7 +88,7 @@ Phân rã CP thay đổi cách tham số hóa lớp song tuyến đầu của m�
 \midrule
 Ba lớp song tuyến đầu & 229\,696 & 3\,712 \\
 Ba khối tương tác, gồm MLP & 248\,608 & 22\,624 \\
-Toàn mạng (M) & 33.76 & 33.53 \\
+Toàn mạng & 33\,760\,941 & 33\,534\,957 \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -97,7 +97,7 @@ CP giảm 98.38\% số tham số của ba lớp song tuyến đầu và 90.90\% 
 
 \subsection{So sánh cấu trúc hai cặp MR và MC với cấu trúc một cặp}
 \label{sec:new-topology}
-Từ kết quả thăm dò về việc loại bỏ cặp RC, loạt thí nghiệm này đối chiếu RC-Free với hai cấu trúc giữ riêng cặp MR hoặc MC. Mọi cấu trúc đều giữ ba nguồn đầu vào và đường truyền gốc. Ba lần chạy dùng cùng cấu hình huấn luyện, còn trọng số khởi tạo của các khối chung có thể khác nhau giữa các cấu trúc.
+Từ kết quả thăm dò về việc loại bỏ cặp RC, tôi đối chiếu RC-Free với hai cấu trúc chỉ giữ cặp MR hoặc chỉ giữ cặp MC. Cả ba nguồn đầu vào và đường truyền gốc đều được giữ lại trong mọi cấu trúc. Ba lần chạy dùng cùng cấu hình huấn luyện, dù trọng số khởi tạo của các khối chung có thể khác nhau giữa các cấu trúc.
 
 \begin{table}[H]
 \centering\small
@@ -115,7 +115,7 @@ RC-Free (MR+MC) & 2 / 4 & $0.8347\pm0.0237$ \\
 \end{tabularx}
 \end{table}
 
-RC-Free đạt C-index xác thực trung bình 0.8347 với hai cặp tương tác, so với 0.8278 của Full CP với ba cặp. Thứ hạng giữa các cấu trúc thay đổi theo lần khởi tạo. Biến thể cố định $\lambda$ và biến thể học $\lambda$ có cùng trung bình 0.8347, với SD tương ứng 0.0313 và 0.0237 (Bảng~\ref{tab:standard-bench}).
+Với hai cặp tương tác, RC-Free đạt C-index xác thực trung bình 0.8347, cao hơn mức 0.8278 của Full CP với ba cặp, dù thứ hạng giữa các cấu trúc thay đổi theo lần khởi tạo. Khi cố định $\lambda$ và khi học $\lambda$, C-index xác thực có cùng giá trị trung bình 0.8347 nhưng SD lần lượt là 0.0313 và 0.0237 (Bảng~\ref{tab:standard-bench}).
 
 \section{Phân tích sống còn của RC-Free}
 \label{sec:posthoc-test}
@@ -125,7 +125,7 @@ Phân tích sống còn tiếp theo sử dụng điểm nguy cơ của RC-Free �
 \subsection{C-index và AUC theo thời gian}
 \input{tables/survival_metrics.tex}
 
-Trên tập xác thực, AUC trung bình tại 2, 3 và 5 năm lần lượt là 0.9805, 0.9788 và 0.7889. Hai ước lượng sớm đều dựa trên bảy người có biến cố. Đến năm thứ năm, số người có biến cố tăng lên 12, còn số người được theo dõi quá mốc giảm xuống 19 (Bảng~\ref{tab:horizon-support}).
+Trên tập xác thực, AUC trung bình tại các mốc 2, 3 và 5 năm lần lượt đạt 0.9805, 0.9788 và 0.7889. Hai mốc đầu cùng có bảy người ghi nhận biến cố, trong khi tại mốc 5 năm, số biến cố tăng lên 12 nhưng số người còn được theo dõi quá thời hạn này giảm xuống 19 (Bảng~\ref{tab:horizon-support}). Sự thay đổi về số lượng ca biến cố và đối chứng cũng làm thay đổi cơ sở đánh giá AUC giữa các mốc thời gian.
 
 \input{tables/horizon_support.tex}
 
@@ -136,11 +136,11 @@ Trên tập xác thực, AUC trung bình tại 2, 3 và 5 năm lần lượt là
 \label{fig:empirical-roc}
 \end{figure}
 
-Trên tập xác thực, hai mốc 2 và 3 năm có cùng bảy người có biến cố. Số người trong nhóm đối chứng giảm từ 37 xuống 34, làm thay đổi các cặp dùng để đánh giá khả năng phân biệt. Ở mốc 5 năm, các đường ROC trên tập xác thực phân tán rộng hơn giữa các lần chạy (Hình~\ref{fig:empirical-roc}). So với hai mốc sớm, AUC tại mốc này có giá trị trung bình thấp hơn và SD lớn hơn.
+Hai mốc 2 và 3 năm trên tập xác thực có cùng bảy người có biến cố, nhưng số người trong nhóm đối chứng giảm từ 37 xuống 34 nên các cặp dùng để đánh giá khả năng phân biệt cũng thay đổi. Ở mốc 5 năm, các đường ROC trên tập xác thực phân tán rộng hơn giữa các lần chạy (Hình~\ref{fig:empirical-roc}), đồng thời AUC có giá trị trung bình thấp hơn và SD lớn hơn so với hai mốc sớm.
 
 \clearpage
 \subsection{Kaplan--Meier theo nhóm nguy cơ}
-Hình~\ref{fig:survival-km} biểu diễn xác suất chưa tiến triển theo thời gian của hai nhóm nguy cơ. Mỗi lần chạy sử dụng trung vị điểm nguy cơ trên tập huấn luyện làm ngưỡng phân nhóm. Nhóm đồng thuận trên tập xác thực gồm 28 người nguy cơ thấp (4 biến cố) và 26 người nguy cơ cao (12 biến cố). Trên tập kiểm tra hậu nghiệm, nhóm nguy cơ thấp gồm 24 người và ghi nhận một biến cố duy nhất trong toàn bộ thời gian theo dõi. Biến cố này xảy ra sau mốc 5 năm. Nhóm nguy cơ cao gồm 30 người và ghi nhận 15 biến cố.
+Hình~\ref{fig:survival-km} trình bày xác suất chưa ghi nhận biến cố theo thời gian của hai nhóm nguy cơ, được xác định dựa trên nguyên tắc đồng thuận qua ba lần khởi tạo. Cụ thể, ngưỡng phân nhóm trong mỗi lần chạy là trung vị điểm nguy cơ trên tập huấn luyện; người có điểm vượt ngưỡng được xếp vào nhóm nguy cơ cao, còn những người có điểm bằng hoặc thấp hơn ngưỡng thuộc nhóm nguy cơ thấp. Trên tập xác thực, nhóm nguy cơ thấp gồm 28 người với 4 biến cố, trong khi nhóm nguy cơ cao gồm 26 người với 12 biến cố. Đối với tập kiểm tra hậu nghiệm, nhóm nguy cơ thấp gồm 24 người và chỉ ghi nhận một biến cố sau năm thứ năm; ngược lại, nhóm nguy cơ cao ghi nhận 15 biến cố trong tổng số 30 người tham gia.
 
 \begin{figure}[H]
 \centering
@@ -151,18 +151,18 @@ Hình~\ref{fig:survival-km} biểu diễn xác suất chưa tiến triển theo 
 
 \input{tables/km_statistics.tex}
 
-Trên tập xác thực, nhóm nguy cơ cao có nguy cơ tức thời ước tính gấp 3.79 lần nhóm nguy cơ thấp (CI 95\% từ 1.22 đến 11.78). Hai đường Kaplan--Meier khác nhau theo kiểm định log-rank ($p=0.0134$). Trên tập kiểm tra hậu nghiệm, HR đạt 16.17 và khoảng tin cậy rộng (2.12--123.17), với một biến cố ở nhóm nguy cơ thấp (Bảng~\ref{tab:km-statistics}).
+Trên tập xác thực, nguy cơ tức thời ước tính ở nhóm nguy cơ cao gấp 3.79 lần nhóm nguy cơ thấp (CI 95\% từ 1.22 đến 11.78), và kiểm định log-rank cho thấy hai đường Kaplan--Meier khác nhau ($p=0.0134$). Trên tập kiểm tra hậu nghiệm, HR đạt 16.17 với khoảng tin cậy rộng (2.12--123.17) trong điều kiện nhóm nguy cơ thấp chỉ ghi nhận một biến cố (Bảng~\ref{tab:km-statistics}).
 
 \section{Trả lời các câu hỏi nghiên cứu}
 \label{sec:rq-results}
-RQ1 và RQ2 dựa trên loạt thăm dò một lần khởi tạo. RQ3 đến RQ5 dựa trên các đối chứng qua ba lần khởi tạo.
+Kết quả cho RQ1 và RQ2 đến từ loạt thăm dò một lần khởi tạo, còn RQ3 đến RQ5 được xem xét qua các đối chứng ở ba lần khởi tạo.
 
 \begin{description}[leftmargin=1.35cm,labelwidth=1.1cm,itemsep=.3em]
-\item[RQ1.] Ở lần khởi tạo thăm dò, mô hình dùng MRI cuối và mô hình dùng MRI dọc với T-LSTM cùng đạt C-index 0.7333. Cấu hình MRI dọc kết hợp T-LSTM và attention đạt 0.7833 (Bảng~\ref{tab:exploratory}).
-\item[RQ2.] Mô hình ghép nối ba nguồn đạt C-index 0.8125, so với 0.7833 của cấu hình MRI dọc có attention. Chênh lệch này phản ánh đồng thời khác biệt về đầu vào, cỡ lô và quy trình huấn luyện (Bảng~\ref{tab:exploratory}).
-\item[RQ3.] Khi kiểm soát trọng số khởi tạo của các khối chung, tích ngoài đạt C-index cao hơn ghép nối trung bình 0.0135. Chiều của chênh lệch thay đổi theo lần khởi tạo (Bảng~\ref{tab:matched-fusion}).
-\item[RQ4.] Phân rã CP giảm 98.38\% số tham số của ba lớp song tuyến đầu, đi kèm mức giảm 0.0066 của C-index xác thực trung bình (Bảng~\ref{tab:standard-bench} và~\ref{tab:interaction-parameters}).
-\item[RQ5.] Trong các cấu trúc đã khảo sát, RC-Free giữ cả ba nguồn đầu vào và giảm từ ba cặp tương tác xuống hai cặp. C-index xác thực trung bình đạt 0.8347, so với 0.8278 của Full CP, 0.8299 của MR-only và 0.8236 của MC-only (Bảng~\ref{tab:new-topology}).
+\item[RQ1.] Trong lần khởi tạo thăm dò, mô hình sử dụng MRI cuối và mô hình kết hợp chuỗi MRI với T-LSTM cùng đạt C-index 0.7333. Khi bổ sung attention để tổng hợp các trạng thái ẩn, C-index tăng lên 0.7833 (Bảng~\ref{tab:exploratory}).
+\item[RQ2.] Mô hình ghép nối ba nguồn đạt C-index 0.8125, cao hơn mức 0.7833 của cấu hình MRI dọc kết hợp attention. Tuy nhiên, chênh lệch này không chỉ phản ánh sự khác biệt về nguồn dữ liệu đầu vào mà còn chịu ảnh hưởng của cỡ lô và quy trình huấn luyện giữa hai cấu hình (Bảng~\ref{tab:exploratory}).
+\item[RQ3.] Trong đối chứng có kiểm soát trọng số khởi tạo của các khối chung, phép tích ngoài đạt C-index xác thực trung bình cao hơn phép ghép nối 0.0135. Tuy nhiên, khi xét riêng từng lần khởi tạo, chiều của chênh lệch thay đổi, cho thấy kết quả không nhất quán giữa các seed (Bảng~\ref{tab:matched-fusion}).
+\item[RQ4.] Phân rã CP giúp giảm 98.38\% số tham số của ba lớp song tuyến đầu, đồng thời làm C-index xác thực trung bình giảm 0.0066 so với cấu trúc Full Outer-Product (Bảng~\ref{tab:standard-bench} và~\ref{tab:interaction-parameters}).
+\item[RQ5.] Trong các cấu trúc được khảo sát, tôi lựa chọn RC-Free với hai cặp tương tác MR và MC, qua đó vẫn duy trì cả ba nguồn dữ liệu đầu vào nhưng giảm số cặp tương tác từ ba xuống hai. Cấu trúc này đạt C-index xác thực trung bình 0.8347, cao hơn Full CP (0.8278), MR-only (0.8299) và MC-only (0.8236) trong cùng loạt so sánh (Bảng~\ref{tab:new-topology}).
 \end{description}
 
-Các kết quả đối chứng cho biết số tham số giảm bao nhiêu và C-index thay đổi như thế nào khi rút gọn các khối tương tác. Chương~\ref{chap:discussion} thảo luận ý nghĩa của những khác biệt này đối với việc phân tầng nguy cơ tiến triển.
+Các kết quả đối chứng cho thấy mức giảm số tham số và chênh lệch về khả năng phân biệt nguy cơ phụ thuộc vào cách rút gọn các khối tương tác. Chương~\ref{chap:discussion} phân tích ý nghĩa của các kết quả này đối với việc lựa chọn kiến trúc RC-Free và phân tầng nguy cơ tiến triển.
