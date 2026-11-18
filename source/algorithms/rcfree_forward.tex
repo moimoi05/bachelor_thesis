@@ -1,0 +1,20 @@
+\begin{algorithm}[H]
+\caption{Luồng tính xuôi của mô hình RC-Free Pairwise Fusion}
+\label{alg:rcfree-forward}
+\small
+\textbf{Đầu vào:} Chuỗi ba lần khám $(t=1,2,3)$ của một cá thể gồm ảnh MRI đã tiền xử lý, vectơ đặc trưng radiomics sau PCA (16 chiều), vectơ lâm sàng kèm chỉ báo quan sát (18 chiều) và khoảng cách thời gian $\Delta t_t$ (với $\Delta t_1=0$).\\
+\textbf{Đầu ra:} Điểm log-nguy cơ $\eta\in\mathbb R$ của cá thể.
+\begin{enumerate}[leftmargin=1.2em,label=\arabic*.,itemsep=0.2em]
+\item Với mỗi lần khám $t=1,2,3$:
+\begin{enumerate}[leftmargin=1.2em,label=\alph*.,itemsep=0.15em]
+\item Mã hóa ba nguồn đầu vào tại lần khám $t$ thành $M_t\in\mathbb R^{128}$, $R_t\in\mathbb R^{64}$, $C_t\in\mathbb R^{64}$ theo Mục~\ref{sec:preprocessing}; chiếu tuyến tính không hệ số chệch về $\widetilde M_t\in\mathbb R^{32}$, $\widetilde R_t\in\mathbb R^{32}$, $\widetilde C_t\in\mathbb R^{16}$ theo (\ref{eq:input-projection}).
+\item Tính đặc trưng tương tác $E_{\mathrm{MR},t}\in\mathbb R^{64}$ từ $(\widetilde M_t,\widetilde R_t)$ và $E_{\mathrm{MC},t}\in\mathbb R^{64}$ từ $(\widetilde M_t,\widetilde C_t)$ bằng hai khối CP hạng $Q=8$ kèm MLP theo (\ref{eq:cp-lowrank})--(\ref{eq:cpblock}); bỏ qua cặp RC.
+\item Với mỗi nhánh $k\to d\in\{\mathrm{MR}\to M,\mathrm{MR}\to R,\mathrm{MC}\to M,\mathrm{MC}\to C\}$, tính phép chiếu theo đích $\widehat E_{k\to d,t}$ theo (\ref{eq:target-projection}), cổng điều tiết $g_{k\to d,t}$ theo (\ref{eq:dynamic-gate}) và lượng bổ sung $D_{k\to d,t}=\lambda_{k\to d}\,g_{k\to d,t}\,\widehat E_{k\to d,t}$.
+\item Cập nhật phần dư và chuẩn hóa theo (\ref{eq:rcfree-first})--(\ref{eq:rcfree-residual}) để thu được $M_{\mathrm{out},t}\in\mathbb R^{128}$, $R_{\mathrm{out},t}\in\mathbb R^{64}$ và $C_{\mathrm{out},t}\in\mathbb R^{64}$.
+\item Ghép nối và ánh xạ thành biểu diễn hợp nhất tại lần khám $t$: $F_t=\operatorname{MLP}_{\mathrm{out}}(M_{\mathrm{out},t}\concat R_{\mathrm{out},t}\concat C_{\mathrm{out},t})\in\mathbb R^{128}$ theo (\ref{eq:concat}).
+\end{enumerate}
+\item Khởi tạo trạng thái ẩn và bộ nhớ bằng không; đưa chuỗi $(F_t,\Delta t_t)_{t=1}^3$ qua T-LSTM theo (\ref{eq:tlstm-first})--(\ref{eq:tlstm-state}) để thu được các trạng thái ẩn $h_1,h_2,h_3\in\mathbb R^{128}$.
+\item Tính trọng số attention $\alpha_t$ và biểu diễn tổng hợp chuỗi $z=\sum_{t=1}^3\alpha_t h_t\in\mathbb R^{128}$ theo (\ref{eq:temporal-attention}).
+\item Đưa $z$ qua khối MLP dự báo sống còn Cox ($128\to64\to1$) ở Mục~\ref{sec:training-method} để xuất điểm log-nguy cơ $\eta$.
+\end{enumerate}
+\end{algorithm}

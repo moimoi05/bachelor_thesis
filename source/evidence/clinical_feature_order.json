@@ -1,0 +1,14 @@
+{
+  "diagnosis_excluded": true,
+  "features": [
+    "mmse_total_score",
+    "cdr_global",
+    "cdr_sum_of_boxes",
+    "cdr_memory",
+    "cdr_orient",
+    "cdr_judge",
+    "cdr_commun",
+    "cdr_home",
+    "cdr_care"
+  ]
+}

@@ -1,0 +1,921 @@
+{
+  "architecture": {
+    "active_cp_branches": [
+      "MR",
+      "MC"
+    ],
+    "active_routes": [
+      "MR -> M",
+      "MR -> R",
+      "MC -> M",
+      "MC -> C"
+    ],
+    "cp_ranks": {
+      "mc": 8,
+      "mr": 8,
+      "rc_unused": 4
+    },
+    "dynamic_gates": 4,
+    "identity_residual": true,
+    "learnable_lambdas": 4,
+    "name": "A6_NO_RC",
+    "parameters": 33519497,
+    "removed_branch": "RC"
+  },
+  "checkpoint_audit": [
+    {
+      "architecture_manifest": {
+        "ablation": {
+          "dynamic_gate": true,
+          "fixed_lambda": 0.1,
+          "identity_residual": true,
+          "learnable_lambda": true,
+          "use_mc": true,
+          "use_mr": true,
+          "use_rc": false
+        },
+        "active_directions": [
+          "mr_to_m",
+          "mc_to_m",
+          "mr_to_r",
+          "mc_to_c"
+        ],
+        "active_pairs": [
+          "mr",
+          "mc"
+        ],
+        "cp_factor_weights": 2944,
+        "cp_specific_parameters": 3200,
+        "dynamic_gate": true,
+        "dynamic_gate_parameters": 25348,
+        "identity_residual": true,
+        "lambda_learnable": true,
+        "lambda_parameters": 4,
+        "medicalnet_sha256": "61224f9317fcce873366deb3703183e92cc47325b726b69691b33536244e10f4",
+        "pairs": {
+          "mc": {
+            "cp_factor_weights": 1408,
+            "cp_parameters_including_bias": 1536,
+            "hidden_dim": 128,
+            "input_dims": [
+              32,
+              16
+            ],
+            "old_first_weights": 65536,
+            "output_dim": 64,
+            "rank": 8,
+            "retained_output_bias": 128,
+            "whole_pair_parameters": 9920
+          },
+          "mr": {
+            "cp_factor_weights": 1536,
+            "cp_parameters_including_bias": 1664,
+            "hidden_dim": 128,
+            "input_dims": [
+              32,
+              32
+            ],
+            "old_first_weights": 131072,
+            "output_dim": 64,
+            "rank": 8,
+            "retained_output_bias": 128,
+            "whole_pair_parameters": 10048
+          }
+        },
+        "pairwise_parameters_including_post_mlp": 19968,
+        "seed": 20260727,
+        "total_parameters": 33519497,
+        "variant": "P06-ABLATION"
+      },
+      "best_epoch": 16,
+      "checkpoint_modified": false,
+      "checkpoint_sha256": "c339c9b57955dd57a1d6a72940b917801c2c2503b3bfd73b4ca4fe2e7e4ba504",
+      "lambda_values": {
+        "mc_to_c": 0.10325280576944351,
+        "mc_to_m": 0.10846921801567078,
+        "mr_to_m": 0.10322289168834686,
+        "mr_to_r": 0.10960301756858826
+      },
+      "optimizer_loaded": false,
+      "path": "/home/data/user/nguyenphuongnam/alzheimer_training/phase_06_ablation/runs/official/a6_no_rc_20260919T192909Z_seed20260727/checkpoints/best.pt",
+      "run_id": "a6_no_rc_20260919T192909Z_seed20260727",
+      "seed": 20260727,
+      "state_dict_finite": true,
+      "state_dict_floating_elements": 33529097,
+      "state_dict_floating_tensor_count": 202,
+      "stored_best_metric": 0.8416666666666667,
+      "stored_test_access": 0,
+      "stored_test_construction_attempts": 0,
+      "stored_val_cindex": 0.8416666666666667,
+      "stored_val_cox_loss": 2.5557241439819336
+    },
+    {
+      "architecture_manifest": {
+        "ablation": {
+          "dynamic_gate": true,
+          "fixed_lambda": 0.1,
+          "identity_residual": true,
+          "learnable_lambda": true,
+          "use_mc": true,
+          "use_mr": true,
+          "use_rc": false
+        },
+        "active_directions": [
+          "mr_to_m",
+          "mc_to_m",
+          "mr_to_r",
+          "mc_to_c"
+        ],
+        "active_pairs": [
+          "mr",
+          "mc"
+        ],
+        "cp_factor_weights": 2944,
+        "cp_specific_parameters": 3200,
+        "dynamic_gate": true,
+        "dynamic_gate_parameters": 25348,
+        "identity_residual": true,
+        "lambda_learnable": true,
+        "lambda_parameters": 4,
+        "medicalnet_sha256": "61224f9317fcce873366deb3703183e92cc47325b726b69691b33536244e10f4",
+        "pairs": {
+          "mc": {
+            "cp_factor_weights": 1408,
+            "cp_parameters_including_bias": 1536,
+            "hidden_dim": 128,
+            "input_dims": [
+              32,
+              16
+            ],
+            "old_first_weights": 65536,
+            "output_dim": 64,
+            "rank": 8,
+            "retained_output_bias": 128,
+            "whole_pair_parameters": 9920
+          },
+          "mr": {
+            "cp_factor_weights": 1536,
+            "cp_parameters_including_bias": 1664,
+            "hidden_dim": 128,
+            "input_dims": [
+              32,
+              32
+            ],
+            "old_first_weights": 131072,
+            "output_dim": 64,
+            "rank": 8,
+            "retained_output_bias": 128,
+            "whole_pair_parameters": 10048
+          }
+        },
+        "pairwise_parameters_including_post_mlp": 19968,
+        "seed": 20260728,
+        "total_parameters": 33519497,
+        "variant": "P06-ABLATION"
+      },
+      "best_epoch": 7,
+      "checkpoint_modified": false,
+      "checkpoint_sha256": "0a46ccb6191fd3f5732c9296c4b6b899b182602845d4f75de0cd9429db41c5c5",
+      "lambda_values": {
+        "mc_to_c": 0.10626742988824844,
+        "mc_to_m": 0.10413328558206558,
+        "mr_to_m": 0.10564129054546356,
+        "mr_to_r": 0.1016099601984024
+      },
+      "optimizer_loaded": false,
+      "path": "/home/data/user/nguyenphuongnam/alzheimer_training/phase_06_ablation/runs/multiseed_validation/official/a6_no_rc_seed20260728_20260920T082644Z/checkpoints/best.pt",
+      "run_id": "a6_no_rc_seed20260728_20260920T082644Z",
+      "seed": 20260728,
+      "state_dict_finite": true,
+      "state_dict_floating_elements": 33529097,
+      "state_dict_floating_tensor_count": 202,
+      "stored_best_metric": 0.8541666666666666,
+      "stored_test_access": 0,
+      "stored_test_construction_attempts": 0,
+      "stored_val_cindex": 0.8541666666666666,
+      "stored_val_cox_loss": 2.7121963500976562
+    },
+    {
+      "architecture_manifest": {
+        "ablation": {
+          "dynamic_gate": true,
+          "fixed_lambda": 0.1,
+          "identity_residual": true,
+          "learnable_lambda": true,
+          "use_mc": true,
+          "use_mr": true,
+          "use_rc": false
+        },
+        "active_directions": [
+          "mr_to_m",
+          "mc_to_m",
+          "mr_to_r",
+          "mc_to_c"
+        ],
+        "active_pairs": [
+          "mr",
+          "mc"
+        ],
+        "cp_factor_weights": 2944,
+        "cp_specific_parameters": 3200,
+        "dynamic_gate": true,
+        "dynamic_gate_parameters": 25348,
+        "identity_residual": true,
+        "lambda_learnable": true,
+        "lambda_parameters": 4,
+        "medicalnet_sha256": "61224f9317fcce873366deb3703183e92cc47325b726b69691b33536244e10f4",
+        "pairs": {
+          "mc": {
+            "cp_factor_weights": 1408,
+            "cp_parameters_including_bias": 1536,
+            "hidden_dim": 128,
+            "input_dims": [
+              32,
+              16
+            ],
+            "old_first_weights": 65536,
+            "output_dim": 64,
+            "rank": 8,
+            "retained_output_bias": 128,
+            "whole_pair_parameters": 9920
+          },
+          "mr": {
+            "cp_factor_weights": 1536,
+            "cp_parameters_including_bias": 1664,
+            "hidden_dim": 128,
+            "input_dims": [
+              32,
+              32
+            ],
+            "old_first_weights": 131072,
+            "output_dim": 64,
+            "rank": 8,
+            "retained_output_bias": 128,
+            "whole_pair_parameters": 10048
+          }
+        },
+        "pairwise_parameters_including_post_mlp": 19968,
+        "seed": 20260729,
+        "total_parameters": 33519497,
+        "variant": "P06-ABLATION"
+      },
+      "best_epoch": 25,
+      "checkpoint_modified": false,
+      "checkpoint_sha256": "5e20a8296491aa0a778b6a51780a103f281f788a060da7b9eb78e9df923a1a3d",
+      "lambda_values": {
+        "mc_to_c": 0.11301649361848831,
+        "mc_to_m": 0.11312483996152878,
+        "mr_to_m": 0.10483330488204956,
+        "mr_to_r": 0.1075030267238617
+      },
+      "optimizer_loaded": false,
+      "path": "/home/data/user/nguyenphuongnam/alzheimer_training/phase_06_ablation/runs/multiseed_validation/official/a6_no_rc_seed20260729_20260920T085637Z/checkpoints/best.pt",
+      "run_id": "a6_no_rc_seed20260729_20260920T085637Z",
+      "seed": 20260729,
+      "state_dict_finite": true,
+      "state_dict_floating_elements": 33529097,
+      "state_dict_floating_tensor_count": 202,
+      "stored_best_metric": 0.8083333333333333,
+      "stored_test_access": 0,
+      "stored_test_construction_attempts": 0,
+      "stored_val_cindex": 0.8083333333333333,
+      "stored_val_cox_loss": 4.018108367919922
+    }
+  ],
+  "evaluation_note": "post-hoc final evaluation of the frozen A6 architecture",
+  "legacy_training_test_access": {
+    "20260727": {
+      "test_access": 0,
+      "test_construction_attempts": 0
+    },
+    "20260728": {
+      "test_access": 0,
+      "test_construction_attempts": 0
+    },
+    "20260729": {
+      "test_access": 0,
+      "test_construction_attempts": 0
+    }
+  },
+  "medicalnet": {
+    "expected_sha256": "61224f9317fcce873366deb3703183e92cc47325b726b69691b33536244e10f4",
+    "path": "/home/data/user/nguyenphuongnam/alzheimer_training/phase_06_ablation/artifacts/pretrained/medicalnet/resnet_18_23dataset.pth",
+    "sha256": "61224f9317fcce873366deb3703183e92cc47325b726b69691b33536244e10f4"
+  },
+  "model_selection_note": "A6 was selected using validation results and multi-seed validation analysis, not these current test results.",
+  "objective": "Evaluation-only inference of the frozen A6_NO_RC best checkpoints on train, validation, and test.",
+  "outputs": {
+    "prediction_directory": "/home/data/user/nguyenphuongnam/alzheimer_training/project_reports/a6_final_predictions",
+    "table_csv": "/home/data/user/nguyenphuongnam/alzheimer_training/project_reports/A6_FINAL_TRAIN_VAL_TEST_TABLE.csv"
+  },
+  "per_seed": {
+    "20260727": {
+      "best_epoch": 16,
+      "checkpoint": {
+        "architecture_manifest": {
+          "ablation": {
+            "dynamic_gate": true,
+            "fixed_lambda": 0.1,
+            "identity_residual": true,
+            "learnable_lambda": true,
+            "use_mc": true,
+            "use_mr": true,
+            "use_rc": false
+          },
+          "active_directions": [
+            "mr_to_m",
+            "mc_to_m",
+            "mr_to_r",
+            "mc_to_c"
+          ],
+          "active_pairs": [
+            "mr",
+            "mc"
+          ],
+          "cp_factor_weights": 2944,
+          "cp_specific_parameters": 3200,
+          "dynamic_gate": true,
+          "dynamic_gate_parameters": 25348,
+          "identity_residual": true,
+          "lambda_learnable": true,
+          "lambda_parameters": 4,
+          "medicalnet_sha256": "61224f9317fcce873366deb3703183e92cc47325b726b69691b33536244e10f4",
+          "pairs": {
+            "mc": {
+              "cp_factor_weights": 1408,
+              "cp_parameters_including_bias": 1536,
+              "hidden_dim": 128,
+              "input_dims": [
+                32,
+                16
+              ],
+              "old_first_weights": 65536,
+              "output_dim": 64,
+              "rank": 8,
+              "retained_output_bias": 128,
+              "whole_pair_parameters": 9920
+            },
+            "mr": {
+              "cp_factor_weights": 1536,
+              "cp_parameters_including_bias": 1664,
+              "hidden_dim": 128,
+              "input_dims": [
+                32,
+                32
+              ],
+              "old_first_weights": 131072,
+              "output_dim": 64,
+              "rank": 8,
+              "retained_output_bias": 128,
+              "whole_pair_parameters": 10048
+            }
+          },
+          "pairwise_parameters_including_post_mlp": 19968,
+          "seed": 20260727,
+          "total_parameters": 33519497,
+          "variant": "P06-ABLATION"
+        },
+        "best_epoch": 16,
+        "checkpoint_modified": false,
+        "checkpoint_sha256": "c339c9b57955dd57a1d6a72940b917801c2c2503b3bfd73b4ca4fe2e7e4ba504",
+        "lambda_values": {
+          "mc_to_c": 0.10325280576944351,
+          "mc_to_m": 0.10846921801567078,
+          "mr_to_m": 0.10322289168834686,
+          "mr_to_r": 0.10960301756858826
+        },
+        "optimizer_loaded": false,
+        "path": "/home/data/user/nguyenphuongnam/alzheimer_training/phase_06_ablation/runs/official/a6_no_rc_20260919T192909Z_seed20260727/checkpoints/best.pt",
+        "run_id": "a6_no_rc_20260919T192909Z_seed20260727",
+        "seed": 20260727,
+        "state_dict_finite": true,
+        "state_dict_floating_elements": 33529097,
+        "state_dict_floating_tensor_count": 202,
+        "stored_best_metric": 0.8416666666666667,
+        "stored_test_access": 0,
+        "stored_test_construction_attempts": 0,
+        "stored_val_cindex": 0.8416666666666667,
+        "stored_val_cox_loss": 2.5557241439819336
+      },
+      "inference": {
+        "device": "cuda",
+        "gradients_enabled": false,
+        "optimizer_steps": 0
+      },
+      "parameters": {
+        "cp_specific": 3200,
+        "dynamic_gate": 25348,
+        "learnable_lambdas": 4,
+        "total": 33519497,
+        "trainable": 33519497
+      },
+      "prediction_files": {
+        "test": "/home/data/user/nguyenphuongnam/alzheimer_training/project_reports/a6_final_predictions/seed_20260727_test.csv",
+        "train": "/home/data/user/nguyenphuongnam/alzheimer_training/project_reports/a6_final_predictions/seed_20260727_train.csv",
+        "val": "/home/data/user/nguyenphuongnam/alzheimer_training/project_reports/a6_final_predictions/seed_20260727_val.csv"
+      },
+      "seed": 20260727,
+      "splits": {
+        "test": {
+          "censored": 38,
+          "cindex": 0.875,
+          "cox_loss": 2.6527111530303955,
+          "duplicate_rids": 0,
+          "events": 16,
+          "finite_risk": true,
+          "risk": {
+            "finite": true,
+            "max": 1.6220703125,
+            "mean": -2.582929849624634,
+            "min": -4.1484375
+          },
+          "split": "test",
+          "subjects": 54
+        },
+        "train": {
+          "censored": 177,
+          "cindex": 0.8858019040644453,
+          "cox_loss": 4.059056758880615,
+          "duplicate_rids": 0,
+          "events": 74,
+          "finite_risk": true,
+          "risk": {
+            "finite": true,
+            "max": 1.9072265625,
+            "mean": -2.7393031120300293,
+            "min": -4.16015625
+          },
+          "split": "train",
+          "subjects": 251
+        },
+        "val": {
+          "censored": 38,
+          "cindex": 0.8416666666666667,
+          "cox_loss": 2.5557241439819336,
+          "duplicate_rids": 0,
+          "events": 16,
+          "finite_risk": true,
+          "risk": {
+            "finite": true,
+            "max": 1.7880859375,
+            "mean": -2.979130506515503,
+            "min": -4.1484375
+          },
+          "split": "val",
+          "subjects": 54
+        }
+      }
+    },
+    "20260728": {
+      "best_epoch": 7,
+      "checkpoint": {
+        "architecture_manifest": {
+          "ablation": {
+            "dynamic_gate": true,
+            "fixed_lambda": 0.1,
+            "identity_residual": true,
+            "learnable_lambda": true,
+            "use_mc": true,
+            "use_mr": true,
+            "use_rc": false
+          },
+          "active_directions": [
+            "mr_to_m",
+            "mc_to_m",
+            "mr_to_r",
+            "mc_to_c"
+          ],
+          "active_pairs": [
+            "mr",
+            "mc"
+          ],
+          "cp_factor_weights": 2944,
+          "cp_specific_parameters": 3200,
+          "dynamic_gate": true,
+          "dynamic_gate_parameters": 25348,
+          "identity_residual": true,
+          "lambda_learnable": true,
+          "lambda_parameters": 4,
+          "medicalnet_sha256": "61224f9317fcce873366deb3703183e92cc47325b726b69691b33536244e10f4",
+          "pairs": {
+            "mc": {
+              "cp_factor_weights": 1408,
+              "cp_parameters_including_bias": 1536,
+              "hidden_dim": 128,
+              "input_dims": [
+                32,
+                16
+              ],
+              "old_first_weights": 65536,
+              "output_dim": 64,
+              "rank": 8,
+              "retained_output_bias": 128,
+              "whole_pair_parameters": 9920
+            },
+            "mr": {
+              "cp_factor_weights": 1536,
+              "cp_parameters_including_bias": 1664,
+              "hidden_dim": 128,
+              "input_dims": [
+                32,
+                32
+              ],
+              "old_first_weights": 131072,
+              "output_dim": 64,
+              "rank": 8,
+              "retained_output_bias": 128,
+              "whole_pair_parameters": 10048
+            }
+          },
+          "pairwise_parameters_including_post_mlp": 19968,
+          "seed": 20260728,
+          "total_parameters": 33519497,
+          "variant": "P06-ABLATION"
+        },
+        "best_epoch": 7,
+        "checkpoint_modified": false,
+        "checkpoint_sha256": "0a46ccb6191fd3f5732c9296c4b6b899b182602845d4f75de0cd9429db41c5c5",
+        "lambda_values": {
+          "mc_to_c": 0.10626742988824844,
+          "mc_to_m": 0.10413328558206558,
+          "mr_to_m": 0.10564129054546356,
+          "mr_to_r": 0.1016099601984024
+        },
+        "optimizer_loaded": false,
+        "path": "/home/data/user/nguyenphuongnam/alzheimer_training/phase_06_ablation/runs/multiseed_validation/official/a6_no_rc_seed20260728_20260920T082644Z/checkpoints/best.pt",
+        "run_id": "a6_no_rc_seed20260728_20260920T082644Z",
+        "seed": 20260728,
+        "state_dict_finite": true,
+        "state_dict_floating_elements": 33529097,
+        "state_dict_floating_tensor_count": 202,
+        "stored_best_metric": 0.8541666666666666,
+        "stored_test_access": 0,
+        "stored_test_construction_attempts": 0,
+        "stored_val_cindex": 0.8541666666666666,
+        "stored_val_cox_loss": 2.7121963500976562
+      },
+      "inference": {
+        "device": "cuda",
+        "gradients_enabled": false,
+        "optimizer_steps": 0
+      },
+      "parameters": {
+        "cp_specific": 3200,
+        "dynamic_gate": 25348,
+        "learnable_lambdas": 4,
+        "total": 33519497,
+        "trainable": 33519497
+      },
+      "prediction_files": {
+        "test": "/home/data/user/nguyenphuongnam/alzheimer_training/project_reports/a6_final_predictions/seed_20260728_test.csv",
+        "train": "/home/data/user/nguyenphuongnam/alzheimer_training/project_reports/a6_final_predictions/seed_20260728_train.csv",
+        "val": "/home/data/user/nguyenphuongnam/alzheimer_training/project_reports/a6_final_predictions/seed_20260728_val.csv"
+      },
+      "seed": 20260728,
+      "splits": {
+        "test": {
+          "censored": 38,
+          "cindex": 0.821969696969697,
+          "cox_loss": 3.0062334537506104,
+          "duplicate_rids": 0,
+          "events": 16,
+          "finite_risk": true,
+          "risk": {
+            "finite": true,
+            "max": 1.2197265625,
+            "mean": -0.2637929618358612,
+            "min": -1.103515625
+          },
+          "split": "test",
+          "subjects": 54
+        },
+        "train": {
+          "censored": 177,
+          "cindex": 0.8643811790552911,
+          "cox_loss": 4.060870170593262,
+          "duplicate_rids": 0,
+          "events": 74,
+          "finite_risk": true,
+          "risk": {
+            "finite": true,
+            "max": 1.2626953125,
+            "mean": -0.4223536252975464,
+            "min": -1.11328125
+          },
+          "split": "train",
+          "subjects": 251
+        },
+        "val": {
+          "censored": 38,
+          "cindex": 0.8541666666666666,
+          "cox_loss": 2.7121963500976562,
+          "duplicate_rids": 0,
+          "events": 16,
+          "finite_risk": true,
+          "risk": {
+            "finite": true,
+            "max": 1.212890625,
+            "mean": -0.5308883190155029,
+            "min": -1.1025390625
+          },
+          "split": "val",
+          "subjects": 54
+        }
+      }
+    },
+    "20260729": {
+      "best_epoch": 25,
+      "checkpoint": {
+        "architecture_manifest": {
+          "ablation": {
+            "dynamic_gate": true,
+            "fixed_lambda": 0.1,
+            "identity_residual": true,
+            "learnable_lambda": true,
+            "use_mc": true,
+            "use_mr": true,
+            "use_rc": false
+          },
+          "active_directions": [
+            "mr_to_m",
+            "mc_to_m",
+            "mr_to_r",
+            "mc_to_c"
+          ],
+          "active_pairs": [
+            "mr",
+            "mc"
+          ],
+          "cp_factor_weights": 2944,
+          "cp_specific_parameters": 3200,
+          "dynamic_gate": true,
+          "dynamic_gate_parameters": 25348,
+          "identity_residual": true,
+          "lambda_learnable": true,
+          "lambda_parameters": 4,
+          "medicalnet_sha256": "61224f9317fcce873366deb3703183e92cc47325b726b69691b33536244e10f4",
+          "pairs": {
+            "mc": {
+              "cp_factor_weights": 1408,
+              "cp_parameters_including_bias": 1536,
+              "hidden_dim": 128,
+              "input_dims": [
+                32,
+                16
+              ],
+              "old_first_weights": 65536,
+              "output_dim": 64,
+              "rank": 8,
+              "retained_output_bias": 128,
+              "whole_pair_parameters": 9920
+            },
+            "mr": {
+              "cp_factor_weights": 1536,
+              "cp_parameters_including_bias": 1664,
+              "hidden_dim": 128,
+              "input_dims": [
+                32,
+                32
+              ],
+              "old_first_weights": 131072,
+              "output_dim": 64,
+              "rank": 8,
+              "retained_output_bias": 128,
+              "whole_pair_parameters": 10048
+            }
+          },
+          "pairwise_parameters_including_post_mlp": 19968,
+          "seed": 20260729,
+          "total_parameters": 33519497,
+          "variant": "P06-ABLATION"
+        },
+        "best_epoch": 25,
+        "checkpoint_modified": false,
+        "checkpoint_sha256": "5e20a8296491aa0a778b6a51780a103f281f788a060da7b9eb78e9df923a1a3d",
+        "lambda_values": {
+          "mc_to_c": 0.11301649361848831,
+          "mc_to_m": 0.11312483996152878,
+          "mr_to_m": 0.10483330488204956,
+          "mr_to_r": 0.1075030267238617
+        },
+        "optimizer_loaded": false,
+        "path": "/home/data/user/nguyenphuongnam/alzheimer_training/phase_06_ablation/runs/multiseed_validation/official/a6_no_rc_seed20260729_20260920T085637Z/checkpoints/best.pt",
+        "run_id": "a6_no_rc_seed20260729_20260920T085637Z",
+        "seed": 20260729,
+        "state_dict_finite": true,
+        "state_dict_floating_elements": 33529097,
+        "state_dict_floating_tensor_count": 202,
+        "stored_best_metric": 0.8083333333333333,
+        "stored_test_access": 0,
+        "stored_test_construction_attempts": 0,
+        "stored_val_cindex": 0.8083333333333333,
+        "stored_val_cox_loss": 4.018108367919922
+      },
+      "inference": {
+        "device": "cuda",
+        "gradients_enabled": false,
+        "optimizer_steps": 0
+      },
+      "parameters": {
+        "cp_specific": 3200,
+        "dynamic_gate": 25348,
+        "learnable_lambdas": 4,
+        "total": 33519497,
+        "trainable": 33519497
+      },
+      "prediction_files": {
+        "test": "/home/data/user/nguyenphuongnam/alzheimer_training/project_reports/a6_final_predictions/seed_20260729_test.csv",
+        "train": "/home/data/user/nguyenphuongnam/alzheimer_training/project_reports/a6_final_predictions/seed_20260729_train.csv",
+        "val": "/home/data/user/nguyenphuongnam/alzheimer_training/project_reports/a6_final_predictions/seed_20260729_val.csv"
+      },
+      "seed": 20260729,
+      "splits": {
+        "test": {
+          "censored": 38,
+          "cindex": 0.8428030303030303,
+          "cox_loss": 4.156676769256592,
+          "duplicate_rids": 0,
+          "events": 16,
+          "finite_risk": true,
+          "risk": {
+            "finite": true,
+            "max": 2.0625,
+            "mean": -2.8885316848754883,
+            "min": -4.66796875
+          },
+          "split": "test",
+          "subjects": 54
+        },
+        "train": {
+          "censored": 177,
+          "cindex": 0.920267301354815,
+          "cox_loss": 3.7073888778686523,
+          "duplicate_rids": 0,
+          "events": 74,
+          "finite_risk": true,
+          "risk": {
+            "finite": true,
+            "max": 2.203125,
+            "mean": -2.92850923538208,
+            "min": -4.63671875
+          },
+          "split": "train",
+          "subjects": 251
+        },
+        "val": {
+          "censored": 38,
+          "cindex": 0.8083333333333333,
+          "cox_loss": 4.018108367919922,
+          "duplicate_rids": 0,
+          "events": 16,
+          "finite_risk": true,
+          "risk": {
+            "finite": true,
+            "max": 2.20703125,
+            "mean": -3.10504150390625,
+            "min": -4.64453125
+          },
+          "split": "val",
+          "subjects": 54
+        }
+      }
+    }
+  },
+  "sanity": {
+    "all_risk_scores_finite": true,
+    "architecture_modified": false,
+    "checkpoint_modified": false,
+    "exactly_three_checkpoints_evaluated": true,
+    "expected_cohort_sizes": true,
+    "mutually_exclusive_split_rids": true,
+    "no_duplicate_rids": true,
+    "optimizer_step_occurred": false,
+    "preprocessing_refit": false,
+    "training_process_launched": false
+  },
+  "split_audit": {
+    "test": {
+      "censored": 38,
+      "duplicate_rids": 0,
+      "events": 16,
+      "rid_max": 4989,
+      "rid_min": 126,
+      "rows": 162,
+      "subjects": 54,
+      "unique_rids": 54
+    },
+    "train": {
+      "censored": 177,
+      "duplicate_rids": 0,
+      "events": 74,
+      "rid_max": 5007,
+      "rid_min": 112,
+      "rows": 753,
+      "subjects": 251,
+      "unique_rids": 251
+    },
+    "val": {
+      "censored": 38,
+      "duplicate_rids": 0,
+      "events": 16,
+      "rid_max": 5066,
+      "rid_min": 351,
+      "rows": 162,
+      "subjects": 54,
+      "unique_rids": 54
+    }
+  },
+  "summary": {
+    "cindex": {
+      "test": {
+        "max": 0.875,
+        "mean": 0.8465909090909091,
+        "min": 0.821969696969697,
+        "sample_sd": 0.02671730299179143,
+        "values": [
+          0.875,
+          0.821969696969697,
+          0.8428030303030303
+        ]
+      },
+      "train": {
+        "max": 0.920267301354815,
+        "mean": 0.8901501281581838,
+        "min": 0.8643811790552911,
+        "sample_sd": 0.02819565491341464,
+        "values": [
+          0.8858019040644453,
+          0.8643811790552911,
+          0.920267301354815
+        ]
+      },
+      "val": {
+        "max": 0.8541666666666666,
+        "mean": 0.8347222222222223,
+        "min": 0.8083333333333333,
+        "sample_sd": 0.023692669596155506,
+        "values": [
+          0.8416666666666667,
+          0.8541666666666666,
+          0.8083333333333333
+        ]
+      }
+    },
+    "test_minus_validation": {
+      "max": 0.03446969696969693,
+      "mean": 0.011868686868686881,
+      "min": -0.03219696969696961,
+      "sample_sd": 0.038166207527082135,
+      "values": [
+        0.033333333333333326,
+        -0.03219696969696961,
+        0.03446969696969693
+      ]
+    }
+  },
+  "test_history_note": "The project test set had prior post-hoc access during earlier exploratory experiments; this is not a pristine never-before-seen test evaluation.",
+  "test_val_deltas": [
+    {
+      "seed": 20260727,
+      "test": 0.875,
+      "test_minus_validation": 0.033333333333333326,
+      "validation": 0.8416666666666667
+    },
+    {
+      "seed": 20260728,
+      "test": 0.821969696969697,
+      "test_minus_validation": -0.03219696969696961,
+      "validation": 0.8541666666666666
+    },
+    {
+      "seed": 20260729,
+      "test": 0.8428030303030303,
+      "test_minus_validation": 0.03446969696969693,
+      "validation": 0.8083333333333333
+    }
+  ],
+  "title": "A6_FINAL_TRAIN_VAL_TEST_EVALUATION",
+  "validation_consistency": [
+    {
+      "absolute_difference": 0.0,
+      "consistent_within_1e-6": true,
+      "recomputed_validation_cindex": 0.8416666666666667,
+      "seed": 20260727,
+      "stored_validation_cindex": 0.8416666666666667
+    },
+    {
+      "absolute_difference": 0.0,
+      "consistent_within_1e-6": true,
+      "recomputed_validation_cindex": 0.8541666666666666,
+      "seed": 20260728,
+      "stored_validation_cindex": 0.8541666666666666
+    },
+    {
+      "absolute_difference": 0.0,
+      "consistent_within_1e-6": true,
+      "recomputed_validation_cindex": 0.8083333333333333,
+      "seed": 20260729,
+      "stored_validation_cindex": 0.8083333333333333
+    }
+  ]
+}

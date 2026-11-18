@@ -1,0 +1,14 @@
+variable,split,reason,n
+CDR,test,observed_valid,22
+CDR,test,outside_90_days,32
+CDR,train,observed_valid,88
+CDR,train,outside_90_days,162
+CDR,train,within_90_but_invalid,1
+CDR,val,observed_valid,21
+CDR,val,outside_90_days,33
+MMSE,test,observed_valid,22
+MMSE,test,outside_90_days,32
+MMSE,train,observed_valid,89
+MMSE,train,outside_90_days,162
+MMSE,val,observed_valid,21
+MMSE,val,outside_90_days,33

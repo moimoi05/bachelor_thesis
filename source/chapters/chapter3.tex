@@ -1,0 +1,412 @@
+\chapter{Phương pháp}
+\label{chap:method}
+
+\section{Tổng quan RC-Free Pairwise Fusion}
+\label{sec:final-pipeline}
+Hình~\ref{fig:overall} trình bày bốn khối của mô hình. MRI ($M$), radiomics ($R$) và lâm sàng ($C$) được mã hóa riêng tại mỗi lần khám. Các biểu diễn này được RC-Free kết hợp qua hai tương tác MRI--radiomics (MR) và MRI--lâm sàng (MC), rồi bổ sung chúng vào từng nguồn qua bốn nhánh có cổng. Chuỗi đặc trưng hợp nhất được T-LSTM và attention tổng hợp qua ba lần khám thành một biểu diễn để khối Cox tạo điểm nguy cơ. Các bộ mã hóa và khối hợp nhất dùng chung trọng số qua ba lần khám.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{image/final-pipeline.pdf}
+\caption[Sơ đồ quy trình xử lý tổng thể]{RC-Free mã hóa ba nguồn, hợp nhất MR/MC rồi tổng hợp chuỗi thành điểm nguy cơ.}
+\label{fig:overall}
+\end{figure}
+\FloatBarrier
+
+Sơ đồ tổng hợp từ dữ liệu dọc đến đánh giá sống còn được trình bày ở Hình~\ref{fig:master-pipeline}, Phụ lục~\ref{app:master-pipeline}.
+
+\section{Thiết kế nghiên cứu và xây dựng dữ liệu}
+\label{sec:study-design}
+
+\subsection{Tiêu chí chọn mẫu và ba lần khám}
+Trước khi xây dựng mô hình, dữ liệu được lấy từ Alzheimer's Disease Neuroimaging Initiative (ADNI), một nghiên cứu dọc đa trung tâm về suy giảm nhận thức và AD \cite{weiner2015impact,jack2008adnimri}. Quy trình liên kết PTID (mã người tham gia dạng chuỗi) với RID (mã số người tham gia trong ADNI), rồi chọn lần khám ban đầu MCI sớm nhất có ngày hợp lệ, mã chẩn đoán MCI (giá trị 2) và mã lần khám \texttt{bl} (baseline, lần khám ban đầu) trong ADNI1, ADNIGO hoặc ADNI2. Với người $i$, đặt $b_i$ là ngày khám ban đầu và $L_i=b_i+18$ tháng lịch là \emph{mốc xét điều kiện chọn mẫu}.
+
+Để giữ nhóm chưa tiến triển trong giai đoạn quan sát, người tham gia bị loại nếu có chẩn đoán AD trong bảng tổng hợp chẩn đoán DXSUM, MMSE $<24$ hoặc CDR-global $\geq1$ tại hoặc trước $L_i$. Sau $L_i$, cần ít nhất một đánh giá MMSE/CDR hợp lệ để xác định biến cố hoặc kiểm duyệt.
+
+Sau khi xác định người đủ điều kiện, MRI được chọn trong khoảng $[b_i,L_i]$. Những lần chụp gần nhau được gom thành nhóm trong cửa sổ hai tháng tính từ lần chụp đầu nhóm. Mỗi nhóm ưu tiên ảnh chụp chính trước ảnh chụp lặp, sau đó ưu tiên phiên bản ảnh theo các bước hiệu chỉnh được ghi trong mô tả ảnh ADNI; nếu vẫn trùng ưu tiên thì chọn mã ảnh nhỏ hơn. Nếu có hơn ba nhóm thời điểm, giữ ảnh đầu, ảnh cuối và ảnh trung gian gần trung điểm thời gian nhất. Thứ tự ưu tiên dựa trên loại xử lý của ảnh; bảng kiểm soát chất lượng chính thức chưa liên kết được với mã ảnh hiện có. Với ADNI1, các tổ hợp nhãn được ưu tiên lần lượt là N3+Scaled+GradWarp+B1, N3+Scaled+GradWarp, N3+Scaled, N3+GradWarp+B1, N3+GradWarp và N3. Với ADNIGO/ADNI2, thứ tự là N3m+GradWarp, N3m, N3+GradWarp và N3; ảnh không khớp các nhãn này được xếp sau. Trong các nhãn phiên bản xử lý này của ADNI, B1 là hiệu chỉnh độ lệch trường tần số vô tuyến, GradWarp là hiệu chỉnh méo hình học do cuộn chênh từ, N3/N3m là hiệu chỉnh bất đồng nhất cường độ sáng và Scaled là chuẩn hóa kích thước theo mẫu đo (phantom); bảng kê ảnh được chọn lưu mã ảnh và thứ tự ưu tiên để truy vết lựa chọn, thay vì suy ra chất lượng từ hình ảnh.\footnote{Mô tả hiệu chỉnh ảnh của ADNI: \url{https://adni.loni.usc.edu/data-samples/adni-data/neuroimaging/mri/mri-pre-processing/}.} Ba ngày MRI được chọn thỏa mãn $s_{i1}<s_{i2}<s_{i3}\leq L_i$.
+
+
+
+Hình~\ref{fig:cohort} tóm tắt quá trình lọc từ 899 người có MRI và liên kết định danh thành công xuống 359 người, mỗi người đúng ba MRI, tổng cộng 1\,077 ảnh. Nhóm cuối có 106 biến cố và 253 trường hợp bị kiểm duyệt; giai đoạn tuyển vào nghiên cứu phân bố như sau: ADNI1 có 78 người, ADNIGO có 80 và ADNI2 có 201.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{image/cohort-construction.pdf}
+\caption[Quy trình xây dựng nhóm nghiên cứu dọc]{Quy trình lọc và chuẩn bị dữ liệu gồm 359 người với 1\,077 lần thăm khám. Ba nguồn được ghép theo lần khám, chia tập theo RID và tiền xử lý dựa trên tập huấn luyện.}
+\label{fig:cohort}
+\end{figure}
+
+\clearpage
+\subsection{Biến cố, kiểm duyệt và mốc tính thời gian}
+Với nhóm đã chọn, biến cố tiến triển được xác định từ các đánh giá lâm sàng sau mốc chọn mẫu $L_i$. Biến cố được ghi nhận tại lần đánh giá hợp lệ đầu tiên có MMSE $<24$ hoặc CDR-global $\geq1$. Nếu chưa ghi nhận biến cố, thời điểm kiểm duyệt là ngày đánh giá MMSE/CDR hợp lệ cuối cùng. Các giá trị thiếu hoặc không hợp lệ không tạo biến cố.
+
+\Needspace{8\baselineskip}
+Khi đã xác định ngày biến cố hoặc kiểm duyệt, thời gian sống còn $t_i$, tính bằng năm, bắt đầu từ ngày MRI cuối trong ba lần được chọn, ký hiệu $p_i=s_{i3}$, đến ngày biến cố hoặc kiểm duyệt, ký hiệu $o_i$. Chỉ báo $\delta_i$ bằng 1 nếu có biến cố và bằng 0 nếu bị kiểm duyệt. Nhãn được tính như sau:
+\begin{equation}
+ t_i=\frac{o_i-p_i}{365.25},\qquad
+ \delta_i=\begin{cases}1,&\text{có biến cố},\\0,&\text{bị kiểm duyệt}.\end{cases}
+ \label{eq:survival-target}
+\end{equation}
+
+Điểm cần lưu ý là $L_i$ dùng để chọn mẫu, còn $p_i$ dùng để bắt đầu tính thời gian. Trong 359 người, có 356 người chụp MRI cuối trước $L_i$; ba người còn lại chụp đúng $L_i$. Khoảng cách $L_i-p_i$ có trung vị 186 ngày, tứ phân vị 169--197 ngày và phạm vi 0--288 ngày. Vì chỉ giữ người chưa tiến triển đến $L_i$, khoảng từ $p_i$ đến $L_i$ được bảo đảm không có biến cố theo điều kiện chọn mẫu. Nói cách khác, tại ngày MRI cuối, việc một người được đưa vào nghiên cứu đã phụ thuộc vào thông tin của những tháng tiếp theo.
+
+Khoảng được bảo đảm không có biến cố này có thể gây sai lệch thời gian bất tử (immortal time bias) \cite{suissa2008immortal} khi diễn giải kết quả như dự báo từ $p_i$. Các kết quả trong khóa luận được diễn giải trong phạm vi nhóm hồi cứu này; thiết lập tiên lượng tại $L_i$ được đề xuất ở Mục~\ref{sec:study-limitations}.
+
+\subsection{Phân chia dữ liệu và hạn chế rò rỉ thông tin}
+\label{sec:data-split}
+Để tránh một người xuất hiện ở nhiều tập, dữ liệu được chia cố định theo RID thành 251 người huấn luyện, 54 người xác thực và 54 người kiểm tra; mọi MRI của một người thuộc cùng một tập. Số biến cố tương ứng là 74, 16 và 16. Các nguồn được ghép theo mã người, lần khám, mã ảnh và tập dữ liệu; mỗi lần khám phải khớp duy nhất giữa các nguồn. Điền dữ liệu thiếu, chuẩn hóa, loại đặc trưng hằng và PCA đều chỉ học từ tập huấn luyện. Chẩn đoán, trạng thái biến cố, ngày kết cục và thời gian sống còn không được dùng làm biến dự báo.
+
+Dữ liệu lâm sàng được ghép cùng RID với đánh giá hợp lệ gần MRI nhất trong $\pm90$ ngày; nếu bằng khoảng cách thì ưu tiên ngày sớm hơn, rồi mã bản ghi nhỏ hơn. Do cửa sổ ghép cho phép lệch tối đa $+90$ ngày so với ngày chụp, có 57 người sử dụng điểm MMSE hoặc CDR đo sau ngày MRI cuối $p_i$. Khi ngày chụp nằm gần mốc $L_i$, cửa sổ này có thể vượt qua $L_i$: có ba lượt ghép MMSE và ba lượt ghép CDR sử dụng số đo sau mốc đó. Tất cả số đo được ghép vẫn nằm trước ngày ghi nhận kết cục $o_i$. Giới hạn thời điểm đầu vào được tổng hợp ở mục tiếp theo.
+
+Để mô tả thành phần của ba tập dữ liệu, Bảng~\ref{tab:baseline-characteristics} tổng hợp đặc điểm của người tham gia tại lần chụp MRI đầu tiên, phân theo từng tập và tình trạng ghi nhận biến cố tiến triển.
+
+\input{tables/baseline_characteristics.tex}
+
+Tuổi, học vấn và các khoảng chụp có phân bố tương đối gần nhau giữa ba tập; các kiểm định mô tả trong bảng có $p>0.05$. Trung vị thời gian quan sát từ MRI cuối đến kết cục của toàn tập huấn luyện, xác thực và kiểm tra lần lượt là 3.07, 3.84 và 3.25 năm; khoảng tứ phân vị tương ứng là [1.98; 6.65], [1.99; 5.90] và [1.66; 6.86] năm. Giá trị dài nhất của tập xác thực là 18.26 năm, so với 13.95 năm ở tập huấn luyện, giải thích việc giới hạn phần theo dõi sau mốc khi tính AUC. Thống kê MMSE và CDR dựa trên 132 và 131 người có quan sát hợp lệ tại MRI đầu; số quan sát của từng nhóm được ghi trong bảng. Kiểm toán các bảng nguồn cho thấy 227 người có bản ghi MMSE/CDR nằm ngoài cửa sổ $\pm90$ ngày quanh MRI đầu (bản ghi hợp lệ gần nhất cách trung vị 102 ngày); CDR có thêm một người có bản ghi trong cửa sổ nhưng giá trị không hợp lệ. MRI đầu cách lần khám baseline trung vị 71 ngày, nên mức thiếu trong bảng phản ánh việc ghép theo ngày chụp; giá trị thiếu được xử lý bằng trung vị huấn luyện và chỉ báo quan sát như Mục~\ref{sec:preprocessing}.
+
+\subsection{Phạm vi đánh giá và diễn giải}
+\label{sec:evaluation-scope}
+Thiết lập trên là nghiên cứu hồi cứu trên nhóm có đủ ba MRI và chưa tiến triển đến $L_i$. Phạm vi này gắn với điều kiện chưa tiến triển đến $L_i$ và cửa sổ ghép lâm sàng quanh MRI. Biến cố được xác định bằng ngưỡng MMSE/CDR; ảnh hưởng đối với diễn giải kết quả được tổng hợp ở Mục~\ref{sec:study-limitations}.
+
+Về đánh giá, tập xác thực là kết quả chính và đã tham gia chọn mô hình. Tập kiểm tra đã được sử dụng để đối chiếu trong quá trình phát triển mô hình, do đó kết quả trên tập này được báo cáo như đánh giá hậu nghiệm (post-hoc). Mô hình chỉ xuất điểm nguy cơ; khóa luận chưa ước lượng nguy cơ tích lũy nền $H_0(t)$ để tính xác suất cá nhân. Vì vậy, các kết quả được dùng để đánh giá xếp hạng, so sánh nhóm và khả năng phân biệt theo thời gian. Mục~\ref{sec:study-limitations} tổng hợp ảnh hưởng của những giới hạn này đối với kết luận.
+
+\section{Tiền xử lý và biểu diễn từng nguồn dữ liệu}
+\label{sec:preprocessing}
+
+\subsection{Minh họa ba nguồn dữ liệu đầu vào}
+Sau khi liên kết dữ liệu, Hình~\ref{fig:input-three-sources} minh họa ba dạng thông tin trước khi đưa vào mạng: ảnh MRI, các số đo radiomics và điểm MMSE/CDR. Mỗi nguồn có một bộ mã hóa riêng để tạo vectơ đặc trưng ở cùng lần khám.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{image/input-three-sources.pdf}
+\caption[Minh họa MRI, radiomics và dữ liệu lâm sàng]{Ba dạng đầu vào và cách chuyển thành vectơ đặc trưng; ảnh MRI dùng để minh họa.}
+\label{fig:input-three-sources}
+\end{figure}
+
+
+
+
+
+
+\subsection{MRI và bộ mã hóa dùng chung}
+Với nhánh ảnh, MRI T1 được đưa về hướng trục RAS và tách não bằng SynthStrip \cite{hoopes2022synthstrip}. Các ảnh sau được căn chỉnh bằng rigid registration sáu bậc tự do (ba phép tịnh tiến và ba phép quay) về ảnh đầu; ảnh đầu được căn chỉnh bằng cùng phép biến đổi về mẫu MNI152NLin2009cAsym. Ba MRI của một người nằm trên lưới chung $144\times144\times144$, với kích thước mỗi voxel là 1.5~mm theo cả ba trục. Cường độ được chuẩn hóa z-score trong brain mask (vùng não được giữ sau tách não) của từng ảnh; voxel ngoài mặt nạ bằng không. Ảnh dùng nội suy tuyến tính, mặt nạ dùng nội suy láng giềng gần nhất. Quy trình không bổ sung hiệu chỉnh N4, thay đổi tỷ lệ affine hay đăng ký phi tuyến.
+
+Sau tiền xử lý, cả ba MRI dùng chung bộ mã hóa ResNet-18 3D triển khai bằng MONAI, khởi tạo từ trọng số MedicalNet; sau đây gọi ngắn là ResNet-18 3D \cite{he2016deep,cardoso2022monai}. Mạng gồm bốn tầng, mỗi tầng có hai khối cơ bản (BasicBlock). Mỗi khối gồm hai phép tích chập với nhân $3^3$, chuẩn hóa BatchNorm, hàm kích hoạt ReLU và đường nối phần dư \cite{ioffe2015batchnorm,nair2010rectified}. Số kênh của bốn tầng lần lượt là 64, 128, 256 và 512. Sau gộp toàn cục, vectơ 512 chiều qua lớp tuyến tính $512\to128$, GELU, Dropout 0.20 và LayerNorm để tạo $M$ \cite{hendrycks2016gelu,srivastava2014dropout,ba2016layernorm}. Trọng số MedicalNet từ Med3D được nạp vào bộ mã hóa \cite{chen2019med3d}: nạp đầy đủ trọng số và trạng thái BatchNorm của mạng trích xuất đặc trưng, bỏ khối đầu ra tiền huấn luyện rồi tinh chỉnh toàn mạng từ vòng huấn luyện đầu tiên.
+
+Bảng~\ref{tab:mri-encoder-shapes} trình bày kích thước bản đồ đặc trưng theo cấu hình MONAI (phiên bản 1.5.2)\footnote{Mã nguồn phiên bản: \url{https://github.com/Project-MONAI/MONAI/blob/1.5.2/monai/networks/nets/resnet.py}.}. Ba lần khám được xử lý bằng cùng bộ mã hóa; các vectơ sau gộp được xếp thành chuỗi $T=3$ trước phép chiếu.
+
+\begin{table}[H]
+\centering
+\small
+\caption[Kích thước trong bộ mã hóa MRI]{Bản đồ đặc trưng có kích thước $[B,C_{\mathrm{ch}},D,H,W]$; $B$ là cỡ lô, $C_{\mathrm{ch}}$ là số kênh, $D,H,W$ là ba kích thước không gian. Chuỗi vectơ có dạng $[B,T,F]$, với $T=3$ lần khám và $F$ là số chiều đặc trưng. Ký hiệu $C$ riêng chỉ nhánh lâm sàng.}
+\label{tab:mri-encoder-shapes}
+\begin{tabularx}{\textwidth}{@{}Y l@{}}
+\toprule
+\textbf{Bước} & \textbf{Kích thước đầu ra} \\
+\midrule
+MRI đầu vào & $[B,1,144,144,144]$ \\
+Tích chập $7^3$, bước 1, đệm 3; BN; ReLU & $[B,64,144,144,144]$ \\
+Gộp cực đại $3^3$, bước 2, đệm 1 & $[B,64,72,72,72]$ \\
+Tầng ResNet 1: hai khối cơ bản & $[B,64,72,72,72]$ \\
+Tầng 2: khối đầu có bước 2 & $[B,128,36,36,36]$ \\
+Tầng 3: khối đầu có bước 2 & $[B,256,18,18,18]$ \\
+Tầng 4: khối đầu có bước 2 & $[B,512,9,9,9]$ \\
+Gộp trung bình toàn cục; trải phẳng & $[B,512,1,1,1]\to[B,512]$ \\
+Xếp ba vectơ sau gộp & $[B,3,512]$ \\
+Tuyến tính; GELU; Dropout; LayerNorm & $[B,3,128]$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Radiomics}
+Từ cùng MRI đã xử lý, PyRadiomics trích 107 đặc trưng trong vùng não được xác định bởi brain mask, gồm hình dạng, thống kê bậc nhất và các nhóm kết cấu GLCM, GLDM, GLRLM, GLSZM, NGTDM \cite{vangriethuysen2017computational}. Cường độ trong mặt nạ được đưa về $[0,1]$ theo giá trị nhỏ nhất và lớn nhất của từng ảnh để tính đặc trưng PyRadiomics. Phép biến đổi này chỉ phục vụ nhánh radiomics, không thay đổi ảnh MRI đã chuẩn hóa z-score dùng cho nhánh CNN. Cấu hình dùng ảnh gốc, không thêm bộ lọc ảnh, và 64 mức rời rạc hóa (\texttt{binCount=64}). Sau khi loại ba đặc trưng không thay đổi trên tập huấn luyện (giá trị lớn nhất, nhỏ nhất và khoảng biến thiên), còn 104 đặc trưng. Chuẩn hóa và PCA giữ ít nhất 99\% phương sai chỉ học từ tập huấn luyện \cite{jolliffe2016pca}, tạo 16 thành phần mỗi lần khám. MLP $16\to128\to64$, GELU, Dropout 0.20 và LayerNorm tạo biểu diễn $R$ 64 chiều.
+
+Bảng~\ref{tab:radiomics-groups} phân biệt các nhóm đặc trưng theo loại thông tin được đo \cite{vangriethuysen2017computational}. Chẳng hạn, thống kê bậc nhất chỉ xét phân bố cường độ, còn các nhóm kết cấu xét thêm quan hệ không gian giữa các voxel. Các đặc trưng mô tả vùng não trong mặt nạ toàn não. Sau PCA, mỗi thành phần là tổ hợp tuyến tính của các đặc trưng đã chuẩn hóa.
+\input{tables/radiomics_groups}
+
+\subsection{Dữ liệu lâm sàng và chỉ báo có dữ liệu}
+Ở nhánh lâm sàng, chín biến dự báo gồm MMSE-total, CDR-global, tổng điểm CDR-sum-of-boxes (CDR-SB) và sáu miền CDR: trí nhớ, định hướng, phán đoán, hoạt động cộng đồng, sinh hoạt gia đình/sở thích và tự chăm sóc \cite{folstein1975mmse,morris1993cdr}. Giá trị thiếu được điền bằng trung vị của lần khám tương ứng trong tập huấn luyện; nếu không có, dùng trung vị chung của tập này. Sau đó, giá trị được chuẩn hóa theo trung bình và độ lệch chuẩn huấn luyện. Mỗi biến có một chỉ báo riêng chỉ nhận $0$ hoặc $1$: $1$ nếu biến tương ứng có giá trị quan sát và $0$ nếu bị thiếu trước khi điền. Vì có chín biến nên tạo thêm đúng chín chỉ báo. Ghép cả hai nhóm tạo 18 đầu vào cho MLP $18\to64\to64$, GELU, Dropout 0.10 và LayerNorm, sinh $C\in\mathbb R^{64}$. Các chỉ báo giúp mạng phân biệt số đo thật với giá trị được điền thay.
+
+Bảng~\ref{tab:clinical-inputs} liệt kê từng biến để phân biệt chín giá trị lâm sàng với chín chỉ báo dữ liệu thiếu. CDR-global và CDR-SB là hai cách tổng hợp khác nhau; sáu miền CDR vẫn được giữ riêng để mô hình nhận thông tin cụ thể của từng hoạt động.
+\input{tables/clinical_inputs}
+
+Hình~\ref{fig:clinical-18} giải thích vì sao đầu vào có 18 chiều. Với một biến thiếu, nhánh giá trị nhận giá trị đã điền và chuẩn hóa, còn chỉ báo của chính biến đó vẫn bằng 0. Với một biến quan sát được, chỉ báo bằng 1. Nhờ giữ lại chỉ báo trước khi điền thiếu, hai trường hợp có cùng giá trị số sau xử lý vẫn có thể được phân biệt.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{image/clinical-18-inputs.pdf}
+\caption[Từ chín biến lâm sàng đến 18 đầu vào]{Hai nhánh xử lý song song của cùng chín biến. Chỉ nhánh giá trị được điền thiếu và chuẩn hóa; chỉ báo giữ ý nghĩa nhị phân quan sát/thiếu.}
+\label{fig:clinical-18}
+\end{figure}
+
+\section{Các mô hình tham chiếu}
+\label{sec:architecture-evolution}
+Các mô hình tham chiếu giúp trả lời hai câu hỏi: thông tin theo thời gian đóng góp thế nào, và cách kết hợp các nguồn ảnh hưởng ra sao đến dự đoán. Nhóm MRI gồm mô hình dùng ảnh cuối, mô hình dùng chuỗi MRI với trạng thái cuối của T-LSTM, và mô hình dùng T-LSTM kết hợp attention để tổng hợp cả ba trạng thái. Nhóm hợp nhất dùng cùng ba nguồn MRI, radiomics và lâm sàng, lần lượt kết hợp bằng ghép nối, tích ngoài và CP.
+
+Một đối chứng riêng được xây dựng theo quy trình CNN--PCA--T-LSTM của Aghajanian và cộng sự \cite{aghajanian2025longitudinal}. CNN TensorFlow nhận MRI kích thước $128^3$ và xuất vectơ 512 chiều trước Dropout và lớp đầu ra. PCA được học từ tập huấn luyện với ngưỡng giữ ít nhất 99\% phương sai, không chuẩn hóa thang đo hoặc làm trắng. Chuỗi đặc trưng sau PCA được đưa vào T-LSTM có trạng thái ẩn 64 chiều.
+
+Với các mã khởi tạo 20260727, 20260728 và 20260729, số thành phần PCA tương ứng là 38, 69 và 2. Ở lần chạy thứ ba, hai thành phần đầu đã giữ 99.4704\% phương sai của 753 biểu diễn huấn luyện, nên đáp ứng ngưỡng 99\%. Phương sai tập trung rất mạnh vào hai hướng ở seed thứ ba, cho thấy số chiều hiệu dụng của biểu diễn CNN nhạy với khởi tạo. Mục~\ref{sec:paper-adaptation-results} đối chiếu số chiều này với C-index của từng seed. Bảng~\ref{tab:reference-methods} tóm tắt dữ liệu và vai trò của phương pháp gốc, bản tái lập có điều chỉnh và mô hình chính.
+
+\begin{table}[H]
+\centering\small
+\caption[Phân biệt công trình gốc, bản tái lập có điều chỉnh và phương pháp chính]{Dữ liệu, cấu hình và vai trò của ba phương pháp.}
+\label{tab:reference-methods}
+\begin{tabularx}{\textwidth}{@{}L{3.2cm}Y Y@{}}
+\toprule
+\textbf{Phương pháp} & \textbf{Dữ liệu và tiền xử lý} & \textbf{Mô hình / vai trò} \\
+\midrule
+Aghajanian gốc \cite{aghajanian2025longitudinal} & 228 MCI; SPM12, mô não và radiomics chất xám & CNN--PCA--T-LSTM; huấn luyện hai bước; nguồn tham chiếu \\
+Bản tái lập có điều chỉnh & 359 người; ảnh MRI đã cố định được đổi kích thước cho CNN & CNN/PCA theo lần khởi tạo; T-LSTM 64; mô hình đối chứng \\
+RC-Free Pairwise & 359 người; MRI $144^3$, radiomics toàn não, lâm sàng và chỉ báo có dữ liệu & MedicalNet; CP MR/MC; phần dư có cổng; T-LSTM 128; kiến trúc chính \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Về triển khai, mô hình chính dùng PyTorch và MONAI; scikit-learn thực hiện các biến đổi dữ liệu bảng \cite{paszke2019pytorch,cardoso2022monai,pedregosa2011sklearn}. Bản CNN--PCA--T-LSTM có bộ tối ưu, cỡ lô và cách tính hàm mất mát Cox khác nhóm mô hình tương tác theo cặp. C-index được tính thống nhất để đối chiếu hiệu năng tổng thể của các quy trình.
+
+\section{Mô hình đối chứng ghép nối đặc trưng}
+Mô hình đối chứng là mô hình dùng làm mốc so sánh để đánh giá đóng góp của một lựa chọn thiết kế. Ở đây, câu hỏi là: nếu đã có đủ MRI, radiomics và lâm sàng, việc tạo tương tác theo cặp có đem lại lợi ích so với cách kết hợp đơn giản hay không? Đối chứng ghép nối sử dụng cùng ba nguồn, nhưng chỉ xếp các vectơ đặc trưng cạnh nhau trước khi đưa vào mạng phía sau.
+
+Ví dụ tại một lần khám, $M_t$ gồm 128 số, $R_t$ gồm 64 số và $C_t$ gồm 64 số. Ghép nối tạo một vectơ 256 chiều theo thứ tự MRI, radiomics rồi lâm sàng. Khối MLP học cách biến đổi vectơ chung thành 128 chiều để khối thời gian sử dụng. Tại lần khám $t$:
+\begin{equation}
+ F_t=\operatorname{MLP}_{\rm out}(M_t\concat R_t\concat C_t),\qquad
+ M_t\concat R_t\concat C_t\in\mathbb R^{256},\quad F_t\in\mathbb R^{128}.\label{eq:concat}
+\end{equation}
+Khối đầu ra $\operatorname{MLP}_{\rm out}$ gồm lớp tuyến tính $256\to128$, GELU, Dropout 0.20 và LayerNorm. Chuỗi ba $F_t$ đi qua khối thời gian và khối dự báo Cox. Các lớp sau ghép nối học quan hệ giữa các nguồn từ vectơ chung này.
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{image/concat-baseline.pdf}
+\caption[Mô hình đối chứng ghép nối đặc trưng]{Luồng tính tại một lần khám của đối chứng ghép nối. Ba biểu diễn được ghép trực tiếp; mô hình theo cặp bổ sung khối tương tác trước bước ghép này.}
+\label{fig:concat-baseline}
+\end{figure}
+Mô hình theo cặp bổ sung một khối riêng để biểu diễn các tích chéo trước bước ghép nối. Trong loạt so sánh có kiểm soát, các thành phần chung và cách khởi tạo được giữ đồng nhất; Mục~\ref{sec:matched-fusion} trình bày kết quả đối chiếu này.
+
+\Needspace{9\baselineskip}
+\section{Hợp nhất động qua tương tác theo cặp}
+Khác với ghép nối, tại mỗi lần khám mô hình dùng ba biểu diễn MRI ($M$, 128 chiều), radiomics ($R$, 64 chiều) và lâm sàng ($C$, 64 chiều). Mô hình đầy đủ tạo ba cặp tương tác MR, MC và RC để khai thác quan hệ giữa các nguồn. Trước khi kết hợp, phép chiếu tuyến tính không có bias (hệ số chệch) giảm $M$ từ 128 xuống 32 chiều, $R$ từ 64 xuống 32 chiều và $C$ từ 64 xuống 16 chiều:
+\begin{equation}
+ \widetilde M\in\mathbb R^{32},\qquad
+ \widetilde R\in\mathbb R^{32},\qquad
+ \widetilde C\in\mathbb R^{16}.\label{eq:input-projection}
+\end{equation}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{image/mr-outer-product.pdf}
+\caption[Tích ngoài và khối MLP]{Tích ngoài tạo mọi tích chéo giữa hai vector cột; ma trận được trải phẳng trước khi qua MLP.}
+\label{fig:mr-outer-product}
+\end{figure}
+
+Mỗi cặp tương tác $k\in\{\mathrm{MR},\mathrm{MC},\mathrm{RC}\}$ kết hợp hai vectơ đã giảm chiều bằng tích ngoài: nhân từng chiều của nguồn thứ nhất với mọi chiều của nguồn thứ hai, không chỉ các chiều cùng vị trí. Ký hiệu tổng quát hai vectơ cột đầu vào của cặp $k$ là $x\in\mathbb R^{d_x\times1}$ và $y\in\mathbb R^{d_y\times1}$ lấy từ $(\widetilde M,\widetilde R,\widetilde C)$, tích ngoài có kích thước $xy^\top\in\mathbb R^{d_x\times d_y}$; trải ma trận $xy^\top$ thành vectơ $v=\operatorname{vec}(xy^\top)$. MR tạo $32\times32=1\,024$ giá trị tương tác; MC và RC mỗi cặp tạo $32\times16=512$ giá trị.
+
+Sau đó, các giá trị này qua MLP để tạo biểu diễn tương tác: MR dùng $1024\to128\to64$, MC dùng $512\to128\to64$, RC dùng $512\to64\to32$. Giữa hai lớp tuyến tính có GELU và Dropout 0.10; LayerNorm đặt cuối mỗi khối.
+
+Để kết hợp với đầu vào gốc, đặc trưng tương tác được ánh xạ về kích thước của từng nguồn để cộng vào biểu diễn gốc. MR truyền về $M$ và $R$; MC về $M$ và $C$; RC về $R$ và $C$. Như vậy, ba cặp tạo sáu nhánh truyền. Mỗi nhánh có phép chiếu tuyến tính và LayerNorm riêng, đưa đặc trưng về 128 chiều nếu đích là $M$, hoặc 64 chiều nếu đích là $R$ hay $C$.
+
+
+
+Mô hình giữ biểu diễn gốc và dùng cổng điều tiết để kiểm soát đóng góp tương tác. Mọi tương tác chỉ diễn ra trong cùng một người tại cùng một lần khám. Cấu trúc đầy đủ này là cơ sở khảo sát việc bỏ tương tác RC trong RC-Free.
+
+\section{Tham số hóa tương tác theo cặp bằng CP}
+\label{sec:cp-method}
+
+Để giảm số trọng số cần học, CP thay lớp song tuyến đầu bằng các nhân tử hạng thấp và giữ nguyên kích thước đầu ra. Có thể hiểu phép tính này như sau: mỗi nguồn được chiếu vào một số ít hướng học được; các tọa độ tương ứng được nhân với nhau, rồi kết quả được chiếu sang không gian đầu ra. Hạng $Q$ quy định số hướng phối hợp được học. Hình~\ref{fig:cp-block} minh họa trường hợp MR với $Q=8$.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{image/outer-vs-cp.pdf}
+\caption[Luồng tính của khối CP]{CP kết hợp các biểu diễn hạng thấp rồi tạo đặc trưng tương tác; MLP phía sau giữ nguyên.}
+\label{fig:cp-block}
+\end{figure}
+Với lớp đầy đủ, chiều ẩn thứ $s$ được tính bằng
+\begin{equation}
+ h_s=\sum_{i=1}^{d_x}\sum_{j=1}^{d_y}\mathcal W_{sij}x_i y_j+b_s,
+ \qquad \mathcal W\in\mathbb R^{d_h\times d_x\times d_y}.
+\end{equation}
+Thay vì học toàn bộ trọng số trên, CP tham số hóa \emph{tensor trọng số của ánh xạ song tuyến} theo cấu trúc hạng thấp \cite{kolda2009tensor,liu2018lowrank}:
+\begin{equation}
+ \mathcal W_{sij}\approx\sum_{q=1}^{Q}O_{sq}A_{iq}B_{jq}.
+ \label{eq:cp-weight}
+\end{equation}
+Trong cách biểu diễn này, các ma trận $A\in\mathbb R^{d_x\times Q}$, $B\in\mathbb R^{d_y\times Q}$ và $O\in\mathbb R^{d_h\times Q}$ được học cùng mạng. Hai đầu vào được chiếu về $Q$ chiều, nhân từng phần tử rồi chiếu ra $d_h$ chiều. Phép tính thuận tương ứng là
+\begin{align}
+ u&=A^\top x,\qquad v=B^\top y,\qquad q=u\odot v,\label{eq:cp-lowrank}\\
+ h&=Oq+b,\qquad E_k=\operatorname{PostMLP}_k(h),
+ \label{eq:cpblock}
+\end{align}
+với $E_k$ là biểu diễn tương tác đầu ra của cặp $k\in\{\mathrm{MR},\mathrm{MC},\mathrm{RC}\}$. Các ma trận $A$ và $B$ không có hệ số chệch; $b$ của lớp đầu được giữ trong $Oq+b$. MLP sau tương tác vẫn gồm GELU, Dropout 0.10, lớp tuyến tính $d_h\to d_o$ và LayerNorm. Đối chứng CP chỉ thay phép biến đổi tương tác đầu, giữ kích thước đầu ra, MLP phía sau, bộ mã hóa, nhánh truyền, cổng, hệ số điều chỉnh và khối thời gian.
+
+
+
+\begin{table}[H]
+\centering
+\caption[Cấu hình CP của mô hình đầy đủ và kiến trúc cuối]{Cấu hình CP của mô hình đầy đủ và kiến trúc cuối.}
+\label{tab:cpconfig}
+\begin{tabular}{lccccc}
+\toprule
+Cặp & $(d_x,d_y)$ & Hạng $Q$ & Chiều ẩn $d_h$ & Đầu ra $d_o$ & RC-Free \\
+\midrule
+MR & $(32,32)$ & 8 & 128 & 64 & Giữ \\
+MC & $(32,16)$ & 8 & 128 & 64 & Giữ \\
+RC & $(32,16)$ & 4 & 64 & 32 & Loại \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Bảng~\ref{tab:cpconfig} ghi hạng thực tế; khóa luận chưa khảo sát rộng để xác định hạng tối ưu. Lớp đầu đầy đủ có $d_hd_xd_y+d_h$ tham số, còn CP có $Q(d_x+d_y+d_h)+d_h$. Lợi ích trực tiếp nằm ở lõi tương tác, trong khi bộ mã hóa MRI vẫn chiếm phần lớn tổng tham số. Công thức này chưa cho biết mức tăng tốc của toàn quy trình.
+
+\section{Truyền phần dư qua cổng điều tiết động}
+\label{sec:gated-routing}
+Một cách đơn giản là ghép ba biểu diễn rồi đưa vào khối thời gian; đây là đối chứng ghép nối của khóa luận. Với mô hình tương tác theo cặp, thiết kế ở đây giữ đường biểu diễn gốc và chỉ cộng thêm thông tin từ các cặp liên quan. Nhờ đó, mạng vẫn nhận được thông tin riêng của mỗi nguồn khi cổng giảm phần bổ sung từ tương tác.
+
+Chẳng hạn, cặp MRI--radiomics tạo thông tin chung nhưng mỗi nguồn cần nhận một phần bổ sung có kích thước khác nhau. Hai phép chiếu riêng đưa tương tác về chiều của MRI và radiomics; mỗi cổng quyết định mức bổ sung cho một người tại một lần khám. Hệ số $\lambda$ điều chỉnh độ lớn và dấu chung của từng nhánh. Thiết kế kế thừa ý tưởng điều tiết phần dư từ \cite{ryumina2026residual,liu2026motion} và tích hợp thành công thức dưới đây.
+
+Với cặp $k$ và phương thức đích $d$, ký hiệu $U_d$ là biểu diễn gốc và
+\begin{equation}
+ \widehat E_{k\to d}=\LN_{k\to d}(W_{k\to d}E_k+b_{k\to d})\label{eq:target-projection}
+\end{equation}
+là đặc trưng tương tác sau phép chiếu theo nguồn đích. Phép chiếu sử dụng ánh xạ tuyến tính có hệ số chệch, tiếp nối bằng chuẩn hóa LayerNorm. Bước giảm chiều đầu vào trước CP chỉ dùng ánh xạ tuyến tính không có hệ số chệch; cả hai bước đều không dùng hàm kích hoạt phi tuyến. Cổng nhận đồng thời biểu diễn gốc đã chuẩn hóa và đặc trưng tương tác:
+\begin{equation}
+ g_{k\to d}=\sigma\!\left(
+ w_{k\to d}^{\top}\operatorname{GELU}\!\left[
+ V_{k\to d}\bigl(\LN_d^{\rm gate}(U_d)\concat\widehat E_{k\to d}\bigr)
+ +a_{k\to d}\right]+c_{k\to d}\right).
+ \label{eq:dynamic-gate}
+\end{equation}
+MLP của cổng có 32 chiều ẩn, xuất một số vô hướng trong $(0,1)$ cho từng cá thể tại mỗi lần khám. Giá trị này được nhân với mọi chiều đặc trưng của nhánh. Các cổng dùng sigmoid độc lập, không cạnh tranh bằng softmax. Trọng số được khởi tạo Xavier và hệ số chệch bằng không.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{image/gated-residual-route.pdf}
+\caption[Cấu trúc một nhánh phần dư có cổng điều tiết]{Đóng góp tương tác được điều tiết bởi cổng $g$ và hệ số $\lambda$, cộng vào biểu diễn gốc rồi chuẩn hóa.}
+\label{fig:route}
+\end{figure}
+
+Bên cạnh cổng phụ thuộc đầu vào, hệ số vô hướng $\lambda_{k\to d}$ được học riêng cho nhánh nhưng dùng chung giữa mọi cá thể và các lần khám. Tham số khởi tạo $\lambda=0.1$ và \emph{không ràng buộc dấu}. Do đó, cổng điều tiết phụ thuộc đầu vào, còn $\lambda$ thể hiện độ lớn và dấu chung của nhánh; không đồng nhất hai thành phần này với trọng số attention.
+
+Biểu diễn phương thức đích được cập nhật bằng
+\begin{equation}
+ Z_d=\LN_d^{\rm out}\left(
+ U_d+\sum_{k\in\mathcal P(d)}\lambda_{k\to d}\,g_{k\to d}\,\widehat E_{k\to d}
+ \right).
+ \label{eq:ours-residual}
+\end{equation}
+Trong đó, $\mathcal P(d)$ là tập các cặp tương tác còn hoạt động truyền tới nhánh đích $d$. Đường truyền gốc dùng trực tiếp $U_d$. LayerNorm ở phép chiếu theo đích, đầu vào cổng và sau tổng phần dư là ba phép chuẩn hóa khác nhau \cite{ba2016layernorm}. Mức đóng góp thực tế phụ thuộc đồng thời vào $\lambda$, cổng và độ lớn đặc trưng. Với một nhánh, cổng gần 0 làm phần tương tác bổ sung nhỏ đi, trong khi đường biểu diễn gốc vẫn được giữ. Cổng gần 1 cho phép truyền nhiều hơn đặc trưng tương tác; dấu của phần bổ sung còn phụ thuộc hệ số $\lambda$ và từng tọa độ đặc trưng. Giá trị cổng cần được đọc cùng hệ số $\lambda$ và độ lớn đặc trưng khi phân tích đóng góp của nhánh.
+
+\section{RC-Free Pairwise Fusion}
+\label{sec:rcfree-method}
+Kiến trúc rút gọn từ mô hình đầy đủ là RC-Free CP-Factorized Pairwise Fusion, gọi ngắn là RC-Free Pairwise Fusion. Tên RC-Free chỉ việc \emph{không có tương tác trực tiếp giữa radiomics và dữ liệu lâm sàng}. Quyết định này được khảo sát sau thí nghiệm loại bỏ thành phần của CP đầy đủ, rồi kiểm tra qua nhiều lần khởi tạo, không áp đặt từ đầu. Cả ba nhánh đầu vào vẫn được giữ; MRI là điểm nối của hai tương tác MR và MC. Bỏ RC nghĩa là bỏ khối tương tác trực tiếp giữa radiomics và lâm sàng, không phải bỏ hai nguồn này: biểu diễn $R$ và $C$ vẫn đi theo đường gốc, nhận bổ sung từ MRI rồi tham gia ghép nối ở đầu ra.
+
+Đặt $D_{k\to d}=\lambda_{k\to d}g_{k\to d}\widehat E_{k\to d}$, các đầu ra là
+\begin{align}
+ M_{\rm out}&=\LN_M^{\rm out}(M+D_{(\mathrm{MR}\to M)}+D_{(\mathrm{MC}\to M)}),\label{eq:rcfree-first}\\
+ R_{\rm out}&=\LN_R^{\rm out}(R+D_{(\mathrm{MR}\to R)}),\\
+ C_{\rm out}&=\LN_C^{\rm out}(C+D_{(\mathrm{MC}\to C)}).
+ \label{eq:rcfree-residual}
+\end{align}
+
+
+
+Hai khối CP MR/MC dùng hạng 8/8; bốn phép chiếu theo đích, bốn cổng động và bốn hệ số điều chỉnh học được còn hoạt động. Đầu ra vẫn có 128/64/64 chiều nên ánh xạ sau ghép nối và mô hình thời gian không đổi. Để đánh giá vai trò của các hệ số điều chỉnh, khóa luận sử dụng thêm biến thể RC-Free Fixed-$\lambda$, trong đó bốn hệ số $\lambda$ được cố định ở mức 0.1 thay vì được học trong quá trình huấn luyện.
+
+\section{Mô hình thời gian và attention}
+\label{sec:temporal-method}
+Sau bước hợp nhất tại từng lần khám, T-LSTM giảm đóng góp của phần bộ nhớ ngắn hạn khi khoảng cách giữa hai lần khám tăng, qua đó xử lý lịch khám không đều \cite{baytas2017patient,aghajanian2025longitudinal}. Khoảng đầu bằng không; các khoảng sau là $\Delta t_t=(s_t-s_{t-1})/365.25$, tính bằng năm. Mô hình dùng số ngày thực tế, không thay bằng thứ tự lần khám và không bổ sung biểu diễn thời gian học được.
+
+Từ bộ nhớ trước đó $c_{t-1}$, mô hình tách thành phần ngắn hạn $c_{t-1}^{S}$ và phần còn lại $c_{t-1}^{L}$, rồi điều chỉnh theo hệ số $\gamma_t$:
+\begin{align}
+ c_{t-1}^{S}&=\tanh(W_Sc_{t-1}+b_S),\qquad
+ c_{t-1}^{L}=c_{t-1}-c_{t-1}^{S},\label{eq:tlstm-first}\\
+ \gamma_t&=\frac{1}{\log(e+\Delta t_t)},\qquad
+ c_{t-1}^{*}=c_{t-1}^{L}+\gamma_t c_{t-1}^{S}.
+ \label{eq:tlstm-memory}
+\end{align}
+Các cổng đầu vào $i_t$, quên $f_t$, đầu ra $o_t$ và bộ nhớ ứng viên $\widetilde c_t$ được tính từ $F_t$, $h_{t-1}$ bằng các ánh xạ tuyến tính có hệ số chệch trên đầu vào và trạng thái trước. Các cổng $i_t,f_t,o_t$ dùng sigmoid; bộ nhớ ứng viên dùng tanh. Bộ nhớ và trạng thái ẩn được cập nhật:
+\begin{equation}
+ c_t=f_t\odot c_{t-1}^{*}+i_t\odot\widetilde c_t,
+ \qquad h_t=o_t\odot\tanh(c_t).\label{eq:tlstm-state}
+\end{equation}
+Mô hình dùng một lớp một chiều với trạng thái ẩn 128 chiều. Thời gian tác động vào độ suy giảm của bộ nhớ ngắn hạn; nếu chỉ báo lần khám không hợp lệ, mô hình giữ trạng thái trước. Trong nhóm nghiên cứu hiện tại, cả ba lần khám của mỗi người đều hợp lệ.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{image/temporal-model.pdf}
+\caption[T-LSTM và attention theo thời gian]{T-LSTM nhận chuỗi và khoảng cách MRI; attention tổng hợp trạng thái trước khi qua Cox.}
+\label{fig:temporal}
+\end{figure}
+
+Attention cộng chỉ tổng hợp các lần khám hợp lệ, theo cách chấm điểm học được \cite{bahdanau2015attention}:
+\begin{equation}
+ e_t=v_a^\top\tanh(W_a h_t+b_a),\qquad
+ \alpha_t=\frac{\exp(e_t)}{\sum_{j\in\mathcal V}\exp(e_j)},\qquad
+ z=\sum_{t\in\mathcal V}\alpha_t h_t.
+ \label{eq:temporal-attention}
+\end{equation}
+Trong đó, $\mathcal V$ là tập các lần khám hợp lệ. Phép chiếu chấm điểm dùng $128\to64\to1$, tạo biểu diễn tổng hợp $z\in\mathbb R^{128}$. Các trọng số quyết định mức đóng góp của từng trạng thái vào biểu diễn chung. T-LSTM trả lời câu hỏi thông tin quá khứ nên được duy trì và cập nhật thế nào khi các lần khám cách nhau không đều; attention trả lời câu hỏi nên tổng hợp ba trạng thái ẩn với trọng số nào. Mỗi trọng số attention điều tiết một trạng thái ẩn đã tổng hợp lịch sử đến lần khám tương ứng.
+
+\section{Hàm mục tiêu Cox}
+\label{sec:training-method}
+Từ biểu diễn chuỗi đã tổng hợp, khối dự báo sống còn dùng lớp tuyến tính $128\to64$, GELU, Dropout 0.30 và lớp tuyến tính $64\to1$ để sinh điểm log-nguy cơ $\eta_i$, không qua sigmoid hay softmax. Với giả định nguy cơ tỷ lệ \cite{cox1972regression},
+\begin{equation}
+ h(\tau\mid z_i)=h_0(\tau)\exp(\eta_i).
+\end{equation}
+Điểm càng lớn tương ứng với nguy cơ biến cố sớm hơn. Hàm mất mát Cox so sánh điểm của người có biến cố với điểm của những người còn trong tập nguy cơ tại cùng thời điểm. Người bị kiểm duyệt vẫn đóng góp thông tin trong thời gian họ còn được theo dõi; sau thời điểm kiểm duyệt, họ không còn thuộc tập nguy cơ. Cách sử dụng dữ liệu này khác với gán mọi trường hợp chưa quan sát biến cố vào một lớp không tiến triển.
+
+Gọi $\tau_k$ là các thời điểm biến cố khác nhau, $\mathcal D_k$ là nhóm biến cố tại $\tau_k$, $d_k=|\mathcal D_k|$ và $\mathcal R_k=\{j:t_j\geq\tau_k\}$. Hàm mất mát là đối của log-hợp lý riêng phần, xử lý biến cố trùng thời gian theo Breslow \cite{breslow1974covariance} và lấy trung bình trên $N_e$ biến cố:
+\begin{equation}
+ \mathcal L_{\rm Cox}=-\frac{1}{N_e}\sum_k
+ \left[\sum_{i\in\mathcal D_k}\eta_i
+ -d_k\log\!\left(\sum_{j\in\mathcal R_k}\exp(\eta_j)\right)\right].
+ \label{eq:cox-method}
+\end{equation}
+
+
+Thuật toán~\ref{alg:rcfree-forward} tóm lược toàn bộ luồng tính xuôi của mô hình sau khi các thành phần đã được định nghĩa. Các bộ mã hóa và khối hợp nhất dùng chung trọng số qua ba lần khám; bốn nhánh tương tác có cổng được tính từ các biểu diễn trong cùng một lần khám.
+\input{algorithms/rcfree_forward}
+
+\section{Đánh giá xếp hạng và phân tầng nguy cơ}
+\label{sec:survival-evaluation}
+Quá trình đánh giá xếp hạng và phân tầng nguy cơ sử dụng trực tiếp điểm dự đoán từ ba mô hình RC-Free đã lưu ứng với ba lần khởi tạo, không huấn luyện lại hay tinh chỉnh thêm siêu tham số. Với từng người, RID, $\eta_i$, $t_i$ và $\delta_i$ được đối chiếu với bảng kê dữ liệu cố định; các tập không trùng RID.
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{image/evaluation-map.pdf}
+\caption[Ba góc nhìn đánh giá điểm nguy cơ]{Vai trò bổ sung của C-index, Kaplan--Meier và AUC khi đánh giá điểm nguy cơ.}
+\label{fig:evaluation-map}
+\end{figure}
+
+\subsection{C-index}
+C-index theo quy ước Harrell \cite{harrell1996multivariable} xét cặp $(i,j)$ khi $\delta_i=1$ và $t_i<t_j$. Cặp nhận 1 nếu $\eta_i>\eta_j$, 0.5 nếu điểm bằng nhau và 0 nếu thứ tự ngược. Thời gian bằng nhau không tạo cặp so sánh. Kết quả của ba lần khởi tạo được tổng hợp bằng trung bình và độ lệch chuẩn mẫu (SD, mẫu số $n-1$). SD phản ánh biến thiên giữa các lần khởi tạo trên cùng nhóm nghiên cứu.
+
+\subsection{Kaplan--Meier và nhóm nguy cơ đồng thuận}
+Với mỗi lần khởi tạo, lấy trung vị $\eta$ trên tập huấn luyện làm ngưỡng: điểm lớn hơn ngưỡng thuộc nhóm cao, bằng hoặc nhỏ hơn thuộc nhóm thấp. Nhóm cuối của mỗi người là đa số phiếu của ba lần khởi tạo. Ngưỡng được xác định hoàn toàn từ điểm nguy cơ huấn luyện; bỏ phiếu kết hợp các quyết định phân nhóm của ba mô hình.
+
+Từ hai nhóm này, Kaplan--Meier (KM) ước lượng xác suất chưa ghi nhận biến cố trong từng nhóm \cite{kaplan1958nonparametric}. Hình gồm khoảng tin cậy (CI) 95\%, dấu kiểm duyệt và số người còn nguy cơ ngay trước 0/2/3/5 năm. Log-rank so sánh hai đường; Cox đơn biến theo nhóm ước lượng HR cao/thấp và CI 95\%. Kiểm tra giả định nguy cơ tỷ lệ bằng phần dư Schoenfeld với biến đổi thời gian theo thứ hạng. Hình giới hạn ở 5 năm để dễ đọc, còn log-rank và HR dùng toàn bộ theo dõi.
+
+\subsection{AUC theo thời gian tại 2, 3 và 5 năm}
+Tại mốc $h$, đặt $\mathcal C_h=\{i:\delta_i=1,t_i\leq h\}$ là nhóm đã có biến cố và $\mathcal D_h=\{j:t_j>h\}$ là nhóm đối chứng còn được theo dõi quá mốc. Những người bị kiểm duyệt trước hoặc tại $h$ được xử lý qua trọng số nghịch đảo xác suất kiểm duyệt (IPCW). Hàm $\widehat G(u)$, ước lượng từ tập huấn luyện, biểu diễn xác suất chưa bị kiểm duyệt đến thời điểm $u$ \cite{polsterl2020scikit,hung2010time}.
+
+Với $w_i=1/\widehat G(t_i)$ cho $i\in\mathcal C_h$, ước lượng AUC tích lũy/động có dạng
+\begin{equation}
+ \widehat{\operatorname{AUC}}(h)=
+ \frac{\displaystyle\sum_{i\in\mathcal C_h}w_i
+                 \sum_{j\in\mathcal D_h}\kappa(\eta_i,\eta_j)}
+      {\displaystyle |\mathcal D_h|\sum_{i\in\mathcal C_h}w_i},
+ \qquad
+ \kappa(a,b)=\begin{cases}
+ 1,&a>b,\\
+ \tfrac12,&a=b,\\
+ 0,&a<b.
+ \end{cases}
+ \label{eq:ipcw-auc}
+\end{equation}
+Công thức lấy trung bình có trọng số trên các cặp biến cố--đối chứng: điểm nguy cơ của người có biến cố càng thường cao hơn điểm của đối chứng thì AUC càng lớn. Nếu gán cho mỗi đối chứng trọng số $1/\widehat G(h)$, hệ số chung này triệt tiêu giữa tử và mẫu, dẫn đến Công thức~\eqref{eq:ipcw-auc}. Khi tính bằng \texttt{scikit-survival}, các điểm nguy cơ kề nhau sau sắp xếp chênh lệch không quá $10^{-8}$ được gom thành nhóm đồng điểm. Chỉ tính AUC khi cả hai nhóm đều có người và xác suất chưa bị kiểm duyệt tại các thời điểm cần dùng còn dương.
+
+Khi gọi thư viện, phần theo dõi sau $h+\varepsilon$ được chặn phải trên bản sao nhãn để giữ nguyên $\mathcal C_h$, $\mathcal D_h$ và các trọng số trong Công thức~\eqref{eq:ipcw-auc}, đồng thời tránh ngoại suy phân phối kiểm duyệt khi thời gian tối đa của tập xác thực (18.26 năm) vượt tập huấn luyện (13.95 năm); $h+\varepsilon$ là số thực biểu diễn được liền sau $h$.
+
+AUC được tính riêng từng lần khởi tạo rồi tổng hợp bằng trung bình $\pm$ SD; mốc không đủ điều kiện được ghi NA kèm lý do. Chương~\ref{chap:results} trình bày lần lượt khả năng xếp hạng qua C-index, phân biệt tại từng mốc qua AUC và khác biệt giữa hai nhóm qua Kaplan--Meier.
+
+\FloatBarrier

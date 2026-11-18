@@ -1,0 +1,16 @@
+{
+  "status": "OFFICIAL_SEED_PCA_COMPLETE",
+  "seed": 20260729,
+  "fit_split": "train",
+  "train_rows": 753,
+  "validation_transform_rows": 162,
+  "validation_fit_rows": 0,
+  "test_rows": 0,
+  "input_dimension": 512,
+  "component_count": 2,
+  "explained_variance": 0.994704058661148,
+  "centered": true,
+  "scaled": false,
+  "whitened": false,
+  "pca_sha256": "5081f32fb7ece4bee422424ca39415cf290171d28bb04a99f547a295b4fe616d"
+}

@@ -1,0 +1,148 @@
+{
+  "experiment_id": "frozen_temporal_audit_v1",
+  "status": "COMPLETE",
+  "timestamp_utc": "2026-10-08T09:17:24.405073+00:00",
+  "source_sha256": "e85108ccdf06c176a55f45eed10e1ace9aa82fc9eb439d29dab5c6c6e6629feb",
+  "command": "/home/data/user/nguyenphuongnam/.conda/envs/alzheimer_training/bin/python /home/data/user/nguyenphuongnam/khoaluan/astra6_revision/experiments/audit_temporal.py",
+  "input_sha256": {
+    "/home/data/user/nguyenphuongnam/data_alzheimer/metadata/processed/training_manifest_with_raw_mri.csv": "7751f697f89400e851d2ada606afecd40501905aa54f0c53155f60378d4c5c18",
+    "/home/data/user/nguyenphuongnam/data_alzheimer/metadata/processed/model_ready_manifest_v1.csv": "1b5db79b3f5c8c805ea33ff515c365d0c159655ee1491c7abbe842eca5011954",
+    "/home/data/user/nguyenphuongnam/data_alzheimer/clinical/clinical_longitudinal_raw.csv": "0ce0580575ae7c4c085ea0b09414958f489ed49c6ea89f07c5e2d47f02212839",
+    "/home/data/user/nguyenphuongnam/data_alzheimer/splits/rid_split_assignments.csv": "f712159fc1b77a8c348976f06e1e7a3fec1ff8e374541e20d9e5cb5afbd9dda3"
+  },
+  "checks": {
+    "1077_unique_visits": true,
+    "359_unique_subjects": true,
+    "three_ordered_visits": true,
+    "split_disjoint": true,
+    "positive_outcome_time": true,
+    "time_from_last_mri_matches_frozen_target": true,
+    "all_outcomes_after_landmark": true,
+    "all_mri_before_or_at_landmark": true,
+    "clinical_offsets_within_90_days": true
+  },
+  "cohort": {
+    "subjects": 359,
+    "visits": 1077,
+    "events": 106,
+    "censored": 253
+  },
+  "splits": {
+    "test": {
+      "subjects": 54,
+      "events": 16,
+      "strict_comparable_pairs": 528
+    },
+    "train": {
+      "subjects": 251,
+      "events": 74,
+      "strict_comparable_pairs": 10924
+    },
+    "val": {
+      "subjects": 54,
+      "events": 16,
+      "strict_comparable_pairs": 480
+    }
+  },
+  "prediction_before_landmark_subjects": 356,
+  "prediction_equal_landmark_subjects": 3,
+  "landmark_minus_prediction_days": {
+    "n": 359,
+    "min": 0.0,
+    "median": 186.0,
+    "max": 288.0,
+    "q25": 169.0,
+    "q75": 197.0
+  },
+  "clinical": {
+    "mmse": {
+      "valid_measurement_visit_rows": 850,
+      "missing_visit_rows": 227,
+      "offset_days": {
+        "n": 850,
+        "min": -90.0,
+        "median": 0.0,
+        "max": 90.0,
+        "q25": 0.0,
+        "q75": 0.0
+      },
+      "after_mri_visit_rows": 146,
+      "after_mri_subjects": 128,
+      "after_prediction_visit_rows": 54,
+      "after_prediction_subjects": 54,
+      "after_landmark_visit_rows": 3,
+      "at_or_after_outcome_visit_rows": 0,
+      "positive_offset_days": {
+        "n": 146,
+        "min": 1.0,
+        "median": 8.0,
+        "max": 90.0,
+        "q25": 3.25,
+        "q75": 73.75
+      },
+      "by_split": {
+        "test": {
+          "rows": 2,
+          "subjects": 2
+        },
+        "train": {
+          "rows": 40,
+          "subjects": 40
+        },
+        "val": {
+          "rows": 12,
+          "subjects": 12
+        }
+      }
+    },
+    "cdr": {
+      "valid_measurement_visit_rows": 841,
+      "missing_visit_rows": 236,
+      "offset_days": {
+        "n": 841,
+        "min": -90.0,
+        "median": 0.0,
+        "max": 90.0,
+        "q25": 0.0,
+        "q75": 0.0
+      },
+      "after_mri_visit_rows": 148,
+      "after_mri_subjects": 128,
+      "after_prediction_visit_rows": 52,
+      "after_prediction_subjects": 52,
+      "after_landmark_visit_rows": 3,
+      "at_or_after_outcome_visit_rows": 0,
+      "positive_offset_days": {
+        "n": 148,
+        "min": 1.0,
+        "median": 8.0,
+        "max": 90.0,
+        "q25": 3.0,
+        "q75": 73.25
+      },
+      "by_split": {
+        "test": {
+          "rows": 0,
+          "subjects": 0
+        },
+        "train": {
+          "rows": 38,
+          "subjects": 38
+        },
+        "val": {
+          "rows": 14,
+          "subjects": 14
+        }
+      }
+    }
+  },
+  "any_predictor_after_prediction_subjects": 57,
+  "any_predictor_after_prediction_visit_rows": 57,
+  "interpretation": [
+    "The frozen benchmark conditions eligibility on information after p for participants with p<L.",
+    "Positive clinical offsets quantify unavailable predictors; observed frozen scores are not prospective performance at p.",
+    "MMSE/CDR appear in both predictors and endpoint; historical availability and endpoint proximity must be disclosed.",
+    "No corrected cohort, new labels or sensitivity performance are created by this audit."
+  ],
+  "test_access": "cohort chronology and target metadata only; no test features, MRI inference or performance evaluation"
+}

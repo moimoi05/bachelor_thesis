@@ -1,0 +1,128 @@
+{
+  "final-pipeline": {
+    "source": "figures_source/final-pipeline.drawio",
+    "renderer": "figures_source/export_architecture.py",
+    "kind": "Editable draw.io and SVG; vector PDF; 300 DPI PNG",
+    "data": "RC-Free model and evaluation flow documented in Chapter 3 and the appendix"
+  },
+  "mci-progression-timeline": {
+    "source": "figures_source/render_revision.py",
+    "style": "academic_style.py",
+    "kind": "vector PDF/SVG; 300 DPI PNG",
+    "data": "Original verified dimensions and counts; no invented patient measurements"
+  },
+  "cohort-construction": {
+    "source": "figures_source/render_revision.py",
+    "style": "academic_style.py",
+    "kind": "vector PDF/SVG; 300 DPI PNG",
+    "data": "Original verified dimensions and counts; no invented patient measurements"
+  },
+  "mr-outer-product": {
+    "source": "figures_source/render_revision.py",
+    "style": "academic_style.py",
+    "kind": "vector PDF/SVG; 300 DPI PNG",
+    "data": "Original verified dimensions and counts; no invented patient measurements"
+  },
+  "outer-vs-cp": {
+    "source": "figures_source/render_revision.py",
+    "style": "academic_style.py",
+    "kind": "vector PDF/SVG; 300 DPI PNG",
+    "data": "Original verified dimensions and counts; no invented patient measurements"
+  },
+  "gated-residual-route": {
+    "source": "figures_source/render_revision.py",
+    "style": "academic_style.py",
+    "kind": "vector PDF/SVG; 300 DPI PNG",
+    "data": "Original verified dimensions and counts; no invented patient measurements"
+  },
+  "temporal-model": {
+    "source": "figures_source/render_revision.py",
+    "style": "academic_style.py",
+    "kind": "vector PDF/SVG; 300 DPI PNG",
+    "data": "Original verified dimensions and counts; no invented patient measurements"
+  },
+  "input-three-sources": {
+    "source": "figures_source/render_revision.py",
+    "style": "academic_style.py",
+    "kind": "vector PDF/SVG; 300 DPI PNG",
+    "data": "Original verified dimensions and counts; no invented patient measurements"
+  },
+  "master-pipeline": {
+    "source": "figures_source/master-pipeline.drawio",
+    "renderer": "figures_source/export_architecture.py",
+    "kind": "Editable draw.io and SVG; vector PDF; 300 DPI PNG",
+    "data": "RC-Free model and evaluation flow documented in Chapter 3 and the appendix"
+  },
+  "concept-survival": {
+    "source": "figures_source/build_explanatory.py",
+    "kind": "Editable SVG; vector PDF; 300 DPI PNG",
+    "data": "Model and explanatory examples from Chapters 2–3"
+  },
+  "concept-longitudinal": {
+    "source": "figures_source/build_explanatory.py",
+    "kind": "Editable SVG; vector PDF; 300 DPI PNG",
+    "data": "Model and explanatory examples from Chapters 2–3"
+  },
+  "concept-sources": {
+    "source": "figures_source/build_explanatory.py",
+    "kind": "Editable SVG; vector PDF; 300 DPI PNG",
+    "data": "Model and explanatory examples from Chapters 2–3"
+  },
+  "concept-fusion": {
+    "source": "figures_source/build_explanatory.py",
+    "kind": "Editable SVG; vector PDF; 300 DPI PNG",
+    "data": "Model and explanatory examples from Chapters 2–3"
+  },
+  "clinical-18-inputs": {
+    "source": "figures_source/build_explanatory.py",
+    "kind": "Editable SVG; vector PDF; 300 DPI PNG",
+    "data": "Model and explanatory examples from Chapters 2–3"
+  },
+  "concat-baseline": {
+    "source": "figures_source/build_explanatory.py",
+    "kind": "Editable SVG; vector PDF; 300 DPI PNG",
+    "data": "Model and explanatory examples from Chapters 2–3"
+  },
+  "evaluation-map": {
+    "source": "figures_source/build_explanatory.py",
+    "kind": "Editable SVG; vector PDF; 300 DPI PNG",
+    "data": "Model and explanatory examples from Chapters 2–3"
+  },
+  "literature-gates": {
+    "source": "figures_source/build_explanatory.py",
+    "kind": "Editable SVG; vector PDF; 300 DPI PNG",
+    "data": "Model and explanatory examples from Chapters 2–3"
+  },
+  "cp-concept-general": {
+    "source": "figures_source/build_cp_concept.py",
+    "kind": "Editable SVG; vector PDF; 300 DPI PNG",
+    "data": "General bilinear layer and CP equations from Chapter 2"
+  },
+  "empirical-training": {
+    "source": "figures_source/render_empirical.py",
+    "kind": "Editable SVG; vector PDF; 300 DPI PNG",
+    "data": [
+      "evidence/training_history.csv",
+      "evidence/training_summary.json"
+    ]
+  },
+  "empirical-ipcw-roc": {
+    "source": "figures_source/render_empirical.py",
+    "kind": "Editable SVG; vector PDF; 300 DPI PNG",
+    "data": [
+      "evidence/roc_coordinates.csv",
+      "evidence/roc_auc_verified.csv",
+      "evidence/auc_summary.csv"
+    ]
+  },
+  "survival-km": {
+    "source": "figures_source/build_survival.py",
+    "kind": "Editable SVG; vector PDF; 300 DPI PNG",
+    "data": [
+      "evidence/km_curves.csv",
+      "evidence/km_event_counts.csv",
+      "evidence/km_statistics.csv",
+      "evidence/number_at_risk.csv"
+    ]
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "source_file": "/home/data/user/nguyenphuongnam/khoaluan/final_revision/academic_language_final/source/chapters/chapter4.tex",
+  "sha256": "7ed27344c7378e0ba53c3c1d7c6c6cd31c866e4cf127ffb115880856cd372b0c",
+  "matched_fusion": {
+    "Concatenation": {
+      "mean": 0.815,
+      "sd": 0.021
+    },
+    "Full Outer-Product": {
+      "mean": 0.828,
+      "sd": 0.027
+    }
+  },
+  "topology": {
+    "MR-only": {
+      "mean": 0.83,
+      "sd": 0.027
+    },
+    "MC-only": {
+      "mean": 0.824,
+      "sd": 0.024
+    }
+  },
+  "note": "Rounded mean/SD retained verbatim from the reviewed thesis tables 4.5 and 4.7; no new training."
+}

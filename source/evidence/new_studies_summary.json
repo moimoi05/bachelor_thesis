@@ -1,0 +1,322 @@
+{
+  "created_utc": "2026-10-09T16:15:17.722264+00:00",
+  "status": "COMPLETE",
+  "topology_status": "COMPLETE",
+  "groups": {
+    "mr_only": {
+      "status": "COMPLETE",
+      "seeds": [
+        20260727,
+        20260728,
+        20260729
+      ],
+      "values": [
+        0.8229166666666666,
+        0.859375,
+        0.8072916666666666
+      ],
+      "mean": 0.829861111111111,
+      "sample_sd": 0.026727090830452542,
+      "total_parameters": [
+        33484165,
+        33484165,
+        33484165
+      ],
+      "pairs": [
+        [
+          "mr"
+        ],
+        [
+          "mr"
+        ],
+        [
+          "mr"
+        ]
+      ],
+      "routes": [
+        [
+          "mr_to_m",
+          "mr_to_r"
+        ],
+        [
+          "mr_to_m",
+          "mr_to_r"
+        ],
+        [
+          "mr_to_m",
+          "mr_to_r"
+        ]
+      ],
+      "evidence": "VERIFIED_FROM_CHECKPOINT_INFERENCE",
+      "runs": [
+        {
+          "run_id": "astra6_mr_only_seed20260727_attempt2",
+          "record": "/home/data/user/nguyenphuongnam/khoaluan/astra6_revision/experiments/new_study_validation_replay_20261009T064346Z/astra6_mr_only_seed20260727_attempt2.json",
+          "sha256": "47a9f0031a668469b18a94909779d63c25529a35e81f8b3bb439f5d689a10b73"
+        },
+        {
+          "run_id": "astra6_mr_only_seed20260728",
+          "record": "/home/data/user/nguyenphuongnam/khoaluan/astra6_revision/experiments/new_study_validation_replay_20261009T064346Z/astra6_mr_only_seed20260728.json",
+          "sha256": "adb1379914452ada37956b1f649761f823a62b797282e557a1b0a4ec8b916d7d"
+        },
+        {
+          "run_id": "astra6_mr_only_seed20260729",
+          "record": "/home/data/user/nguyenphuongnam/khoaluan/astra6_revision/experiments/new_study_validation_replay_20261009T064346Z/astra6_mr_only_seed20260729.json",
+          "sha256": "088c55326b5fc6d108cfe9ca44d79143cfa749b8fb7d729c09eaaf806784db03"
+        }
+      ]
+    },
+    "mc_only": {
+      "status": "COMPLETE",
+      "seeds": [
+        20260727,
+        20260728,
+        20260729
+      ],
+      "values": [
+        0.8489583333333334,
+        0.8197916666666667,
+        0.8020833333333334
+      ],
+      "mean": 0.8236111111111112,
+      "sample_sd": 0.023669759676603144,
+      "total_parameters": [
+        33484037,
+        33484037,
+        33484037
+      ],
+      "pairs": [
+        [
+          "mc"
+        ],
+        [
+          "mc"
+        ],
+        [
+          "mc"
+        ]
+      ],
+      "routes": [
+        [
+          "mc_to_m",
+          "mc_to_c"
+        ],
+        [
+          "mc_to_m",
+          "mc_to_c"
+        ],
+        [
+          "mc_to_m",
+          "mc_to_c"
+        ]
+      ],
+      "evidence": "VERIFIED_FROM_CHECKPOINT_INFERENCE",
+      "runs": [
+        {
+          "run_id": "astra6_mc_only_seed20260727",
+          "record": "/home/data/user/nguyenphuongnam/khoaluan/astra6_revision/experiments/new_study_validation_replay_20261009T064346Z/astra6_mc_only_seed20260727.json",
+          "sha256": "407f9ec10d15c4d7cb925b5443c5e4f5d7926c5c929067fc9307ffa9cda50aed"
+        },
+        {
+          "run_id": "astra6_mc_only_seed20260728",
+          "record": "/home/data/user/nguyenphuongnam/khoaluan/astra6_revision/experiments/new_study_validation_replay_20261009T064346Z/astra6_mc_only_seed20260728.json",
+          "sha256": "46b7c6d9d1c88cdda42c2442cf51182e4dd1887daccc04e76c9eac5831c7379e"
+        },
+        {
+          "run_id": "astra6_mc_only_seed20260729",
+          "record": "/home/data/user/nguyenphuongnam/khoaluan/astra6_revision/experiments/new_study_validation_replay_20261009T064346Z/astra6_mc_only_seed20260729.json",
+          "sha256": "5c1e52bf3244c038d68bfa1de0efc63da909595965e89053249e7006a060d4ae"
+        }
+      ]
+    },
+    "matched_concat": {
+      "status": "COMPLETE",
+      "seeds": [
+        20260727,
+        20260728,
+        20260729
+      ],
+      "values": [
+        0.8395833333333333,
+        0.8020833333333334,
+        0.803125
+      ],
+      "mean": 0.8149305555555556,
+      "sample_sd": 0.021356283770391365,
+      "total_parameters": [
+        33441281,
+        33441281,
+        33441281
+      ],
+      "pairs": [
+        [],
+        [],
+        []
+      ],
+      "routes": [
+        [],
+        [],
+        []
+      ],
+      "evidence": "VERIFIED_FROM_CHECKPOINT_INFERENCE",
+      "runs": [
+        {
+          "run_id": "astra6_matched_concat_seed20260727",
+          "record": "/home/data/user/nguyenphuongnam/khoaluan/astra6_revision/experiments/new_study_validation_replay_20261009T161116Z/astra6_matched_concat_seed20260727.json",
+          "sha256": "95203f8a765774f89cf8ab4768dc70552b24bc71f6f25508a39c6ba8be2fb7ae"
+        },
+        {
+          "run_id": "astra6_matched_concat_seed20260728",
+          "record": "/home/data/user/nguyenphuongnam/khoaluan/astra6_revision/experiments/new_study_validation_replay_20261009T161116Z/astra6_matched_concat_seed20260728.json",
+          "sha256": "04a5a698163a96e0b56ffcd53200f841d0042d71a8369114de7328abc2bea0b5"
+        },
+        {
+          "run_id": "astra6_matched_concat_seed20260729",
+          "record": "/home/data/user/nguyenphuongnam/khoaluan/astra6_revision/experiments/new_study_validation_replay_20261009T161116Z/astra6_matched_concat_seed20260729.json",
+          "sha256": "236fa2ef7aa3563fa4781e0e59af601750c01ab4bf978a8da145ce29644145db"
+        }
+      ]
+    },
+    "matched_outer": {
+      "status": "COMPLETE",
+      "seeds": [
+        20260727,
+        20260728,
+        20260729
+      ],
+      "values": [
+        0.83125,
+        0.8541666666666666,
+        0.8
+      ],
+      "mean": 0.8284722222222223,
+      "sample_sd": 0.027189961042294257,
+      "total_parameters": [
+        33760941,
+        33760941,
+        33760941
+      ],
+      "pairs": [
+        [
+          "mr",
+          "mc",
+          "rc"
+        ],
+        [
+          "mr",
+          "mc",
+          "rc"
+        ],
+        [
+          "mr",
+          "mc",
+          "rc"
+        ]
+      ],
+      "routes": [
+        [
+          "mr_to_m",
+          "mc_to_m",
+          "mr_to_r",
+          "rc_to_r",
+          "mc_to_c",
+          "rc_to_c"
+        ],
+        [
+          "mr_to_m",
+          "mc_to_m",
+          "mr_to_r",
+          "rc_to_r",
+          "mc_to_c",
+          "rc_to_c"
+        ],
+        [
+          "mr_to_m",
+          "mc_to_m",
+          "mr_to_r",
+          "rc_to_r",
+          "mc_to_c",
+          "rc_to_c"
+        ]
+      ],
+      "evidence": "VERIFIED_FROM_CHECKPOINT_INFERENCE",
+      "runs": [
+        {
+          "run_id": "astra6_matched_outer_seed20260727",
+          "record": "/home/data/user/nguyenphuongnam/khoaluan/astra6_revision/experiments/new_study_validation_replay_20261009T161116Z/astra6_matched_outer_seed20260727.json",
+          "sha256": "ec3ccf00f91869e2ce52d66726788d9ca24863c570b62cbf8a7c79bbef7360d3"
+        },
+        {
+          "run_id": "astra6_matched_outer_seed20260728",
+          "record": "/home/data/user/nguyenphuongnam/khoaluan/astra6_revision/experiments/new_study_validation_replay_20261009T161116Z/astra6_matched_outer_seed20260728.json",
+          "sha256": "81bf7d01968590f3f0bdfe0fd4752d8df975b4f296b263448d39c28186349a79"
+        },
+        {
+          "run_id": "astra6_matched_outer_seed20260729",
+          "record": "/home/data/user/nguyenphuongnam/khoaluan/astra6_revision/experiments/new_study_validation_replay_20261009T161116Z/astra6_matched_outer_seed20260729.json",
+          "sha256": "ed4ba57822360a71117c78fdd34bfe77cad5d706c70cb2a104e155fd12010022"
+        }
+      ]
+    }
+  },
+  "paired_seed_differences": {
+    "A6_minus_mr_only": {
+      "values": [
+        0.018750000000000044,
+        -0.00520833333333337,
+        0.0010416666666667185
+      ],
+      "mean": 0.004861111111111131,
+      "sample_sd": 0.01242745150567592,
+      "reference_is_historical": true
+    },
+    "P05-CP_minus_mr_only": {
+      "values": [
+        -0.0010416666666666075,
+        -0.004166666666666652,
+        -0.0010416666666666075
+      ],
+      "mean": -0.002083333333333289,
+      "sample_sd": 0.0018042195912176063,
+      "reference_is_historical": true
+    },
+    "A6_minus_mc_only": {
+      "values": [
+        -0.007291666666666696,
+        0.03437499999999993,
+        0.006249999999999978
+      ],
+      "mean": 0.011111111111111072,
+      "sample_sd": 0.02125442492055955,
+      "reference_is_historical": true
+    },
+    "P05-CP_minus_mc_only": {
+      "values": [
+        -0.027083333333333348,
+        0.03541666666666665,
+        0.004166666666666652
+      ],
+      "mean": 0.004166666666666652,
+      "sample_sd": 0.03125,
+      "reference_is_historical": true
+    },
+    "matched_outer_minus_matched_concat": {
+      "values": [
+        -0.008333333333333304,
+        0.05208333333333326,
+        -0.0031249999999999334
+      ],
+      "mean": 0.013541666666666674,
+      "sample_sd": 0.03347949724997534
+    }
+  },
+  "historical_reference": "/home/data/user/nguyenphuongnam/khoaluan/astra6_revision/experiments/validation_uncertainty_20261009/result.json",
+  "historical_reference_sha256": "a1b7dc06dc11f61b92f130f479f7350709257aa04b85f68dd14f7f0cd18d334d",
+  "script_sha256": "4d6cc21d5e8ce13e88a2183c11b4ce17193f3e1933657e8848612091e549b983",
+  "validation_only": true,
+  "notes": [
+    "Historical Full CP/RC-Free are references, not new retraining.",
+    "Matched concat/outer isolate fusion RNG; do not mix their initialization policy with historical/topology runs.",
+    "Seed SD is not a population CI; validation selection bias remains."
+  ]
+}

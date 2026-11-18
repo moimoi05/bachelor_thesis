@@ -1,0 +1,12 @@
+\chapter*{ABSTRACT}
+\addcontentsline{toc}{chapter}{ABSTRACT}
+
+People with mild cognitive impairment (MCI) may progress at different rates. This thesis combines three magnetic resonance imaging (MRI) scans acquired over time, quantitative image features (radiomics, R), and clinical (C) scores to rank progression risk. Rather than concatenating all features immediately, the model learns MRI--radiomics and MRI--clinical interactions separately, then summarizes changes across the three visits.
+
+The model is named RC-Free Pairwise Fusion: it omits direct radiomics--clinical interaction while retaining all three inputs. Canonical Polyadic (CP) tensor factorization, a sum of rank-one weight components, reduces the interaction parameters, and gated residual connections add interaction features to each input representation. A Time-Aware Long Short-Term Memory network (T-LSTM) accounts for the intervals between visits, attention summarizes the sequence, and a Cox head produces a risk score.
+
+Retrospective experiments on the Alzheimer's Disease Neuroimaging Initiative (ADNI) include 359 participants, split into 251/54/54 training/validation/test participants. Across three initializations, the model achieves a validation concordance index (C-index) of $0.8347\pm0.0237$. The risk groups differ in Kaplan--Meier analysis, with log-rank $p=0.01336$; validation areas under the ROC curve (AUCs) at 2, 3, and 5 years are $0.9805\pm0.0149$, $0.9788\pm0.0162$, and $0.7889\pm0.0632$, respectively. CP reduces parameters in the full model's first three bilinear layers, which model cross-products between two inputs, by 98.384\%.
+
+The main contribution is to clarify the trade-off between interaction size and risk discrimination. The reduced structure retains competitive average performance relative to the full model in this study population, providing a basis for further evaluation on independent data.
+
+\textbf{Keywords:} Alzheimer's disease, MCI, longitudinal MRI, radiomics, pairwise fusion, survival analysis.

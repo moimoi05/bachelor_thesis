@@ -1,0 +1,18 @@
+[
+  {
+    "path": "/home/data/user/nguyenphuongnam/data_alzheimer/metadata/processed/model_ready_manifest_v1.csv",
+    "sha256": "1b5db79b3f5c8c805ea33ff515c365d0c159655ee1491c7abbe842eca5011954"
+  },
+  {
+    "path": "/home/data/user/nguyenphuongnam/data_alzheimer/metadata/processed/training_manifest_with_raw_mri.csv",
+    "sha256": "7751f697f89400e851d2ada606afecd40501905aa54f0c53155f60378d4c5c18"
+  },
+  {
+    "path": "/home/data/user/nguyenphuongnam/data_alzheimer/clinical/clinical_longitudinal_raw.csv",
+    "sha256": "0ce0580575ae7c4c085ea0b09414958f489ed49c6ea89f07c5e2d47f02212839"
+  },
+  {
+    "path": "/home/data/user/nguyenphuongnam/data_alzheimer/data/raw/clinical/ADNIMERGE2.tar.gz",
+    "sha256": "c2b2973e3216a6da2fb22b6c25200ca25283a007a4dfc2ad4814e4333b18fb13"
+  }
+]

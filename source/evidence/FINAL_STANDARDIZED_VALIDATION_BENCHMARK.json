@@ -1,0 +1,1110 @@
+{
+  "benchmark_scope": "validation_only",
+  "canonical_seeds": [
+    20260727,
+    20260728,
+    20260729
+  ],
+  "canonical_split_fingerprints": {
+    "TEST": "2c0cac271098fd0f32fb8668bb9fdecbe8d3da834c5d4a0d5fb1af52d928fd97",
+    "TRAIN": "da3e67db377a3bc16bdd577832345b24710fc022d78a89f0e0a6350e806d945d",
+    "VALIDATION": "2452c29d40a32982018fe4c5f9af0cb6f4cd4b11f53aa6bf1ec4dd5b2b28b39e"
+  },
+  "classical_comparator": {
+    "artifact_paths": [
+      "phase_01_tabular/reports/selected_candidate.json",
+      "phase_01_tabular/runs/20260730T061549Z_seed20260727_5625bb05/model_metadata.json"
+    ],
+    "deterministic_final_fit": true,
+    "feature_count": 102,
+    "hyperparameters": {
+      "alpha": 0.1,
+      "l1_ratio": 0.5
+    },
+    "input_modalities": "9 clinical values + 9 observedness masks + 16 bin64 PCA radiomics per visit, 3 visits = 102 features",
+    "library": "scikit-survival",
+    "library_version": "0.28.0",
+    "metric_implementation": "sksurv.metrics.concordance_index_censored",
+    "model": "P01-R08",
+    "model_type": "Cox elastic-net (scikit-survival Coxnet)",
+    "parameterization": "102 feature coefficients; model artifact does not report a separate trainable-parameter total",
+    "random_resampling_or_cv": "5-fold stratified CV was used for training-side selection; no neural initialization-seed ensemble",
+    "representation": "R08_CLINICAL_RAD64_LONG",
+    "selection_scope": "R08 was selected after validation evaluation among candidate representations/models; the reported validation C-index is post-selection, not an untouched one-shot comparator",
+    "status": "AUDITED SEPARATELY",
+    "test_evaluated": false,
+    "training_protocol": "5-fold RID-level stratified CV on the 251-subject training split, followed by validation evaluation of candidate representations/models, final candidate selection, and refit on all training subjects",
+    "validation_cindex": 0.8607068607068608,
+    "why_separate": "single deterministic post-selection validation result is not the same uncertainty object as a 3-seed neural-network mean \u00b1 sample SD"
+  },
+  "deep_models": [
+    {
+      "max": 0.7916666666666666,
+      "mean": 0.7416666666666667,
+      "min": 0.6625,
+      "model": "P10",
+      "parameters": "seed-specific: 33205186/33213122/33195970",
+      "parameters_by_seed": [
+        33205186,
+        33213122,
+        33195970
+      ],
+      "sample_sd": 0.06934715407122183,
+      "seed_20260727": 0.6625,
+      "seed_20260728": 0.7708333333333334,
+      "seed_20260729": 0.7916666666666666,
+      "status": "REUSED"
+    },
+    {
+      "max": 0.8458333333333333,
+      "mean": 0.834375,
+      "min": 0.8177083333333334,
+      "model": "P05B",
+      "parameters": 33760941,
+      "parameters_by_seed": [
+        33760941,
+        33760941,
+        33760941
+      ],
+      "sample_sd": 0.01476817383203938,
+      "seed_20260727": 0.8395833333333333,
+      "seed_20260728": 0.8458333333333333,
+      "seed_20260729": 0.8177083333333334,
+      "status": "REUSED"
+    },
+    {
+      "max": 0.8552083333333333,
+      "mean": 0.8277777777777778,
+      "min": 0.80625,
+      "model": "P05-CP",
+      "parameters": 33534957,
+      "parameters_by_seed": [
+        33534957,
+        33534957,
+        33534957
+      ],
+      "sample_sd": 0.025007232750042827,
+      "seed_20260727": 0.821875,
+      "seed_20260728": 0.8552083333333333,
+      "seed_20260729": 0.80625,
+      "status": "REUSED"
+    },
+    {
+      "max": 0.8541666666666666,
+      "mean": 0.8347222222222223,
+      "min": 0.8083333333333333,
+      "model": "A6",
+      "parameters": 33519497,
+      "parameters_by_seed": [
+        33519497,
+        33519497,
+        33519497
+      ],
+      "sample_sd": 0.023692669596155506,
+      "seed_20260727": 0.8416666666666667,
+      "seed_20260728": 0.8541666666666666,
+      "seed_20260729": 0.8083333333333333,
+      "status": "REUSED"
+    },
+    {
+      "max": 0.8666666666666667,
+      "mean": 0.8347222222222223,
+      "min": 0.8041666666666667,
+      "model": "B1",
+      "parameters": 33519493,
+      "parameters_by_seed": [
+        33519493,
+        33519493,
+        33519493
+      ],
+      "sample_sd": 0.03127313958110473,
+      "seed_20260727": 0.8333333333333334,
+      "seed_20260728": 0.8666666666666667,
+      "seed_20260729": 0.8041666666666667,
+      "status": "REUSED"
+    }
+  ],
+  "metric": {
+    "event_convention": "event=1 is observed event; event=0 censored",
+    "implementation_sources": [
+      "phase_05b_pairwise_medicalnet/src/p05b_pairwise_medicalnet/metrics.py",
+      "phase_05_cp/src/p05_cp/metrics.py",
+      "phase_06_ablation/src/p06_ablation/metrics.py",
+      "phase_06b_targeted/src/p06b_targeted/metrics.py",
+      "phase_10_paper_cnn_tlstm_reproduction/src/p10_paper_reproduction/tlstm/validation.py"
+    ],
+    "name": "strict_pairwise_harrell_c_index",
+    "risk_direction": "higher raw risk means earlier event risk",
+    "risk_ties": "0.5 concordance",
+    "time_convention": "survival_time_years",
+    "time_ties": "not comparable",
+    "validation_comparable_pairs": 480,
+    "validation_subjects": 54
+  },
+  "per_seed": {
+    "A6": {
+      "20260727": {
+        "best_epoch": 16,
+        "checkpoint_path": "phase_06_ablation/runs/official/a6_no_rc_20260919T192909Z_seed20260727/checkpoints/best.pt",
+        "checkpoint_sha256": "c339c9b57955dd57a1d6a72940b917801c2c2503b3bfd73b4ca4fe2e7e4ba504",
+        "exact_match": true,
+        "metric": 0.8416666666666667,
+        "metric_name": "canonical_validation_harrell_cindex",
+        "model": "A6",
+        "parameters": 33519497,
+        "seed": 20260727,
+        "split_fingerprint_audit": {
+          "TEST": {
+            "file_sha256": "c838bce87ed647cbb99d72f9166132968397018e3c0c403b4e8d98a17378e38f",
+            "fingerprint": "2c0cac271098fd0f32fb8668bb9fdecbe8d3da834c5d4a0d5fb1af52d928fd97",
+            "match": true
+          },
+          "TRAIN": {
+            "file_sha256": "a37ff1100674e4f540927b19f25a9f2cf44bc63a36bedc1cb45f0c7cbc95979c",
+            "fingerprint": "da3e67db377a3bc16bdd577832345b24710fc022d78a89f0e0a6350e806d945d",
+            "match": true
+          },
+          "VALIDATION": {
+            "file_sha256": "3a41c0932104cb8b8a642079aca722e55a8b276d431c71a77b4ec9b41ff83b45",
+            "fingerprint": "2452c29d40a32982018fe4c5f9af0cb6f4cd4b11f53aa6bf1ec4dd5b2b28b39e",
+            "match": true
+          },
+          "dataset_constructor_audit": {
+            "TEST": "not constructed",
+            "applies_to_seeds": [
+              20260727,
+              20260728,
+              20260729
+            ],
+            "observed": {
+              "TRAIN": {
+                "match": true,
+                "rid_fingerprint": "da3e67db377a3bc16bdd577832345b24710fc022d78a89f0e0a6350e806d945d",
+                "rows_subjects": 251
+              },
+              "VALIDATION": {
+                "match": true,
+                "rid_fingerprint": "2452c29d40a32982018fe4c5f9af0cb6f4cd4b11f53aa6bf1ec4dd5b2b28b39e",
+                "rows_subjects": 54
+              }
+            },
+            "status": "PASS"
+          },
+          "status": "PASS",
+          "verification": "phase dataset split-lock/source audit plus canonical frozen split metadata; TEST is metadata-only"
+        },
+        "status": "REUSED",
+        "stored_best_metric": 0.8416666666666667,
+        "test_access": {
+          "test_access": 0,
+          "test_construction_attempts": 0
+        },
+        "validation_comparable_pairs": 480,
+        "validation_predictions_in_memory": 54,
+        "validation_unique_rids_in_memory": 54,
+        "wrote_predictions": false
+      },
+      "20260728": {
+        "best_epoch": 7,
+        "checkpoint_path": "phase_06_ablation/runs/multiseed_validation/official/a6_no_rc_seed20260728_20260920T082644Z/checkpoints/best.pt",
+        "checkpoint_sha256": "0a46ccb6191fd3f5732c9296c4b6b899b182602845d4f75de0cd9429db41c5c5",
+        "exact_match": true,
+        "metric": 0.8541666666666666,
+        "metric_name": "canonical_validation_harrell_cindex",
+        "model": "A6",
+        "parameters": 33519497,
+        "seed": 20260728,
+        "split_fingerprint_audit": {
+          "TEST": {
+            "file_sha256": "c838bce87ed647cbb99d72f9166132968397018e3c0c403b4e8d98a17378e38f",
+            "fingerprint": "2c0cac271098fd0f32fb8668bb9fdecbe8d3da834c5d4a0d5fb1af52d928fd97",
+            "match": true
+          },
+          "TRAIN": {
+            "file_sha256": "a37ff1100674e4f540927b19f25a9f2cf44bc63a36bedc1cb45f0c7cbc95979c",
+            "fingerprint": "da3e67db377a3bc16bdd577832345b24710fc022d78a89f0e0a6350e806d945d",
+            "match": true
+          },
+          "VALIDATION": {
+            "file_sha256": "3a41c0932104cb8b8a642079aca722e55a8b276d431c71a77b4ec9b41ff83b45",
+            "fingerprint": "2452c29d40a32982018fe4c5f9af0cb6f4cd4b11f53aa6bf1ec4dd5b2b28b39e",
+            "match": true
+          },
+          "dataset_constructor_audit": {
+            "TEST": "not constructed",
+            "applies_to_seeds": [
+              20260727,
+              20260728,
+              20260729
+            ],
+            "observed": {
+              "TRAIN": {
+                "match": true,
+                "rid_fingerprint": "da3e67db377a3bc16bdd577832345b24710fc022d78a89f0e0a6350e806d945d",
+                "rows_subjects": 251
+              },
+              "VALIDATION": {
+                "match": true,
+                "rid_fingerprint": "2452c29d40a32982018fe4c5f9af0cb6f4cd4b11f53aa6bf1ec4dd5b2b28b39e",
+                "rows_subjects": 54
+              }
+            },
+            "status": "PASS"
+          },
+          "status": "PASS",
+          "verification": "phase dataset split-lock/source audit plus canonical frozen split metadata; TEST is metadata-only"
+        },
+        "status": "REUSED",
+        "stored_best_metric": 0.8541666666666666,
+        "test_access": {
+          "test_access": 0,
+          "test_construction_attempts": 0
+        },
+        "validation_comparable_pairs": 480,
+        "validation_predictions_in_memory": 54,
+        "validation_unique_rids_in_memory": 54,
+        "wrote_predictions": false
+      },
+      "20260729": {
+        "best_epoch": 25,
+        "checkpoint_path": "phase_06_ablation/runs/multiseed_validation/official/a6_no_rc_seed20260729_20260920T085637Z/checkpoints/best.pt",
+        "checkpoint_sha256": "5e20a8296491aa0a778b6a51780a103f281f788a060da7b9eb78e9df923a1a3d",
+        "exact_match": true,
+        "metric": 0.8083333333333333,
+        "metric_name": "canonical_validation_harrell_cindex",
+        "model": "A6",
+        "parameters": 33519497,
+        "seed": 20260729,
+        "split_fingerprint_audit": {
+          "TEST": {
+            "file_sha256": "c838bce87ed647cbb99d72f9166132968397018e3c0c403b4e8d98a17378e38f",
+            "fingerprint": "2c0cac271098fd0f32fb8668bb9fdecbe8d3da834c5d4a0d5fb1af52d928fd97",
+            "match": true
+          },
+          "TRAIN": {
+            "file_sha256": "a37ff1100674e4f540927b19f25a9f2cf44bc63a36bedc1cb45f0c7cbc95979c",
+            "fingerprint": "da3e67db377a3bc16bdd577832345b24710fc022d78a89f0e0a6350e806d945d",
+            "match": true
+          },
+          "VALIDATION": {
+            "file_sha256": "3a41c0932104cb8b8a642079aca722e55a8b276d431c71a77b4ec9b41ff83b45",
+            "fingerprint": "2452c29d40a32982018fe4c5f9af0cb6f4cd4b11f53aa6bf1ec4dd5b2b28b39e",
+            "match": true
+          },
+          "dataset_constructor_audit": {
+            "TEST": "not constructed",
+            "applies_to_seeds": [
+              20260727,
+              20260728,
+              20260729
+            ],
+            "observed": {
+              "TRAIN": {
+                "match": true,
+                "rid_fingerprint": "da3e67db377a3bc16bdd577832345b24710fc022d78a89f0e0a6350e806d945d",
+                "rows_subjects": 251
+              },
+              "VALIDATION": {
+                "match": true,
+                "rid_fingerprint": "2452c29d40a32982018fe4c5f9af0cb6f4cd4b11f53aa6bf1ec4dd5b2b28b39e",
+                "rows_subjects": 54
+              }
+            },
+            "status": "PASS"
+          },
+          "status": "PASS",
+          "verification": "phase dataset split-lock/source audit plus canonical frozen split metadata; TEST is metadata-only"
+        },
+        "status": "REUSED",
+        "stored_best_metric": 0.8083333333333333,
+        "test_access": {
+          "test_access": 0,
+          "test_construction_attempts": 0
+        },
+        "validation_comparable_pairs": 480,
+        "validation_predictions_in_memory": 54,
+        "validation_unique_rids_in_memory": 54,
+        "wrote_predictions": false
+      }
+    },
+    "B1": {
+      "20260727": {
+        "best_epoch": 12,
+        "checkpoint_path": "phase_06b_targeted/runs/multiseed_validation/official/b1_a6_fixedlambda_seed20260727_20260920T121112Z/checkpoints/best.pt",
+        "checkpoint_sha256": "ed7bfd31ce35e833ee7453b5d679800afb547e07aa60fbb2e70f0bd6cd3eae6f",
+        "exact_match": true,
+        "metric": 0.8333333333333334,
+        "metric_name": "canonical_validation_harrell_cindex",
+        "model": "B1",
+        "parameters": 33519493,
+        "seed": 20260727,
+        "split_fingerprint_audit": {
+          "TEST": {
+            "file_sha256": "c838bce87ed647cbb99d72f9166132968397018e3c0c403b4e8d98a17378e38f",
+            "fingerprint": "2c0cac271098fd0f32fb8668bb9fdecbe8d3da834c5d4a0d5fb1af52d928fd97",
+            "match": true
+          },
+          "TRAIN": {
+            "file_sha256": "a37ff1100674e4f540927b19f25a9f2cf44bc63a36bedc1cb45f0c7cbc95979c",
+            "fingerprint": "da3e67db377a3bc16bdd577832345b24710fc022d78a89f0e0a6350e806d945d",
+            "match": true
+          },
+          "VALIDATION": {
+            "file_sha256": "3a41c0932104cb8b8a642079aca722e55a8b276d431c71a77b4ec9b41ff83b45",
+            "fingerprint": "2452c29d40a32982018fe4c5f9af0cb6f4cd4b11f53aa6bf1ec4dd5b2b28b39e",
+            "match": true
+          },
+          "dataset_constructor_audit": {
+            "TEST": "not constructed",
+            "applies_to_seeds": [
+              20260727,
+              20260728,
+              20260729
+            ],
+            "observed": {
+              "TRAIN": {
+                "match": true,
+                "rid_fingerprint": "da3e67db377a3bc16bdd577832345b24710fc022d78a89f0e0a6350e806d945d",
+                "rows_subjects": 251
+              },
+              "VALIDATION": {
+                "match": true,
+                "rid_fingerprint": "2452c29d40a32982018fe4c5f9af0cb6f4cd4b11f53aa6bf1ec4dd5b2b28b39e",
+                "rows_subjects": 54
+              }
+            },
+            "status": "PASS"
+          },
+          "status": "PASS",
+          "verification": "phase dataset split-lock/source audit plus canonical frozen split metadata; TEST is metadata-only"
+        },
+        "status": "REUSED",
+        "stored_best_metric": 0.8333333333333334,
+        "test_access": {
+          "test_access": 0,
+          "test_construction_attempts": 0
+        },
+        "validation_comparable_pairs": 480,
+        "validation_predictions_in_memory": 54,
+        "validation_unique_rids_in_memory": 54,
+        "wrote_predictions": false
+      },
+      "20260728": {
+        "best_epoch": 11,
+        "checkpoint_path": "phase_06b_targeted/runs/multiseed_validation/official/b1_a6_fixedlambda_seed20260728_20260920T124156Z/checkpoints/best.pt",
+        "checkpoint_sha256": "7c3a2bf881f87c5e44377e928aba699eff6be39977d1f3a9756d4dbc65e473b2",
+        "exact_match": true,
+        "metric": 0.8666666666666667,
+        "metric_name": "canonical_validation_harrell_cindex",
+        "model": "B1",
+        "parameters": 33519493,
+        "seed": 20260728,
+        "split_fingerprint_audit": {
+          "TEST": {
+            "file_sha256": "c838bce87ed647cbb99d72f9166132968397018e3c0c403b4e8d98a17378e38f",
+            "fingerprint": "2c0cac271098fd0f32fb8668bb9fdecbe8d3da834c5d4a0d5fb1af52d928fd97",
+            "match": true
+          },
+          "TRAIN": {
+            "file_sha256": "a37ff1100674e4f540927b19f25a9f2cf44bc63a36bedc1cb45f0c7cbc95979c",
+            "fingerprint": "da3e67db377a3bc16bdd577832345b24710fc022d78a89f0e0a6350e806d945d",
+            "match": true
+          },
+          "VALIDATION": {
+            "file_sha256": "3a41c0932104cb8b8a642079aca722e55a8b276d431c71a77b4ec9b41ff83b45",
+            "fingerprint": "2452c29d40a32982018fe4c5f9af0cb6f4cd4b11f53aa6bf1ec4dd5b2b28b39e",
+            "match": true
+          },
+          "dataset_constructor_audit": {
+            "TEST": "not constructed",
+            "applies_to_seeds": [
+              20260727,
+              20260728,
+              20260729
+            ],
+            "observed": {
+              "TRAIN": {
+                "match": true,
+                "rid_fingerprint": "da3e67db377a3bc16bdd577832345b24710fc022d78a89f0e0a6350e806d945d",
+                "rows_subjects": 251
+              },
+              "VALIDATION": {
+                "match": true,
+                "rid_fingerprint": "2452c29d40a32982018fe4c5f9af0cb6f4cd4b11f53aa6bf1ec4dd5b2b28b39e",
+                "rows_subjects": 54
+              }
+            },
+            "status": "PASS"
+          },
+          "status": "PASS",
+          "verification": "phase dataset split-lock/source audit plus canonical frozen split metadata; TEST is metadata-only"
+        },
+        "status": "REUSED",
+        "stored_best_metric": 0.8666666666666667,
+        "test_access": {
+          "test_access": 0,
+          "test_construction_attempts": 0
+        },
+        "validation_comparable_pairs": 480,
+        "validation_predictions_in_memory": 54,
+        "validation_unique_rids_in_memory": 54,
+        "wrote_predictions": false
+      },
+      "20260729": {
+        "best_epoch": 20,
+        "checkpoint_path": "phase_06b_targeted/runs/multiseed_validation/official/b1_a6_fixedlambda_seed20260729_20260920T131142Z/checkpoints/best.pt",
+        "checkpoint_sha256": "687e7c9c73369ac8cdd19f58838a7b05bd2728ad3c9dd3ef6c0c3a61b9656dd4",
+        "exact_match": true,
+        "metric": 0.8041666666666667,
+        "metric_name": "canonical_validation_harrell_cindex",
+        "model": "B1",
+        "parameters": 33519493,
+        "seed": 20260729,
+        "split_fingerprint_audit": {
+          "TEST": {
+            "file_sha256": "c838bce87ed647cbb99d72f9166132968397018e3c0c403b4e8d98a17378e38f",
+            "fingerprint": "2c0cac271098fd0f32fb8668bb9fdecbe8d3da834c5d4a0d5fb1af52d928fd97",
+            "match": true
+          },
+          "TRAIN": {
+            "file_sha256": "a37ff1100674e4f540927b19f25a9f2cf44bc63a36bedc1cb45f0c7cbc95979c",
+            "fingerprint": "da3e67db377a3bc16bdd577832345b24710fc022d78a89f0e0a6350e806d945d",
+            "match": true
+          },
+          "VALIDATION": {
+            "file_sha256": "3a41c0932104cb8b8a642079aca722e55a8b276d431c71a77b4ec9b41ff83b45",
+            "fingerprint": "2452c29d40a32982018fe4c5f9af0cb6f4cd4b11f53aa6bf1ec4dd5b2b28b39e",
+            "match": true
+          },
+          "dataset_constructor_audit": {
+            "TEST": "not constructed",
+            "applies_to_seeds": [
+              20260727,
+              20260728,
+              20260729
+            ],
+            "observed": {
+              "TRAIN": {
+                "match": true,
+                "rid_fingerprint": "da3e67db377a3bc16bdd577832345b24710fc022d78a89f0e0a6350e806d945d",
+                "rows_subjects": 251
+              },
+              "VALIDATION": {
+                "match": true,
+                "rid_fingerprint": "2452c29d40a32982018fe4c5f9af0cb6f4cd4b11f53aa6bf1ec4dd5b2b28b39e",
+                "rows_subjects": 54
+              }
+            },
+            "status": "PASS"
+          },
+          "status": "PASS",
+          "verification": "phase dataset split-lock/source audit plus canonical frozen split metadata; TEST is metadata-only"
+        },
+        "status": "REUSED",
+        "stored_best_metric": 0.8041666666666667,
+        "test_access": {
+          "test_access": 0,
+          "test_construction_attempts": 0
+        },
+        "validation_comparable_pairs": 480,
+        "validation_predictions_in_memory": 54,
+        "validation_unique_rids_in_memory": 54,
+        "wrote_predictions": false
+      }
+    },
+    "P05-CP": {
+      "20260727": {
+        "best_epoch": 8,
+        "checkpoint_path": "phase_05_cp/runs/official/p05cp_official_20260919T094039595311702_seed20260727/checkpoints/best.pt",
+        "checkpoint_sha256": "9a437266a5306e979083a907b938b836bf53503a3f54824206a374d1d31e1b38",
+        "exact_match": true,
+        "metric": 0.821875,
+        "metric_name": "canonical_validation_harrell_cindex",
+        "model": "P05-CP",
+        "parameters": 33534957,
+        "seed": 20260727,
+        "split_fingerprint_audit": {
+          "TEST": {
+            "file_sha256": "c838bce87ed647cbb99d72f9166132968397018e3c0c403b4e8d98a17378e38f",
+            "fingerprint": "2c0cac271098fd0f32fb8668bb9fdecbe8d3da834c5d4a0d5fb1af52d928fd97",
+            "match": true
+          },
+          "TRAIN": {
+            "file_sha256": "a37ff1100674e4f540927b19f25a9f2cf44bc63a36bedc1cb45f0c7cbc95979c",
+            "fingerprint": "da3e67db377a3bc16bdd577832345b24710fc022d78a89f0e0a6350e806d945d",
+            "match": true
+          },
+          "VALIDATION": {
+            "file_sha256": "3a41c0932104cb8b8a642079aca722e55a8b276d431c71a77b4ec9b41ff83b45",
+            "fingerprint": "2452c29d40a32982018fe4c5f9af0cb6f4cd4b11f53aa6bf1ec4dd5b2b28b39e",
+            "match": true
+          },
+          "dataset_constructor_audit": {
+            "TEST": "not constructed",
+            "applies_to_seeds": [
+              20260727,
+              20260728,
+              20260729
+            ],
+            "observed": {
+              "TRAIN": {
+                "match": true,
+                "rid_fingerprint": "da3e67db377a3bc16bdd577832345b24710fc022d78a89f0e0a6350e806d945d",
+                "rows_subjects": 251
+              },
+              "VALIDATION": {
+                "match": true,
+                "rid_fingerprint": "2452c29d40a32982018fe4c5f9af0cb6f4cd4b11f53aa6bf1ec4dd5b2b28b39e",
+                "rows_subjects": 54
+              }
+            },
+            "status": "PASS"
+          },
+          "status": "PASS",
+          "verification": "phase dataset split-lock/source audit plus canonical frozen split metadata; TEST is metadata-only"
+        },
+        "status": "REUSED",
+        "stored_best_metric": 0.821875,
+        "test_access": {
+          "test_access": 0,
+          "test_construction_attempts": 0
+        },
+        "validation_comparable_pairs": 480,
+        "validation_predictions_in_memory": 54,
+        "validation_unique_rids_in_memory": 54,
+        "wrote_predictions": false
+      },
+      "20260728": {
+        "best_epoch": 11,
+        "checkpoint_path": "phase_05_cp/runs/multiseed_validation/official/p05-cp_validation_20260919T124252929082756_seed20260728/checkpoints/best.pt",
+        "checkpoint_sha256": "cc7ec626b4c5fa844fc5a53f88ff49ba0e9dad79b55dee0bb61ccb0a1f1d4270",
+        "exact_match": true,
+        "metric": 0.8552083333333333,
+        "metric_name": "canonical_validation_harrell_cindex",
+        "model": "P05-CP",
+        "parameters": 33534957,
+        "seed": 20260728,
+        "split_fingerprint_audit": {
+          "TEST": {
+            "file_sha256": "c838bce87ed647cbb99d72f9166132968397018e3c0c403b4e8d98a17378e38f",
+            "fingerprint": "2c0cac271098fd0f32fb8668bb9fdecbe8d3da834c5d4a0d5fb1af52d928fd97",
+            "match": true
+          },
+          "TRAIN": {
+            "file_sha256": "a37ff1100674e4f540927b19f25a9f2cf44bc63a36bedc1cb45f0c7cbc95979c",
+            "fingerprint": "da3e67db377a3bc16bdd577832345b24710fc022d78a89f0e0a6350e806d945d",
+            "match": true
+          },
+          "VALIDATION": {
+            "file_sha256": "3a41c0932104cb8b8a642079aca722e55a8b276d431c71a77b4ec9b41ff83b45",
+            "fingerprint": "2452c29d40a32982018fe4c5f9af0cb6f4cd4b11f53aa6bf1ec4dd5b2b28b39e",
+            "match": true
+          },
+          "dataset_constructor_audit": {
+            "TEST": "not constructed",
+            "applies_to_seeds": [
+              20260727,
+              20260728,
+              20260729
+            ],
+            "observed": {
+              "TRAIN": {
+                "match": true,
+                "rid_fingerprint": "da3e67db377a3bc16bdd577832345b24710fc022d78a89f0e0a6350e806d945d",
+                "rows_subjects": 251
+              },
+              "VALIDATION": {
+                "match": true,
+                "rid_fingerprint": "2452c29d40a32982018fe4c5f9af0cb6f4cd4b11f53aa6bf1ec4dd5b2b28b39e",
+                "rows_subjects": 54
+              }
+            },
+            "status": "PASS"
+          },
+          "status": "PASS",
+          "verification": "phase dataset split-lock/source audit plus canonical frozen split metadata; TEST is metadata-only"
+        },
+        "status": "REUSED",
+        "stored_best_metric": 0.8552083333333333,
+        "test_access": {
+          "test_access": 0,
+          "test_construction_attempts": 0
+        },
+        "validation_comparable_pairs": 480,
+        "validation_predictions_in_memory": 54,
+        "validation_unique_rids_in_memory": 54,
+        "wrote_predictions": false
+      },
+      "20260729": {
+        "best_epoch": 8,
+        "checkpoint_path": "phase_05_cp/runs/multiseed_validation/official/p05-cp_validation_20260919T131256643473042_seed20260729/checkpoints/best.pt",
+        "checkpoint_sha256": "314f3bae9ca5870776284aa3a7cd159987e169024d922884047604a3a090cc1a",
+        "exact_match": true,
+        "metric": 0.80625,
+        "metric_name": "canonical_validation_harrell_cindex",
+        "model": "P05-CP",
+        "parameters": 33534957,
+        "seed": 20260729,
+        "split_fingerprint_audit": {
+          "TEST": {
+            "file_sha256": "c838bce87ed647cbb99d72f9166132968397018e3c0c403b4e8d98a17378e38f",
+            "fingerprint": "2c0cac271098fd0f32fb8668bb9fdecbe8d3da834c5d4a0d5fb1af52d928fd97",
+            "match": true
+          },
+          "TRAIN": {
+            "file_sha256": "a37ff1100674e4f540927b19f25a9f2cf44bc63a36bedc1cb45f0c7cbc95979c",
+            "fingerprint": "da3e67db377a3bc16bdd577832345b24710fc022d78a89f0e0a6350e806d945d",
+            "match": true
+          },
+          "VALIDATION": {
+            "file_sha256": "3a41c0932104cb8b8a642079aca722e55a8b276d431c71a77b4ec9b41ff83b45",
+            "fingerprint": "2452c29d40a32982018fe4c5f9af0cb6f4cd4b11f53aa6bf1ec4dd5b2b28b39e",
+            "match": true
+          },
+          "dataset_constructor_audit": {
+            "TEST": "not constructed",
+            "applies_to_seeds": [
+              20260727,
+              20260728,
+              20260729
+            ],
+            "observed": {
+              "TRAIN": {
+                "match": true,
+                "rid_fingerprint": "da3e67db377a3bc16bdd577832345b24710fc022d78a89f0e0a6350e806d945d",
+                "rows_subjects": 251
+              },
+              "VALIDATION": {
+                "match": true,
+                "rid_fingerprint": "2452c29d40a32982018fe4c5f9af0cb6f4cd4b11f53aa6bf1ec4dd5b2b28b39e",
+                "rows_subjects": 54
+              }
+            },
+            "status": "PASS"
+          },
+          "status": "PASS",
+          "verification": "phase dataset split-lock/source audit plus canonical frozen split metadata; TEST is metadata-only"
+        },
+        "status": "REUSED",
+        "stored_best_metric": 0.80625,
+        "test_access": {
+          "test_access": 0,
+          "test_construction_attempts": 0
+        },
+        "validation_comparable_pairs": 480,
+        "validation_predictions_in_memory": 54,
+        "validation_unique_rids_in_memory": 54,
+        "wrote_predictions": false
+      }
+    },
+    "P05B": {
+      "20260727": {
+        "best_epoch": 35,
+        "checkpoint_path": "phase_05b_pairwise_medicalnet/runs/official/p05b_official_20260731T101104Z_seed20260727/checkpoints/best.pt",
+        "checkpoint_sha256": "f0e3a2954f4e4fc542a1c77082b87699f8ca8ffbb4534736967c55ed726ee97d",
+        "exact_match": true,
+        "metric": 0.8395833333333333,
+        "metric_name": "canonical_validation_harrell_cindex",
+        "model": "P05B",
+        "parameters": 33760941,
+        "seed": 20260727,
+        "split_fingerprint_audit": {
+          "TEST": {
+            "file_sha256": "c838bce87ed647cbb99d72f9166132968397018e3c0c403b4e8d98a17378e38f",
+            "fingerprint": "2c0cac271098fd0f32fb8668bb9fdecbe8d3da834c5d4a0d5fb1af52d928fd97",
+            "match": true
+          },
+          "TRAIN": {
+            "file_sha256": "a37ff1100674e4f540927b19f25a9f2cf44bc63a36bedc1cb45f0c7cbc95979c",
+            "fingerprint": "da3e67db377a3bc16bdd577832345b24710fc022d78a89f0e0a6350e806d945d",
+            "match": true
+          },
+          "VALIDATION": {
+            "file_sha256": "3a41c0932104cb8b8a642079aca722e55a8b276d431c71a77b4ec9b41ff83b45",
+            "fingerprint": "2452c29d40a32982018fe4c5f9af0cb6f4cd4b11f53aa6bf1ec4dd5b2b28b39e",
+            "match": true
+          },
+          "dataset_constructor_audit": {
+            "TEST": "not constructed",
+            "applies_to_seeds": [
+              20260727,
+              20260728,
+              20260729
+            ],
+            "observed": {
+              "TRAIN": {
+                "match": true,
+                "rid_fingerprint": "da3e67db377a3bc16bdd577832345b24710fc022d78a89f0e0a6350e806d945d",
+                "rows_subjects": 251
+              },
+              "VALIDATION": {
+                "match": true,
+                "rid_fingerprint": "2452c29d40a32982018fe4c5f9af0cb6f4cd4b11f53aa6bf1ec4dd5b2b28b39e",
+                "rows_subjects": 54
+              }
+            },
+            "status": "PASS"
+          },
+          "status": "PASS",
+          "verification": "phase dataset split-lock/source audit plus canonical frozen split metadata; TEST is metadata-only"
+        },
+        "status": "REUSED",
+        "stored_best_metric": 0.8395833333333333,
+        "test_access": {
+          "test_access": 0,
+          "test_construction_attempts": 0
+        },
+        "validation_comparable_pairs": 480,
+        "validation_predictions_in_memory": 54,
+        "validation_unique_rids_in_memory": 54,
+        "wrote_predictions": false
+      },
+      "20260728": {
+        "best_epoch": 12,
+        "checkpoint_path": "phase_05b_pairwise_medicalnet/runs/multiseed_validation/official/p05b_validation_20260919T113827946200515_seed20260728/checkpoints/best.pt",
+        "checkpoint_sha256": "07cd8dd4bde947ef28af1f83ab1c1fda12cc942af0d8b971038a56da02205181",
+        "exact_match": true,
+        "metric": 0.8458333333333333,
+        "metric_name": "canonical_validation_harrell_cindex",
+        "model": "P05B",
+        "parameters": 33760941,
+        "seed": 20260728,
+        "split_fingerprint_audit": {
+          "TEST": {
+            "file_sha256": "c838bce87ed647cbb99d72f9166132968397018e3c0c403b4e8d98a17378e38f",
+            "fingerprint": "2c0cac271098fd0f32fb8668bb9fdecbe8d3da834c5d4a0d5fb1af52d928fd97",
+            "match": true
+          },
+          "TRAIN": {
+            "file_sha256": "a37ff1100674e4f540927b19f25a9f2cf44bc63a36bedc1cb45f0c7cbc95979c",
+            "fingerprint": "da3e67db377a3bc16bdd577832345b24710fc022d78a89f0e0a6350e806d945d",
+            "match": true
+          },
+          "VALIDATION": {
+            "file_sha256": "3a41c0932104cb8b8a642079aca722e55a8b276d431c71a77b4ec9b41ff83b45",
+            "fingerprint": "2452c29d40a32982018fe4c5f9af0cb6f4cd4b11f53aa6bf1ec4dd5b2b28b39e",
+            "match": true
+          },
+          "dataset_constructor_audit": {
+            "TEST": "not constructed",
+            "applies_to_seeds": [
+              20260727,
+              20260728,
+              20260729
+            ],
+            "observed": {
+              "TRAIN": {
+                "match": true,
+                "rid_fingerprint": "da3e67db377a3bc16bdd577832345b24710fc022d78a89f0e0a6350e806d945d",
+                "rows_subjects": 251
+              },
+              "VALIDATION": {
+                "match": true,
+                "rid_fingerprint": "2452c29d40a32982018fe4c5f9af0cb6f4cd4b11f53aa6bf1ec4dd5b2b28b39e",
+                "rows_subjects": 54
+              }
+            },
+            "status": "PASS"
+          },
+          "status": "PASS",
+          "verification": "phase dataset split-lock/source audit plus canonical frozen split metadata; TEST is metadata-only"
+        },
+        "status": "REUSED",
+        "stored_best_metric": 0.8458333333333333,
+        "test_access": {
+          "test_access": 0,
+          "test_construction_attempts": 0
+        },
+        "validation_comparable_pairs": 480,
+        "validation_predictions_in_memory": 54,
+        "validation_unique_rids_in_memory": 54,
+        "wrote_predictions": false
+      },
+      "20260729": {
+        "best_epoch": 7,
+        "checkpoint_path": "phase_05b_pairwise_medicalnet/runs/multiseed_validation/official/p05b_validation_20260919T121253155712205_seed20260729/checkpoints/best.pt",
+        "checkpoint_sha256": "8ee05d0b8e6fcb9bc6ad157b2d1d2468d862bb4eb2401c8aa787ef0677e89e05",
+        "exact_match": true,
+        "metric": 0.8177083333333334,
+        "metric_name": "canonical_validation_harrell_cindex",
+        "model": "P05B",
+        "parameters": 33760941,
+        "seed": 20260729,
+        "split_fingerprint_audit": {
+          "TEST": {
+            "file_sha256": "c838bce87ed647cbb99d72f9166132968397018e3c0c403b4e8d98a17378e38f",
+            "fingerprint": "2c0cac271098fd0f32fb8668bb9fdecbe8d3da834c5d4a0d5fb1af52d928fd97",
+            "match": true
+          },
+          "TRAIN": {
+            "file_sha256": "a37ff1100674e4f540927b19f25a9f2cf44bc63a36bedc1cb45f0c7cbc95979c",
+            "fingerprint": "da3e67db377a3bc16bdd577832345b24710fc022d78a89f0e0a6350e806d945d",
+            "match": true
+          },
+          "VALIDATION": {
+            "file_sha256": "3a41c0932104cb8b8a642079aca722e55a8b276d431c71a77b4ec9b41ff83b45",
+            "fingerprint": "2452c29d40a32982018fe4c5f9af0cb6f4cd4b11f53aa6bf1ec4dd5b2b28b39e",
+            "match": true
+          },
+          "dataset_constructor_audit": {
+            "TEST": "not constructed",
+            "applies_to_seeds": [
+              20260727,
+              20260728,
+              20260729
+            ],
+            "observed": {
+              "TRAIN": {
+                "match": true,
+                "rid_fingerprint": "da3e67db377a3bc16bdd577832345b24710fc022d78a89f0e0a6350e806d945d",
+                "rows_subjects": 251
+              },
+              "VALIDATION": {
+                "match": true,
+                "rid_fingerprint": "2452c29d40a32982018fe4c5f9af0cb6f4cd4b11f53aa6bf1ec4dd5b2b28b39e",
+                "rows_subjects": 54
+              }
+            },
+            "status": "PASS"
+          },
+          "status": "PASS",
+          "verification": "phase dataset split-lock/source audit plus canonical frozen split metadata; TEST is metadata-only"
+        },
+        "status": "REUSED",
+        "stored_best_metric": 0.8177083333333334,
+        "test_access": {
+          "test_access": 0,
+          "test_construction_attempts": 0
+        },
+        "validation_comparable_pairs": 480,
+        "validation_predictions_in_memory": 54,
+        "validation_unique_rids_in_memory": 54,
+        "wrote_predictions": false
+      }
+    },
+    "P10": {
+      "20260727": {
+        "best_epoch": 20,
+        "checkpoint_path": "phase_10_paper_cnn_tlstm_reproduction/artifacts/checkpoints/tlstm_official_seed_20260727/best.pt",
+        "checkpoint_sha256": "c2d942d3bd9428798fd7390c3b302ba154e3d23ef049f426722ebe064699a1bf",
+        "cnn_checkpoint_sha256": "bcb96142e7d78d070c0663a853805701766b53d4aafd9f4531cc20b4735e14bd",
+        "cnn_parameters": 33170113,
+        "exact_match": true,
+        "metric": 0.6625,
+        "model": "P10",
+        "parameters": 33205186,
+        "pca_components": 38,
+        "replay_mode": "phase-10 official_state deep validation replay on validation PCA archive",
+        "seed": 20260727,
+        "split_fingerprint_audit": {
+          "TEST": {
+            "file_sha256": "c838bce87ed647cbb99d72f9166132968397018e3c0c403b4e8d98a17378e38f",
+            "fingerprint": "2c0cac271098fd0f32fb8668bb9fdecbe8d3da834c5d4a0d5fb1af52d928fd97",
+            "match": true
+          },
+          "TRAIN": {
+            "file_sha256": "a37ff1100674e4f540927b19f25a9f2cf44bc63a36bedc1cb45f0c7cbc95979c",
+            "fingerprint": "da3e67db377a3bc16bdd577832345b24710fc022d78a89f0e0a6350e806d945d",
+            "match": true
+          },
+          "VALIDATION": {
+            "file_sha256": "3a41c0932104cb8b8a642079aca722e55a8b276d431c71a77b4ec9b41ff83b45",
+            "fingerprint": "2452c29d40a32982018fe4c5f9af0cb6f4cd4b11f53aa6bf1ec4dd5b2b28b39e",
+            "match": true
+          },
+          "dataset_constructor_audit": "P10 official-state validation archive audit; no TEST constructor",
+          "status": "PASS",
+          "verification": "P10 official-state frozen assignment hash plus canonical frozen split metadata; TEST is metadata-only"
+        },
+        "status": "REUSED",
+        "stored_best_metric": 0.6625,
+        "test_access": {
+          "test_artifacts": 0,
+          "test_dataset": 0,
+          "test_embeddings": 0,
+          "test_metrics": 0,
+          "test_mri": 0,
+          "test_predictions": 0
+        },
+        "tlstm_parameters": 35073
+      },
+      "20260728": {
+        "best_epoch": 12,
+        "checkpoint_path": "phase_10_paper_cnn_tlstm_reproduction/artifacts/checkpoints/tlstm_official_seed_20260728/best.pt",
+        "checkpoint_sha256": "9eb74762e30555d86c7edcfd61dc22bde883c613dc8e4e0fe38c2cfb3f9113b0",
+        "cnn_checkpoint_sha256": "fde47263d61f6e9ffc9b399eb1dfa9eaea5bd413e87fc1c27e26cd0af2d0cde2",
+        "cnn_parameters": 33170113,
+        "exact_match": true,
+        "metric": 0.7708333333333334,
+        "model": "P10",
+        "parameters": 33213122,
+        "pca_components": 69,
+        "replay_mode": "phase-10 official_state deep validation replay on validation PCA archive",
+        "seed": 20260728,
+        "split_fingerprint_audit": {
+          "TEST": {
+            "file_sha256": "c838bce87ed647cbb99d72f9166132968397018e3c0c403b4e8d98a17378e38f",
+            "fingerprint": "2c0cac271098fd0f32fb8668bb9fdecbe8d3da834c5d4a0d5fb1af52d928fd97",
+            "match": true
+          },
+          "TRAIN": {
+            "file_sha256": "a37ff1100674e4f540927b19f25a9f2cf44bc63a36bedc1cb45f0c7cbc95979c",
+            "fingerprint": "da3e67db377a3bc16bdd577832345b24710fc022d78a89f0e0a6350e806d945d",
+            "match": true
+          },
+          "VALIDATION": {
+            "file_sha256": "3a41c0932104cb8b8a642079aca722e55a8b276d431c71a77b4ec9b41ff83b45",
+            "fingerprint": "2452c29d40a32982018fe4c5f9af0cb6f4cd4b11f53aa6bf1ec4dd5b2b28b39e",
+            "match": true
+          },
+          "dataset_constructor_audit": "P10 official-state validation archive audit; no TEST constructor",
+          "status": "PASS",
+          "verification": "P10 official-state frozen assignment hash plus canonical frozen split metadata; TEST is metadata-only"
+        },
+        "status": "REUSED",
+        "stored_best_metric": 0.7708333333333334,
+        "test_access": {
+          "test_artifacts": 0,
+          "test_dataset": 0,
+          "test_embeddings": 0,
+          "test_metrics": 0,
+          "test_mri": 0,
+          "test_predictions": 0
+        },
+        "tlstm_parameters": 43009
+      },
+      "20260729": {
+        "best_epoch": 16,
+        "checkpoint_path": "phase_10_paper_cnn_tlstm_reproduction/artifacts/checkpoints/tlstm_official_seed_20260729/best.pt",
+        "checkpoint_sha256": "4bcd5070d0d3cc94ff50dacb36e472736968763927a1a217f6bde736efd2cb60",
+        "cnn_checkpoint_sha256": "11c163cfd2744feff8d47882b302f29cd0487f8a7670916c177587fc993a599b",
+        "cnn_parameters": 33170113,
+        "exact_match": true,
+        "metric": 0.7916666666666666,
+        "model": "P10",
+        "parameters": 33195970,
+        "pca_components": 2,
+        "replay_mode": "phase-10 official_state deep validation replay on validation PCA archive",
+        "seed": 20260729,
+        "split_fingerprint_audit": {
+          "TEST": {
+            "file_sha256": "c838bce87ed647cbb99d72f9166132968397018e3c0c403b4e8d98a17378e38f",
+            "fingerprint": "2c0cac271098fd0f32fb8668bb9fdecbe8d3da834c5d4a0d5fb1af52d928fd97",
+            "match": true
+          },
+          "TRAIN": {
+            "file_sha256": "a37ff1100674e4f540927b19f25a9f2cf44bc63a36bedc1cb45f0c7cbc95979c",
+            "fingerprint": "da3e67db377a3bc16bdd577832345b24710fc022d78a89f0e0a6350e806d945d",
+            "match": true
+          },
+          "VALIDATION": {
+            "file_sha256": "3a41c0932104cb8b8a642079aca722e55a8b276d431c71a77b4ec9b41ff83b45",
+            "fingerprint": "2452c29d40a32982018fe4c5f9af0cb6f4cd4b11f53aa6bf1ec4dd5b2b28b39e",
+            "match": true
+          },
+          "dataset_constructor_audit": "P10 official-state validation archive audit; no TEST constructor",
+          "status": "PASS",
+          "verification": "P10 official-state frozen assignment hash plus canonical frozen split metadata; TEST is metadata-only"
+        },
+        "status": "REUSED",
+        "stored_best_metric": 0.7916666666666666,
+        "test_access": {
+          "test_artifacts": 0,
+          "test_dataset": 0,
+          "test_embeddings": 0,
+          "test_metrics": 0,
+          "test_mri": 0,
+          "test_predictions": 0
+        },
+        "tlstm_parameters": 25857
+      }
+    }
+  },
+  "recommended_frozen_thesis_model": "A6_NO_RC",
+  "runs_retrained": [],
+  "runs_reused": [
+    {
+      "model": "P05B",
+      "run_path": "phase_05b_pairwise_medicalnet/runs/official/p05b_official_20260731T101104Z_seed20260727",
+      "seed": 20260727
+    },
+    {
+      "model": "P05B",
+      "run_path": "phase_05b_pairwise_medicalnet/runs/multiseed_validation/official/p05b_validation_20260919T113827946200515_seed20260728",
+      "seed": 20260728
+    },
+    {
+      "model": "P05B",
+      "run_path": "phase_05b_pairwise_medicalnet/runs/multiseed_validation/official/p05b_validation_20260919T121253155712205_seed20260729",
+      "seed": 20260729
+    },
+    {
+      "model": "P05-CP",
+      "run_path": "phase_05_cp/runs/official/p05cp_official_20260919T094039595311702_seed20260727",
+      "seed": 20260727
+    },
+    {
+      "model": "P05-CP",
+      "run_path": "phase_05_cp/runs/multiseed_validation/official/p05-cp_validation_20260919T124252929082756_seed20260728",
+      "seed": 20260728
+    },
+    {
+      "model": "P05-CP",
+      "run_path": "phase_05_cp/runs/multiseed_validation/official/p05-cp_validation_20260919T131256643473042_seed20260729",
+      "seed": 20260729
+    },
+    {
+      "model": "A6",
+      "run_path": "phase_06_ablation/runs/official/a6_no_rc_20260919T192909Z_seed20260727",
+      "seed": 20260727
+    },
+    {
+      "model": "A6",
+      "run_path": "phase_06_ablation/runs/multiseed_validation/official/a6_no_rc_seed20260728_20260920T082644Z",
+      "seed": 20260728
+    },
+    {
+      "model": "A6",
+      "run_path": "phase_06_ablation/runs/multiseed_validation/official/a6_no_rc_seed20260729_20260920T085637Z",
+      "seed": 20260729
+    },
+    {
+      "model": "B1",
+      "run_path": "phase_06b_targeted/runs/multiseed_validation/official/b1_a6_fixedlambda_seed20260727_20260920T121112Z",
+      "seed": 20260727
+    },
+    {
+      "model": "B1",
+      "run_path": "phase_06b_targeted/runs/multiseed_validation/official/b1_a6_fixedlambda_seed20260728_20260920T124156Z",
+      "seed": 20260728
+    },
+    {
+      "model": "B1",
+      "run_path": "phase_06b_targeted/runs/multiseed_validation/official/b1_a6_fixedlambda_seed20260729_20260920T131142Z",
+      "seed": 20260729
+    },
+    {
+      "model": "P10",
+      "run_path": "phase_10_paper_cnn_tlstm_reproduction/artifacts/checkpoints/tlstm_official_seed_20260727/best.pt",
+      "seed": 20260727
+    },
+    {
+      "model": "P10",
+      "run_path": "phase_10_paper_cnn_tlstm_reproduction/artifacts/checkpoints/tlstm_official_seed_20260728/best.pt",
+      "seed": 20260728
+    },
+    {
+      "model": "P10",
+      "run_path": "phase_10_paper_cnn_tlstm_reproduction/artifacts/checkpoints/tlstm_official_seed_20260729/best.pt",
+      "seed": 20260729
+    }
+  ],
+  "status": "COMPLETE",
+  "test_access_in_phase": 0,
+  "warnings": [
+    "P05B seed 20260727 has no separate run-local architecture_manifest.json or resolved_config.json sidecar; its checkpoint embeds resolved_config and architecture_manifest, and the phase-level manifests/configs were used for the audit.",
+    "P05B seed 20260728 also lacks a separate run-local resolved_config.json; the checkpoint payload and phase-level multiseed config were used.",
+    "Historical validation_predictions.json files are last-checkpoint artifacts for the non-P10 families, not the validation-selected best checkpoints; they were located but not used for the standardized table.",
+    "P10 is a paper-inspired/adapted reproduction baseline with prespecified train-only retuning, not an exact reproduction of Aghajanian et al. 2025."
+  ]
+}

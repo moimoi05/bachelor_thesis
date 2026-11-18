@@ -1,0 +1,29 @@
+\chapter[Thảo luận, kết luận và hướng phát triển]{Thảo luận, kết luận\\và hướng phát triển}
+\label{chap:discussion}
+
+\section{Các phát hiện chính}
+Đối chứng nhiều lần khởi tạo cho thấy khả năng phân biệt nguy cơ phụ thuộc cả cấu trúc tương tác và cách tham số hóa. CP giảm 98.384\% tham số ở ba lớp song tuyến đầu; mức giảm toàn mạng khoảng 0.669\% vì bộ mã hóa MRI chiếm phần lớn. Lợi ích đo được nằm ở kích thước lõi tương tác, còn tốc độ suy luận cần phép đo riêng.
+
+RC-Free giữ đủ ba nguồn, hai cặp MR/MC và bốn nhánh phần dư có cổng. Cấu trúc này duy trì C-index xác thực trung bình cạnh tranh với mô hình đầy đủ, đồng thời giảm số cặp và nhánh truyền. Kết quả MR-only, MC-only và Fixed-$\lambda$ cho thấy nhiều cấu trúc gọn có hiệu năng gần nhau trong nhóm nghiên cứu hiện tại.
+
+Phân tích sống còn bổ sung ý nghĩa theo thời gian cho điểm nguy cơ: KM mô tả sự phân tầng giữa hai nhóm, còn AUC cho biết khả năng phân biệt tại 2, 3 và 5 năm. AUC giảm ở mốc 5 năm; số biến cố và số người còn nguy cơ trong các bảng giúp đặt những giá trị này vào bối cảnh dữ liệu.
+
+\section{Kết luận}
+RC-Free Pairwise Fusion kết hợp ResNet-18 3D khởi tạo MedicalNet, các bộ mã hóa dữ liệu bảng, tương tác CP với gated residual, T-LSTM, attention và Cox. C-index trên tập xác thực đạt $0.8347\pm0.0237$ qua ba lần khởi tạo. KM đồng thuận có log-rank $p=0.01336$; AUC tập xác thực tại 2/3/5 năm lần lượt đạt $0.9805\pm0.0149$, $0.9788\pm0.0162$ và $0.7889\pm0.0632$. Các kết quả bổ sung cho nhau: C-index mô tả thứ tự nguy cơ, AUC cho thấy thay đổi theo thời hạn và KM thể hiện khác biệt giữa hai nhóm.
+
+Đóng góp chính là tích hợp và kiểm chứng đánh đổi giữa tham số hóa, cấu trúc tương tác và khả năng phân biệt nguy cơ. CP giảm 98.384\% tham số của ba lớp song tuyến đầu; RC-Free rút gọn cấu trúc mà vẫn giữ khả năng phân biệt cạnh tranh. Nghiên cứu chưa chứng minh ưu thế thống kê của mô hình đề xuất hoặc sự cần thiết của từng nhánh tương tác.
+
+\section{Giới hạn}
+\label{sec:study-limitations}
+\begin{enumerate}
+\item \textbf{Chọn mẫu hồi cứu và thời điểm đầu vào.} Trong 359 người, 356 người có MRI cuối trước mốc chọn mẫu $L$, cách mốc này trung vị 186 ngày. Điều kiện chưa tiến triển đến $L$ tạo ra khoảng không có biến cố được bảo đảm từ MRI cuối đến $L$, có thể gây sai lệch thời gian bất tử khi diễn giải như dự báo từ MRI cuối. Ngoài ra, 57 người có ít nhất một số đo MMSE/CDR ghép sau MRI cuối. Thiết lập tiến cứu cần thống nhất mốc chọn mẫu, thời điểm đầu vào và gốc tính thời gian.
+\item \textbf{Tiêu chí biến cố và đóng góp của MRI.} Biến cố theo MMSE/CDR là tiêu chí thay thế về nhận thức, còn xác nhận AD bằng dấu ấn sinh học nằm ngoài thiết kế này. Các thang đo cũng xuất hiện ở đầu vào, nên hiệu năng phản ánh đóng góp phối hợp của ảnh và thông tin lâm sàng.
+\item \textbf{Bất định và sử dụng lại dữ liệu.} Tập xác thực chỉ có 54 người (16 biến cố) và đã tham gia lựa chọn mô hình. SD qua ba lần khởi tạo mô tả biến thiên tối ưu trên cùng nhóm người; suy rộng ra quần thể cần nhóm xác nhận độc lập. Tập kiểm tra đã được sử dụng để đối chiếu trong quá trình phát triển mô hình; kết quả trên tập này được báo cáo như đánh giá hậu nghiệm. AUC sớm dựa trên ít biến cố và HR tập kiểm tra có CI rộng; các phép kiểm tra bổ sung chưa hiệu chỉnh đa kiểm định. Kiểm tra nguy cơ tỷ lệ chưa phát hiện vi phạm, nhưng ít biến cố làm giảm khả năng phát hiện sai lệch.
+\item \textbf{Giả định và khả năng khái quát.} IPCW giả định phân phối kiểm duyệt tập huấn luyện áp dụng được cho tập đánh giá và kiểm duyệt độc lập. Nghiên cứu chưa xác nhận ngoài nhóm nghiên cứu, chưa kiểm chứng khi thiếu nguồn hoặc đổi chất lượng ảnh. Nguồn trọng số MedicalNet đã được xác minh, nhưng chưa đủ thông tin để kiểm tra trùng người với dữ liệu tiền huấn luyện.
+\item \textbf{Chưa có xác suất cá nhân đã hiệu chỉnh.} Chưa ước lượng và xác nhận hàm sống còn nền, độ hiệu chỉnh xác suất hoặc lợi ích lâm sàng. C-index, KM và AUC không thay thế các bước này; không dùng điểm log-nguy cơ như phần trăm chuyển bệnh hay căn cứ quyết định chăm sóc.
+\end{enumerate}
+
+\section{Hướng phát triển}
+Từ các giới hạn trên, ưu tiên là thiết lập nhóm nghiên cứu tiến cứu nhất quán theo thời gian: chọn người đủ điều kiện tại $L$, chỉ dùng thông tin có trước hoặc tại $L$, rồi tính thời gian đến biến cố từ cùng mốc. Thiết lập này cần phiên bản dữ liệu và đánh giá riêng.
+
+Cần xác nhận trên nhóm nghiên cứu độc lập, tăng cỡ mẫu và kiểm soát các khối chung khi khảo sát hạng CP, cặp tương tác và nguồn dữ liệu. Độ ổn định của attention/cổng giúp phân tích hành vi mạng; diễn giải bệnh học cần bằng chứng lâm sàng bổ sung. Sau khi kiểm chứng khả năng phân biệt, có thể bổ sung hàm sống còn nền và đánh giá độ hiệu chỉnh xác suất theo thời hạn. Lợi ích triển khai chỉ nên kết luận khi đo độ trễ và bộ nhớ trên cùng phần cứng, đầu vào và chế độ suy luận.

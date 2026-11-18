@@ -1,0 +1,4 @@
+seed,epochs,valid_batches,invalid_batches,min_valid_per_epoch,max_valid_per_epoch
+20260727,36,1512,0,42,42
+20260728,30,1260,0,42,42
+20260729,30,1260,0,42,42

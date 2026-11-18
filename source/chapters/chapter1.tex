@@ -1,0 +1,68 @@
+\chapter{Giới thiệu}
+\label{chap:intro}
+
+\section{Động lực nghiên cứu}
+Bệnh Alzheimer (Alzheimer's disease -- AD) là bệnh thoái hóa thần kinh tiến triển, gây suy giảm nhận thức và chức năng sinh hoạt. Suy giảm nhận thức nhẹ (Mild Cognitive Impairment -- MCI) là trạng thái suy giảm vượt mức kỳ vọng theo tuổi nhưng chưa làm mất khả năng sinh hoạt độc lập như sa sút trí tuệ. Diễn tiến MCI không đồng nhất: một số người tiến triển thành sa sút trí tuệ, một số ổn định, những người khác có thể cải thiện \cite{petersen2018mci,jack2018niaaa}. Đánh giá trạng thái hiện tại và dự đoán tiến triển là hai nhiệm vụ khác nhau; khóa luận này dùng lịch sử thăm khám để xếp hạng nguy cơ tiến triển giữa các cá thể.
+
+Để mô tả quá trình này, dữ liệu theo dõi dọc cho phép đánh giá trạng thái tại từng lần thăm khám và sự thay đổi giữa các lần khám, qua đó có thể bổ sung thông tin về diễn biến so với một quan sát đơn lẻ. Khoảng cách giữa các lần khám thường không đều, nên mô hình cần xét cả thứ tự và thời gian quan sát.
+
+Ảnh cộng hưởng từ cấu trúc (MRI) cung cấp thông tin về giải phẫu não; radiomics trích xuất các đặc trưng (feature) định lượng về hình dạng, cường độ và kết cấu từ chính ảnh này \cite{vangriethuysen2017computational}. Dữ liệu lâm sàng phản ánh tình trạng nhận thức và khả năng sinh hoạt thông qua các thang đánh giá tương ứng. Ba nguồn có thể bổ sung cho nhau nhưng cũng chứa thông tin trùng lặp, khác biệt về thang đo hoặc nhiễu. Vì vậy, hiệu quả hợp nhất cần được đánh giá thực nghiệm.
+
+Nghiên cứu \emph{Longitudinal structural MRI-based deep learning and radiomics features for predicting Alzheimer's disease progression} của Aghajanian và cộng sự (2025) \cite{aghajanian2025longitudinal} là cơ sở tham chiếu. Quy trình dùng mạng nơ-ron tích chập (CNN) trích đặc trưng MRI, phân tích thành phần chính (PCA) giảm chiều và mạng bộ nhớ dài ngắn hạn có xét thời gian (T-LSTM) kết hợp cơ chế chú ý (attention) để tổng hợp chuỗi cho mô hình sống còn Cox. Việc bổ sung radiomics chưa mang lại cải thiện nhất quán, đặt ra nhu cầu khảo sát cơ chế hợp nhất có chọn lọc hơn. Kế thừa quy trình CNN--PCA--T-LSTM làm đối chứng có điều chỉnh, khóa luận khảo sát tương tác song tuyến, tức các tích giữa đặc trưng thuộc hai nguồn. Phân rã Canonical Polyadic (CP) biểu diễn tensor trọng số bằng tổng các tích ngoài của các vectơ, mỗi tích ngoài là một thành phần hạng một, nhằm làm gọn tương tác; kết nối phần dư có cổng điều tiết đưa thông tin này trở lại từng nguồn. Kiến trúc RC-Free giữ hai cặp MRI--radiomics (MR) và MRI--lâm sàng (MC), bỏ tương tác trực tiếp radiomics--lâm sàng (RC).
+
+\section{Phát biểu bài toán}
+Đề tài \emph{Longitudinal Learning with Tensor Fusion for Predicting Progression of Alzheimer's Disease} xây dựng mô hình dự báo cho nhóm người bệnh MCI được lựa chọn từ bộ dữ liệu Alzheimer's Disease Neuroimaging Initiative (ADNI) \cite{weiner2015impact}. Mỗi người có ba ảnh MRI được chọn trong 18 tháng đầu kể từ lần khám ban đầu; đặc trưng radiomics và dữ liệu lâm sàng tương ứng được liên kết với từng lần chụp. Ba ngày chụp $s_1<s_2<s_3=p\leq L$ tạo thành chuỗi quan sát có khoảng cách thời gian không nhất thiết bằng nhau. Mô hình xuất điểm log-nguy cơ có giá trị thực để xếp hạng nguy cơ tiến triển giữa các cá thể.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{image/mci-progression-timeline.pdf}
+\caption[Bài toán dự đoán tiến triển MCI theo thời gian]{Ba MRI trong cửa sổ 18 tháng; $p$ là MRI cuối, còn $L$ là mốc chọn mẫu. Khoảng cách trên hình không theo tỷ lệ.}
+\label{fig:problem-timeline}
+\end{figure}
+
+Hình~\ref{fig:problem-timeline} phân biệt ngày MRI cuối $p$ với mốc chọn mẫu $L$, bằng ngày khám ban đầu cộng 18 tháng. MMSE (Mini-Mental State Examination) đánh giá nhận thức trên thang 0--30, điểm thấp hơn phản ánh suy giảm nhiều hơn. CDR-global (Clinical Dementia Rating toàn cục) mô tả mức độ suy giảm với các mức 0, 0.5, 1, 2 và 3; mức 0 biểu thị không suy giảm, còn các mức 1--3 lần lượt biểu thị sa sút trí tuệ nhẹ, vừa và nặng. Ngưỡng nghiên cứu không thay thế chẩn đoán lâm sàng. Biến cố được quy ước là lần đầu MMSE $<24$ hoặc CDR-global $\geq1$ sau $L$ \cite{folstein1975mmse,morris1993cdr}. Nếu chưa ghi nhận biến cố khi kết thúc theo dõi, ta chỉ biết người đó chưa tiến triển đến ngày được quan sát cuối cùng; trường hợp này được gọi là \emph{kiểm duyệt phải}. Phân tích sống còn sử dụng cả thời gian theo dõi và thông tin kiểm duyệt này.
+
+Hai mốc $p$ và $L$ có vai trò khác nhau: $L$ xác định người đủ điều kiện, còn $p$ là gốc tính thời gian trong bộ dữ liệu hiện tại. Thời gian theo dõi được tính từ ngày MRI cuối ($p$) đến ngày biến cố hoặc kiểm duyệt. Để được chọn, người tham gia còn phải chưa tiến triển đến $L$, có thể sau ngày MRI cuối. Ví dụ, nếu MRI cuối ở tháng 12 và $L$ ở tháng 18, thời gian được tính từ tháng 12 nhưng điều kiện chọn mẫu xét đến tháng 18. Vì vậy, đoạn từ $p$ đến $L$ được bảo đảm không có biến cố bởi cách chọn mẫu; kết quả là phân tích hồi cứu trên nhóm đã chọn, chưa phải dự báo tiến cứu tại $p$. Mục~\ref{sec:study-design} giải thích cụ thể cách xây dựng dữ liệu và phạm vi diễn giải của thiết lập này.
+
+\section{Thách thức và phạm vi nghiên cứu}
+MRI và radiomics có cùng nguồn ảnh, còn điểm lâm sàng liên quan chặt với tiêu chí biến cố. Vì vậy, cần kiểm tra cách kết hợp thông tin bổ sung và hạn chế phần trùng lặp. Phép ghép nối (concatenation) kết hợp các vectơ đầu vào thành biểu diễn chung, giúp các lớp tiếp theo học quan hệ giữa các nguồn dữ liệu. Tích ngoài (outer product) biểu diễn tường minh các tích chéo. Tuy nhiên, lớp song tuyến đầy đủ có số tham số tăng theo tích số chiều đầu vào và đầu ra \cite{baltrusaitis2019multimodal,zadeh2017tensor,kolda2009tensor}. CP ràng buộc cấu trúc tensor trọng số để giảm số tham số, đổi lại giới hạn khả năng biểu diễn \cite{liu2018lowrank,kolda2009tensor}.
+
+Để xem xét đánh đổi đó, khóa luận khảo sát ba vấn đề: biểu diễn tương tác tường minh, giảm tham số bằng CP và lựa chọn cặp tương tác. Trọng tâm là tích hợp các thành phần này và kiểm chứng trên cùng nhóm dữ liệu. Các đối chứng chính được đánh giá trên cùng dữ liệu, cách chia tập, ba lần khởi tạo ngẫu nhiên (seed) và quy ước C-index.
+
+\section{Câu hỏi nghiên cứu}
+Năm câu hỏi trong Bảng~\ref{tab:rq} khảo sát dữ liệu đầu vào và chiến lược hợp nhất. RQ1--RQ2 đóng vai trò bổ trợ; RQ3--RQ5 tập trung vào hợp nhất, CP và cấu trúc tương tác. Khả năng phân biệt nguy cơ được đánh giá bằng C-index xác thực, kết hợp số tham số và độ phức tạp kiến trúc. Chương~\ref{chap:results} phân tích điều kiện so sánh và giới hạn của từng nhóm thí nghiệm.
+
+\begin{table}[H]
+\centering\small
+\caption[Các câu hỏi nghiên cứu và phương pháp kiểm chứng]{Các câu hỏi nghiên cứu và phương pháp kiểm chứng.}
+\label{tab:rq}
+\setlength{\tabcolsep}{6pt}
+\renewcommand{\arraystretch}{1.12}
+\begin{tabularx}{\textwidth}{@{}Y Y@{}}
+\toprule
+\textbf{Câu hỏi nghiên cứu} & \textbf{Phương pháp kiểm chứng} \\
+\midrule
+\textbf{RQ1.} MRI ở nhiều thời điểm có mang lại lợi ích dự báo so với chỉ dùng MRI cuối cùng không? & Đối chiếu mô hình \textit{MRI cuối} với \textit{MRI dọc và T-LSTM} cùng \textit{MRI dọc, T-LSTM và attention} để khảo sát vai trò của thông tin theo thời gian. \\
+\addlinespace
+\textbf{RQ2.} Bổ sung radiomics và lâm sàng có cải thiện khả năng phân biệt nguy cơ so với chỉ dùng MRI không? & Đối chiếu \textit{MRI dọc, T-LSTM và attention} với \textit{Ghép nối ba nguồn (thăm dò)} sử dụng cả ba nguồn dữ liệu. \\
+\addlinespace
+\textbf{RQ3.} Tương tác theo cặp có hiệu quả hơn ghép nối đặc trưng không? & So sánh Concatenation và Full Outer-Product qua ba lần khởi tạo, kiểm soát cấu hình huấn luyện và các khối chung. \\
+\addlinespace
+\textbf{RQ4.} CP giảm bao nhiêu tham số của lớp tương tác và ảnh hưởng thế nào đến khả năng dự báo? & So sánh Full Outer-Product và Full CP Pairwise về C-index và số tham số ở từng phạm vi. \\
+\addlinespace
+\textbf{RQ5.} Có thể bỏ một số cặp tương tác và nhánh truyền mà vẫn duy trì khả năng phân biệt nguy cơ không? & Thí nghiệm loại bỏ thành phần; đối chiếu Full CP, RC-Free, MR-only và MC-only để đánh giá cấu trúc tương tác. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\FloatBarrier
+\Needspace{11\baselineskip}
+\section{Đóng góp của khóa luận}
+Khóa luận có ba đóng góp chính:
+\begin{enumerate}
+\item \textbf{Mô hình hợp nhất dọc.} Kết hợp bộ mã hóa MRI, radiomics và lâm sàng với T-LSTM, attention và Cox. Đối chứng CNN--PCA--T-LSTM thích nghi từ Aghajanian và cộng sự \cite{aghajanian2025longitudinal} theo điều kiện dữ liệu của khóa luận.
+\item \textbf{Điều tiết tương tác theo cặp.} Kết hợp tương tác song tuyến với phép chiếu về từng nguồn, cổng điều tiết riêng cho từng cá thể tại mỗi lần khám, hệ số học riêng từng nhánh và kết nối phần dư. Thiết kế thích nghi các ý tưởng điều tiết trong \cite{ryumina2026residual,liu2026motion}.
+\item \textbf{Tham số hóa gọn và cấu trúc RC-Free.} Dùng CP cho trọng số tương tác và kiểm tra cấu trúc MR/MC qua ba lần khởi tạo; mô hình giữ đủ ba nguồn và được đánh giá bằng C-index, KM, AUC.
+\end{enumerate}
+
+

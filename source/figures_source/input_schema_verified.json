@@ -1,0 +1,91 @@
+{
+  "status": "INPUT_SCHEMA_VERIFIED_LOCAL_MRI_EXPORTED",
+  "mri": {
+    "modality": "Structural T1; MPRAGE/SPGR/T1 manifest description verified",
+    "shape": [
+      144,
+      144,
+      144
+    ],
+    "spacing_mm": [
+      1.5,
+      1.5,
+      1.5
+    ],
+    "orientation": "RAS",
+    "same_volume_three_planes": true,
+    "brain_mask_actual_pipeline": true,
+    "source_hashes_match_freeze": true,
+    "raw_data_copied": false,
+    "published_asset": "assets/mri_t1_three_planes.png",
+    "asset_sha256": "4f5eff6a6648748fa0fab3c11faec0b39e7f127ae1818599365d27a2eb05bf58",
+    "display": "Brain-masked intensity; 1st–99th percentile window for display only; no artificial ROI"
+  },
+  "radiomics": {
+    "groups": {
+      "shape": 14,
+      "firstorder": 18,
+      "glcm": 24,
+      "glrlm": 16,
+      "glszm": 16,
+      "gldm": 14,
+      "ngtdm": 5
+    },
+    "region": "whole-brain mask",
+    "image_types": [
+      "Original"
+    ],
+    "intensity": "Within-mask min-max [0,1] before PyRadiomics; in memory",
+    "binCount": 64,
+    "preprocessing": {
+      "candidate": "bin64",
+      "constant_removed": 3,
+      "fit_split": "train",
+      "near_zero_variance_removed": 0,
+      "no_correlation_filter": true,
+      "pca_components": 16,
+      "pca_explained_variance_ratio": 0.99120037556228,
+      "post_filter_feature_count": 104,
+      "raw_feature_count": 107,
+      "constant_feature_names": [
+        "original_firstorder_Maximum",
+        "original_firstorder_Minimum",
+        "original_firstorder_Range"
+      ],
+      "constant_names_evidence": "qa/constant_features_evidence.json (local bin64 preprocessing artifacts)"
+    },
+    "embedding_dim": 64
+  },
+  "clinical": {
+    "features": [
+      "mmse_total_score",
+      "cdr_global",
+      "cdr_sum_of_boxes",
+      "cdr_memory",
+      "cdr_orient",
+      "cdr_judge",
+      "cdr_commun",
+      "cdr_home",
+      "cdr_care"
+    ],
+    "observed_indicator": "1=observed, 0=missing",
+    "input_values": 9,
+    "input_indicators": 9,
+    "embedding_dim": 64,
+    "imputation": "Train visit median, fallback train global median",
+    "scaling": "Train mean/population SD",
+    "alignment": "Nearest valid ±90 days; not past-only"
+  },
+  "mri_embedding_dim": 128,
+  "source_hashes": {
+    "scripts/26_extract_whole_brain_radiomics_image.py": "29f5648a1091fd62b0412934daa98d817cf0ae503f023cb460f0f44c7342c16a",
+    "scripts/25_run_whole_brain_radiomics_pilot.py": "fbecd16d64433fab631bcfc45aa6c100721ff98748566c541d73419468d3fc66",
+    "scripts/16_build_clinical_core_v1.py": "a064155c945d626887e1ad6b14410673e4628cc7486d6048f7878234156cd4d5",
+    "scripts/17_build_model_ready_v1.py": "ad1201f970af607ba38c8406c2a9c97f17c22821d035177d1b0e86660a4aa88e",
+    "radiomics/pilot_whole_brain/configs/pyradiomics_bin64.yaml": "766dbefbbb1ced223362a6091662abdbc39a85835bada517562ba3cb6bf357e9",
+    "model/mri_encoder.py": "047bb2dcc858bcac3c34491abe910b83a3a845415744effa6d8c1289583a8897",
+    "model/radiomics_encoder.py": "c28277a98bd1917ac4b39287d49eb425e22cf31c52298c7cca5e06dcdcfc8be6",
+    "model/clinical_encoder.py": "b3585c405e2d5700c7a4550c472ba864db62cc2699a81f3829a62dc78d51c8c6"
+  },
+  "visual_mri_review": "USER_CONFIRMED_LOCAL_CLEAR_NO_ARTIFACT_NO_IDENTIFIERS"
+}

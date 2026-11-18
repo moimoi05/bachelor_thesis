@@ -1,0 +1,17 @@
+split,group,year,at_risk
+val,Low risk,0,28
+val,Low risk,2,23
+val,Low risk,3,21
+val,Low risk,5,11
+val,High risk,0,26
+val,High risk,2,14
+val,High risk,3,13
+val,High risk,5,8
+test,Low risk,0,24
+test,Low risk,2,19
+test,Low risk,3,15
+test,Low risk,5,9
+test,High risk,0,30
+test,High risk,2,18
+test,High risk,3,14
+test,High risk,5,7

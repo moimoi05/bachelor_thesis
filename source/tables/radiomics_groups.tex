@@ -1,0 +1,20 @@
+\begin{table}[H]
+\centering\small
+\caption[Các nhóm đặc trưng radiomics]{Bảy nhóm đặc trưng trích từ ảnh và mặt nạ toàn não trong cấu hình đã dùng. Ví dụ là tên đặc trưng thực tế, không phải toàn bộ danh sách.}
+\label{tab:radiomics-groups}
+\begin{tabularx}{\linewidth}{@{}L{2.7cm}r Y Y@{}}
+\toprule
+Nhóm & Số lượng & Thông tin mô tả & Ví dụ \\
+\midrule
+Hình dạng & 14 & Hình học của mặt nạ não & Thể tích (MeshVolume), diện tích bề mặt (SurfaceArea) \\
+Thống kê bậc nhất & 18 & Phân bố cường độ trong mặt nạ & Trung bình (Mean), phương sai (Variance), Entropy \\
+GLCM & 24 & Quan hệ mức xám giữa các cặp voxel & Contrast, Correlation \\
+GLRLM & 16 & Độ dài chuỗi voxel cùng mức xám theo hướng & ShortRunEmphasis, LongRunEmphasis \\
+GLSZM & 16 & Kích thước vùng liên thông cùng mức xám & SmallAreaEmphasis, LargeAreaEmphasis \\
+GLDM & 14 & Mức phụ thuộc cường độ giữa voxel và lân cận & DependenceEntropy, DependenceVariance \\
+NGTDM & 5 & Chênh lệch cường độ với lân cận & Coarseness, Contrast, Busyness, Complexity, Strength \\
+\midrule
+Tổng & 107 & Loại Maximum, Minimum, Range: còn 104 & PCA giữ 16 thành phần \\
+\bottomrule
+\end{tabularx}
+\end{table}

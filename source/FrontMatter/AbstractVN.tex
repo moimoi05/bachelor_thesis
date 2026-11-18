@@ -1,0 +1,12 @@
+\chapter*{TÓM TẮT}
+\addcontentsline{toc}{chapter}{TÓM TẮT}
+
+Người bệnh suy giảm nhận thức nhẹ (MCI) có thể tiến triển với tốc độ khác nhau. Khóa luận nghiên cứu cách kết hợp ba ảnh cộng hưởng từ (MRI) theo thời gian, các đặc trưng định lượng trích từ ảnh (radiomics, ký hiệu R) và điểm đánh giá lâm sàng (clinical, ký hiệu C) để xếp hạng nguy cơ tiến triển. Thay vì ghép tất cả đặc trưng ngay từ đầu, mô hình học riêng mối liên hệ giữa MRI với radiomics và giữa MRI với lâm sàng, rồi tổng hợp diễn biến qua ba lần khám.
+
+Mô hình được gọi là RC-Free Pairwise Fusion: không tạo tương tác trực tiếp giữa radiomics và lâm sàng, nhưng vẫn dùng đủ ba nguồn dữ liệu. Các tương tác được tham số hóa gọn bằng phân rã tensor Canonical Polyadic (CP), biểu diễn trọng số tương tác bằng tổng các tích ngoài của các vectơ (mỗi tích ngoài là một thành phần hạng một), và bổ sung vào từng nguồn qua cổng điều tiết. Mạng bộ nhớ dài ngắn hạn có xét thời gian (Time-Aware Long Short-Term Memory, T-LSTM) xét khoảng cách giữa các lần khám, attention tổng hợp chuỗi và khối Cox tạo điểm nguy cơ.
+
+Thực nghiệm hồi cứu sử dụng dữ liệu của Alzheimer's Disease Neuroimaging Initiative (ADNI), gồm 359 người: 251 người thuộc tập huấn luyện, 54 người thuộc tập xác thực và 54 người thuộc tập kiểm tra. Qua ba lần khởi tạo, mô hình đạt chỉ số đồng thuận (C-index) trên tập xác thực $0.8347\pm0.0237$. Hai nhóm nguy cơ có khác biệt theo Kaplan--Meier với log-rank $p=0.01336$; diện tích dưới đường cong ROC (AUC) trên tập xác thực tại 2, 3 và 5 năm lần lượt là $0.9805\pm0.0149$, $0.9788\pm0.0162$ và $0.7889\pm0.0632$. CP giảm 98.384\% tham số ở ba lớp song tuyến đầu (các lớp xử lý tích chéo giữa hai nguồn) của mô hình đầy đủ.
+
+Đóng góp chính là làm rõ đánh đổi giữa kích thước khối tương tác và khả năng phân biệt nguy cơ. Cấu trúc rút gọn giữ được kết quả trung bình cạnh tranh với mô hình đầy đủ trên nhóm nghiên cứu hiện tại; đây là cơ sở để tiếp tục kiểm chứng trên dữ liệu độc lập.
+
+\noindent\textbf{Từ khóa:} Alzheimer, MCI, MRI dọc, radiomics, hợp nhất theo cặp,\par\noindent phân tích sống còn.

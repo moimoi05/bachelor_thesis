@@ -1,0 +1,90 @@
+[
+  {
+    "path": "/home/data/user/nguyenphuongnam/alzheimer_training/phase_06_ablation/runs/official/a6_no_rc_20260919T192909Z_seed20260727/history.json",
+    "sha256": "4886a4d155e26b3de09757595f14b650f1bfff6e6700779a7f8ec810bff7eb07"
+  },
+  {
+    "path": "/home/data/user/nguyenphuongnam/alzheimer_training/phase_06_ablation/runs/official/a6_no_rc_20260919T192909Z_seed20260727/final_summary.json",
+    "sha256": "1d7bbda3045a8ffd653ed5179e780ca6db92be38575558e23d7a71d857cc30d3"
+  },
+  {
+    "path": "/home/data/user/nguyenphuongnam/alzheimer_training/phase_06_ablation/runs/multiseed_validation/official/a6_no_rc_seed20260728_20260920T082644Z/history.json",
+    "sha256": "8e46dfbec610fa730ab7de68ff3af69d71d54c14e3b727802d63a2d78179d17d"
+  },
+  {
+    "path": "/home/data/user/nguyenphuongnam/alzheimer_training/phase_06_ablation/runs/multiseed_validation/official/a6_no_rc_seed20260728_20260920T082644Z/final_summary.json",
+    "sha256": "27a2e4af0c87a6f3a6160efb3f03fcb5dd0e232dc0ef9df4a5957524c8c18bc8"
+  },
+  {
+    "path": "/home/data/user/nguyenphuongnam/alzheimer_training/phase_06_ablation/runs/multiseed_validation/official/a6_no_rc_seed20260729_20260920T085637Z/history.json",
+    "sha256": "a3ea8482c2aa5efc9f673dacd22df86fc0d78eb89d04d63b71f19611eb75e9ef"
+  },
+  {
+    "path": "/home/data/user/nguyenphuongnam/alzheimer_training/phase_06_ablation/runs/multiseed_validation/official/a6_no_rc_seed20260729_20260920T085637Z/final_summary.json",
+    "sha256": "f2c6b80cc0f15e2d11c80c9a18d6901d4e75b976b0b90735d2458fe96bf5b437"
+  },
+  {
+    "path": "/home/data/user/nguyenphuongnam/alzheimer_training/project_reports/A6_FINAL_TRAIN_VAL_TEST_EVALUATION.json",
+    "sha256": "d6c497e246b46f587789ac620624ff260783bfe83aee3a3884061be0641b0943"
+  },
+  {
+    "path": "/home/data/user/nguyenphuongnam/data_alzheimer/metadata/processed/model_ready_manifest_v1.csv",
+    "sha256": "1b5db79b3f5c8c805ea33ff515c365d0c159655ee1491c7abbe842eca5011954"
+  },
+  {
+    "path": "/home/data/user/nguyenphuongnam/data_alzheimer/metadata/processed/training_manifest_with_raw_mri.csv",
+    "sha256": "7751f697f89400e851d2ada606afecd40501905aa54f0c53155f60378d4c5c18"
+  },
+  {
+    "path": "/home/data/user/nguyenphuongnam/data_alzheimer/scripts/pipeline_common.py",
+    "sha256": "94fe7d60c795186b5d6af808f112a644cfbca6755f5f207dc0fcb19ffaed7773"
+  },
+  {
+    "path": "/home/data/user/nguyenphuongnam/alzheimer_training/phase_06_ablation/runs/official/a6_no_rc_20260919T192909Z_seed20260727/checkpoints/best.pt",
+    "sha256": "c339c9b57955dd57a1d6a72940b917801c2c2503b3bfd73b4ca4fe2e7e4ba504"
+  },
+  {
+    "path": "/home/data/user/nguyenphuongnam/alzheimer_training/project_reports/a6_final_predictions/seed_20260727_train.csv",
+    "sha256": "dff8201b60b100456958d899ef7b62c66cfdf8b45581f675e45f71a701d772a1"
+  },
+  {
+    "path": "/home/data/user/nguyenphuongnam/alzheimer_training/project_reports/a6_final_predictions/seed_20260727_val.csv",
+    "sha256": "bdfd025069c731612a1e71c2865ce0ff82595e148da18ddb6170e2b44e612a81"
+  },
+  {
+    "path": "/home/data/user/nguyenphuongnam/alzheimer_training/project_reports/a6_final_predictions/seed_20260727_test.csv",
+    "sha256": "69111abdcbb3b8dabc6eaa663ae59962b75666aa161f24345cd194e3ed8d4fda"
+  },
+  {
+    "path": "/home/data/user/nguyenphuongnam/alzheimer_training/phase_06_ablation/runs/multiseed_validation/official/a6_no_rc_seed20260728_20260920T082644Z/checkpoints/best.pt",
+    "sha256": "0a46ccb6191fd3f5732c9296c4b6b899b182602845d4f75de0cd9429db41c5c5"
+  },
+  {
+    "path": "/home/data/user/nguyenphuongnam/alzheimer_training/project_reports/a6_final_predictions/seed_20260728_train.csv",
+    "sha256": "5316357e04d4632c1a548d038e9337e9d0fda3e0e2e63cd9e894807fb2d3eba4"
+  },
+  {
+    "path": "/home/data/user/nguyenphuongnam/alzheimer_training/project_reports/a6_final_predictions/seed_20260728_val.csv",
+    "sha256": "6eb7aec3b9a94350af199a02ad3de2a90df6ae1c92a522519e88b84a63bc4832"
+  },
+  {
+    "path": "/home/data/user/nguyenphuongnam/alzheimer_training/project_reports/a6_final_predictions/seed_20260728_test.csv",
+    "sha256": "7bf7d61d8fd3f8430616b79518e4ecbbba910f62cc5795a3cd8c1ff0dbcb675f"
+  },
+  {
+    "path": "/home/data/user/nguyenphuongnam/alzheimer_training/phase_06_ablation/runs/multiseed_validation/official/a6_no_rc_seed20260729_20260920T085637Z/checkpoints/best.pt",
+    "sha256": "5e20a8296491aa0a778b6a51780a103f281f788a060da7b9eb78e9df923a1a3d"
+  },
+  {
+    "path": "/home/data/user/nguyenphuongnam/alzheimer_training/project_reports/a6_final_predictions/seed_20260729_train.csv",
+    "sha256": "ce7df35958b4b65a18ff008ca2f92a57047d1c78ceeb8fdc0b351b2a882139f9"
+  },
+  {
+    "path": "/home/data/user/nguyenphuongnam/alzheimer_training/project_reports/a6_final_predictions/seed_20260729_val.csv",
+    "sha256": "d85e0bbc5acd9aa03106c1cda756f723d596b2ac955e15b855a58153a7b8e468"
+  },
+  {
+    "path": "/home/data/user/nguyenphuongnam/alzheimer_training/project_reports/a6_final_predictions/seed_20260729_test.csv",
+    "sha256": "4b44e924c4db67cae5d087136801c9378d8dd01a7308ea905cb15c49377ee8f6"
+  }
+]

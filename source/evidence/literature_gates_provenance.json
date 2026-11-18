@@ -1,0 +1,21 @@
+{
+  "sources": [
+    {
+      "url": "https://arxiv.org/html/2607.14702v1",
+      "section": "3.5",
+      "equations": [
+        13
+      ]
+    },
+    {
+      "url": "https://arxiv.org/html/2606.11645v1",
+      "section": "3.4",
+      "equations": [
+        1,
+        2
+      ]
+    }
+  ],
+  "figure": "Original schematic redrawn for the thesis; simplified main data flow",
+  "accessed": "2026-11-14"
+}

@@ -1,0 +1,54 @@
+[
+  {
+    "source": "/home/data/user/nguyenphuongnam/alzheimer_training/project_reports/posthoc_all_phase_evaluation_20261008/results/P02_P02-A_MedicalNet_seed20260727.json",
+    "sha256": "fc28954120e2008639f1017d24e077a907e0e806526a7466bc0617335e26cc42",
+    "validation": {
+      "independent_final_evaluation": false,
+      "recorded_validation_cindex": 0.7333333333333333,
+      "test_evaluation_label": "POSTHOC_HISTORICAL_TEST_ACCESS: the test split was accessed in prior project work and this run; this score is not an independent final evaluation and must not be used for model or hyperparameter selection.",
+      "validation_cindex": 0.7333333333333333,
+      "validation_difference_vs_recorded": 0.0,
+      "validation_events": 16,
+      "validation_n_rids": 54
+    }
+  },
+  {
+    "source": "/home/data/user/nguyenphuongnam/alzheimer_training/project_reports/posthoc_all_phase_evaluation_20261008/results/P03_P03-TLSTM_seed20260727.json",
+    "sha256": "350b18fa5cc3ed696401f26b97eeafce1eb6a604464a5c70fa18d50aa51ee84f",
+    "validation": {
+      "independent_final_evaluation": false,
+      "recorded_validation_cindex": 0.7333333333333333,
+      "test_evaluation_label": "POSTHOC_HISTORICAL_TEST_ACCESS: the test split was accessed in prior project work and this run; this score is not an independent final evaluation and must not be used for model or hyperparameter selection.",
+      "validation_cindex": 0.7333333333333333,
+      "validation_difference_vs_recorded": 0.0,
+      "validation_events": 16,
+      "validation_n_rids": 54
+    }
+  },
+  {
+    "source": "/home/data/user/nguyenphuongnam/alzheimer_training/project_reports/posthoc_all_phase_evaluation_20261008/results/P03_P03-TLSTM-ATTN_repaired_seed20260727.json",
+    "sha256": "9dc1697d2ed1a9427f12a42db0e8f27b47d5a3196c0ab855e8ab16d3953b72c0",
+    "validation": {
+      "independent_final_evaluation": false,
+      "recorded_validation_cindex": 0.7833333333333333,
+      "test_evaluation_label": "POSTHOC_HISTORICAL_TEST_ACCESS: the test split was accessed in prior project work and this run; this score is not an independent final evaluation and must not be used for model or hyperparameter selection.",
+      "validation_cindex": 0.7833333333333333,
+      "validation_difference_vs_recorded": 0.0,
+      "validation_events": 16,
+      "validation_n_rids": 54
+    }
+  },
+  {
+    "source": "/home/data/user/nguyenphuongnam/alzheimer_training/project_reports/posthoc_all_phase_evaluation_20261008/results/P04_P04-SIMPLE-FUSION_seed20260727.json",
+    "sha256": "478d68b5d5e203bcecdcf85c50cb457a1f88003de9db55ed71c1d57a4f58e8c1",
+    "validation": {
+      "independent_final_evaluation": false,
+      "recorded_validation_cindex": 0.8125,
+      "test_evaluation_label": "POSTHOC_HISTORICAL_TEST_ACCESS: the test split was accessed in prior project work and this run; this score is not an independent final evaluation and must not be used for model or hyperparameter selection.",
+      "validation_cindex": 0.8125,
+      "validation_difference_vs_recorded": 0.0,
+      "validation_events": 16,
+      "validation_n_rids": 54
+    }
+  }
+]
