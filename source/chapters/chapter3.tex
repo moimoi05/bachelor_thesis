@@ -8,7 +8,7 @@ Hình~\ref{fig:overall} trình bày bốn khối của mô hình RC-Free. Tại 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{image/final-pipeline.pdf}
-\caption[Sơ đồ quy trình xử lý tổng thể]{Ba bộ mã hóa tạo biểu diễn theo nguồn. Khối RC-Free kết hợp các nguồn qua MR và MC trước khi mô hình thời gian và khối Cox tính điểm nguy cơ.}
+\caption{Sơ đồ quy trình xử lý tổng thể của mô hình RC-Free}
 \label{fig:overall}
 \end{figure}
 \FloatBarrier
@@ -34,7 +34,7 @@ Hình~\ref{fig:cohort} tóm tắt quá trình lọc từ 899 người có MRI v�
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{image/cohort-construction.pdf}
-\caption[Quy trình xây dựng nhóm nghiên cứu dọc]{Quy trình lọc và chuẩn bị dữ liệu gồm 359 người với 1077 lần thăm khám. Ba nguồn được ghép theo lần khám, chia tập theo RID và tiền xử lý dựa trên tập huấn luyện.}
+\caption{Quy trình xây dựng và chọn lọc nhóm nghiên cứu dọc}
 \label{fig:cohort}
 \end{figure}
 
@@ -82,7 +82,7 @@ Hình~\ref{fig:input-three-sources} minh họa ba dạng thông tin được li�
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{image/input-three-sources.pdf}
-\caption[Minh họa MRI, radiomics và dữ liệu lâm sàng]{Ba dạng đầu vào và cách chuyển thành vectơ đặc trưng; ảnh MRI dùng để minh họa.}
+\caption{Minh họa ba nguồn dữ liệu đầu vào và các biểu diễn đặc trưng}
 \label{fig:input-three-sources}
 \end{figure}
 
@@ -97,7 +97,7 @@ Mỗi người tham gia có ba ảnh cộng hưởng từ có trọng số T1 (M
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{image/mri-preprocessing.pdf}
-\caption[Quy trình tiền xử lý ba ảnh MRI T1]{Quy trình tiền xử lý ba ảnh MRI T1 của cùng một người trước khi đưa vào bộ mã hóa ảnh. Lát cắt minh họa lấy từ ảnh MRI đã xử lý trong Hình~\ref{fig:input-three-sources}.}
+\caption{Quy trình tiền xử lý chuỗi ảnh MRI T1 dọc}
 \label{fig:mri-preprocessing}
 \end{figure}
 
@@ -119,7 +119,7 @@ Sau khi hai ảnh chụp sau đã có mốc tham chiếu là ảnh đầu, mỗi
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{image/mri-registration.pdf}
-\caption[Căn chỉnh MRI giữa các lần khám và về mẫu MNI]{Các mũi tên biểu thị chiều quy chiếu từ lần hai và lần ba về lần đầu, rồi từ lần đầu về mẫu MNI. Ba ảnh minh họa dùng cùng một lát cắt MRI thật, với góc xoay mô phỏng tư thế đầu ở hai lần chụp sau.}
+\caption{Quy trình căn chỉnh không gian MRI giữa các lần khám và về mẫu MNI}
 \label{fig:mri-registration}
 \end{figure}
 
@@ -137,7 +137,9 @@ Cường độ MRI T1 mang tính tương đối: cùng một loại mô có th�
 \]
 Chẳng hạn, nếu $\mu=100$, $\sigma=20$ và $I(v)=130$ thì $z(v)=(130-100)/20=1.5$. Giá trị này cho biết cường độ tại voxel đang xét cao hơn trung bình trong vùng não của ảnh 1.5 độ lệch chuẩn. Sau chuẩn hóa, cường độ trong mặt nạ có trung bình bằng 0 và độ lệch chuẩn bằng 1. Các voxel ngoài mặt nạ không tham gia tính hai thống kê này và được đặt bằng 0 ở ảnh đầu ra.
 
-Chuẩn hóa z-score thay đổi thang cường độ chung của từng ảnh và giữ nguyên vị trí các voxel. Quy trình không áp dụng hiệu chỉnh N4, vốn nhằm xử lý hiện tượng cường độ không đồng đều theo vị trí trong ảnh (\emph{bias field}). Sau tiền xử lý, bộ mã hóa nhận ba ảnh MRI đã tách não trên cùng lưới và cùng hệ tọa độ. Khác biệt về tư thế đầu và thang cường độ được giảm bớt để mô hình có thể khai thác những thay đổi cấu trúc còn lại qua ba lần khám.
+Tóm lại, bước chuẩn hóa z-score chỉ đồng nhất thang đo độ sáng tối giữa các ảnh chụp khác nhau mà hoàn toàn không làm thay đổi vị trí hay hình học của các voxel trong não. Trong quy trình này, tôi không áp dụng thêm bước khử nhiễu từ trường N4 (\emph{N4 bias field correction} — một kỹ thuật thường dùng để làm phẳng độ chênh lệch ánh sáng cục bộ do cuộn cảm máy chụp), nhằm tránh làm biến dạng độ tương phản mô tự nhiên của ảnh gốc. 
+
+Như vậy, sau toàn bộ chuỗi tiền xử lý từ tách não, căn chỉnh tọa độ cho đến chuẩn hóa cường độ, bộ mã hóa sẽ tiếp nhận ba khối ảnh MRI đã được đưa về cùng một chuẩn thống nhất: cùng kích thước lưới $144\times144\times144$, cùng hệ tọa độ giải phẫu MNI, và cùng một thang đo giá trị. Nhờ loại bỏ được các yếu tố gây nhiễu ngoại cảnh như tư thế nghiêng đầu của người bệnh hay sự khác biệt về cài đặt máy chụp giữa các lần tái khám, mô hình học sâu có thể tập trung tối đa vào việc trích xuất những biến đổi giải phẫu bệnh lý thực sự — đặc biệt là hiện tượng teo mô não và giãn rộng não thất — diễn ra qua ba lần khám.
 
 Sau tiền xử lý, cả ba MRI dùng chung bộ mã hóa ResNet-18 3D triển khai bằng MONAI, khởi tạo từ trọng số MedicalNet; sau đây gọi ngắn là ResNet-18 3D \cite{he2016deep,cardoso2022monai}. Mỗi tầng trong bốn tầng của mạng có hai khối cơ bản (BasicBlock), mỗi khối gồm hai phép tích chập với nhân $3^3$, chuẩn hóa BatchNorm, hàm kích hoạt ReLU và đường nối phần dư \cite{ioffe2015batchnorm,nair2010rectified}. Số kênh của bốn tầng lần lượt là 64, 128, 256 và 512. Sau gộp toàn cục, vectơ 512 chiều qua lớp tuyến tính $512\to128$, GELU, Dropout 0.20 và LayerNorm để tạo $M$ \cite{hendrycks2016gelu,srivastava2014dropout,ba2016layernorm}. Khi khởi tạo bộ mã hóa bằng trọng số MedicalNet từ Med3D \cite{chen2019med3d}, tôi nạp đầy đủ trọng số và trạng thái BatchNorm của mạng trích xuất đặc trưng, đồng thời bỏ khối đầu ra tiền huấn luyện. Toàn mạng được tinh chỉnh ngay từ vòng huấn luyện đầu tiên.
 
@@ -167,9 +169,33 @@ Tuyến tính; GELU; Dropout; LayerNorm & $[B,3,128]$ \\
 \end{table}
 
 \subsection{Radiomics}
-Từ các ảnh MRI đã tiền xử lý, tôi sử dụng PyRadiomics để trích xuất 107 đặc trưng trong vùng não được xác định bởi brain mask, bao gồm đặc trưng hình dạng, thống kê bậc nhất và các nhóm kết cấu GLCM, GLDM, GLRLM, GLSZM, NGTDM \cite{vangriethuysen2017computational}. Đối với nhánh radiomics, tôi đưa cường độ voxel trong mặt nạ về khoảng $[0,1]$ dựa trên giá trị nhỏ nhất và lớn nhất của từng ảnh trước khi trích xuất đặc trưng, trong khi nhánh CNN tiếp tục sử dụng ảnh MRI đã chuẩn hóa z-score. Tôi sử dụng ảnh gốc, không bổ sung bộ lọc ảnh và thiết lập 64 mức rời rạc hóa (\texttt{binCount=64}). Ba đặc trưng có giá trị không đổi trên tập huấn luyện là giá trị lớn nhất, giá trị nhỏ nhất và khoảng biến thiên của cường độ. Với 104 đặc trưng còn lại, các tham số chuẩn hóa và PCA được ước lượng trên tập huấn luyện \cite{jolliffe2016pca}. Ngưỡng giữ ít nhất 99\% phương sai cho 16 thành phần PCA ở mỗi lần khám. MLP $16\to128\to64$, GELU, Dropout 0.20 và LayerNorm tạo biểu diễn $R$ 64 chiều.
+\label{sec:radiomics-pipeline}
 
-Bảng~\ref{tab:radiomics-groups} phân biệt các nhóm đặc trưng theo loại thông tin được đo \cite{vangriethuysen2017computational}. Chẳng hạn, thống kê bậc nhất chỉ xét phân bố cường độ, còn các nhóm kết cấu xét thêm quan hệ không gian giữa các voxel. Các đặc trưng mô tả vùng não trong mặt nạ toàn não. Sau PCA, mỗi thành phần là tổ hợp tuyến tính của các đặc trưng đã chuẩn hóa.
+Bên cạnh bộ mã hóa CNN học sâu — vốn trích xuất các biểu diễn ẩn trừu tượng từ ảnh khối 3D — tôi xây dựng một nhánh xử lý song song dựa trên \emph{Radiomics} để khai thác các đặc trưng hình học và kết cấu mô não được định nghĩa toán học tường minh \cite{vangriethuysen2017computational}. Trong khi mạng nơ-ron sâu thường hoạt động như một ``hộp đen'', các chỉ số radiomics mang ý nghĩa y sinh cụ thể, cho phép định lượng trực tiếp mức độ teo thoái hóa hình thái cũng như sự biến đổi vi mô về mật độ mô não của người bệnh.
+
+\noindent\textbf{Trích xuất đặc trưng bằng PyRadiomics.}
+Từ ảnh MRI đã qua tiền xử lý cùng mặt nạ não (\emph{brain mask}), tôi sử dụng thư viện chuẩn hóa PyRadiomics để trích xuất 107 đặc trưng định lượng thuộc bảy nhóm khác nhau (Bảng~\ref{tab:radiomics-groups}). Các nhóm này bao gồm:
+\begin{itemize}
+\item \emph{Đặc trưng hình dạng} (14 biến): Đo lường kích thước hình học tổng thể của vùng não, chẳng hạn như thể tích não thật (\emph{MeshVolume}) và diện tích bề mặt (\emph{SurfaceArea}).
+\item \emph{Thống kê cường độ bậc nhất} (18 biến): Mô tả phân bố độ sáng tối của các voxel trong não mà không xét đến vị trí không gian, ví dụ như giá trị trung bình (\emph{Mean}), độ lệch chuẩn, độ bất đối xứng (\emph{Skewness}) và độ hỗn loạn (\emph{Entropy}).
+\item \emph{Các nhóm kết cấu không gian} (75 biến): Nắm bắt mối tương quan không gian và độ thô mịn giữa các voxel lân cận thông qua các ma trận toán học kinh điển, bao gồm ma trận đồng xuất hiện mức xám (GLCM, 24 biến), ma trận độ dài dải mức xám (GLRLM, 16 biến), ma trận kích thước vùng mức xám (GLSZM, 16 biến), ma trận phụ thuộc mức xám (GLDM, 14 biến) và ma trận chênh lệch độ xám theo vùng lân cận (NGTDM, 5 biến).
+\end{itemize}
+
+\noindent\textbf{Chuẩn hóa cường độ riêng cho Radiomics.}
+Một điểm kỹ thuật then chốt cần phân biệt rõ là sự khác biệt về yêu cầu đầu vào giữa nhánh CNN và nhánh Radiomics:
+\begin{itemize}
+\item \emph{Nhánh CNN (ResNet-18 3D)} tiếp nhận ảnh đã qua chuẩn hóa z-score (trung bình 0, độ lệch chuẩn 1), vì đây là dạng phân phối tối ưu giúp gradient lan truyền ổn định trong các mạng nơ-ron sâu.
+\item \emph{Nhánh Radiomics} lại đòi hỏi một cách tiếp cận khác: các thuật toán tính ma trận kết cấu (như GLCM hay GLSZM) bắt buộc phải chia dải cường độ của ảnh thành một số lượng mức xám rời rạc cố định (\texttt{binCount=64}). Để các mức xám này có cùng khoảng chia và giữ đúng ý nghĩa vật lý giữa các bệnh nhân khác nhau, toàn bộ cường độ voxel trong mặt nạ trước hết được co giãn Min-Max tuyến tính về khoảng $[0, 1]$ (voxel tối nhất bằng 0, sáng nhất bằng 1). Nếu dùng ảnh z-score (vốn có cả giá trị âm lẫn dương và biên độ biến thiên không bị chặn), việc chia 64 mức xám sẽ bị xáo trộn giữa các lần chụp, dẫn đến các phép đo kết cấu bị sai lệch.
+\end{itemize}
+
+\noindent\textbf{Lọc biến hằng và giảm chiều bằng PCA.}
+Do toàn bộ voxel trong não đã được chuẩn hóa về dải $[0, 1]$, ba đặc trưng thống kê bậc nhất — bao gồm giá trị cường độ nhỏ nhất (luôn bằng 0), giá trị lớn nhất (luôn bằng 1) và khoảng biến thiên cường độ (luôn bằng $1-0=1$) — trở thành các giá trị hằng số giống hệt nhau ở mọi người tham gia. Vì không chứa thông tin phân biệt bệnh lý, ba biến này được loại bỏ, giữ lại chính xác 104 đặc trưng thực sự hữu ích.
+
+Trong số 104 đặc trưng còn lại, nhiều biến có mức độ tương quan chéo cao (chẳng hạn các đặc trưng đo kích thước não hoặc các chỉ số đồng nhất kết cấu). Để loại bỏ hiện tượng đa cộng tuyến và tránh bùng nổ tham số khi kết hợp với các nguồn dữ liệu khác, tôi áp dụng Phân tích thành phần chính (PCA) \cite{jolliffe2016pca}. Nhằm triệt tiêu hoàn toàn nguy cơ rò rỉ dữ liệu, các tham số chuẩn hóa z-score của từng đặc trưng và ma trận chuyển đổi PCA đều được ước lượng nghiêm ngặt trên tập huấn luyện, sau đó mới áp dụng cố định cho tập xác thực và kiểm tra. Với ngưỡng giữ lại ít nhất 99\% tổng phương sai, mô hình xác định được đúng 16 thành phần chính tại mỗi lần khám.
+
+\noindent\textbf{Tạo biểu diễn nhúng qua mạng MLP.}
+Cuối cùng, vectơ 16 chiều sau PCA được đưa qua một khối mạng perceptron đa tầng ($16 \to 128 \to 64$) gồm kích hoạt phi tuyến GELU, tỉ lệ Dropout 0.20 và lớp chuẩn hóa LayerNorm \cite{hendrycks2016gelu,srivastava2014dropout,ba2016layernorm}. Đầu ra của khối này là một vectơ biểu diễn Radiomics $R \in \mathbb R^{64}$, vừa cô đọng các dấu hiệu giải phẫu vi mô, vừa đồng bộ kích thước để sẵn sàng tham gia vào các tầng hợp nhất đa phương thức tiếp theo.
+
 \input{tables/radiomics_groups}
 
 \subsection{Dữ liệu lâm sàng và chỉ báo có dữ liệu}
@@ -183,7 +209,7 @@ Hình~\ref{fig:clinical-18} minh họa cách hình thành đầu vào 18 chiều
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{image/clinical-18-inputs.pdf}
-\caption[Từ chín biến lâm sàng đến 18 đầu vào]{Hai nhánh xử lý song song của cùng chín biến. Chỉ nhánh giá trị được điền thiếu và chuẩn hóa; chỉ báo giữ ý nghĩa nhị phân quan sát/thiếu.}
+\caption{Quy trình mở rộng chín biến lâm sàng thành 18 chiều đầu vào}
 \label{fig:clinical-18}
 \end{figure}
 
@@ -224,13 +250,14 @@ Khối đầu ra $\operatorname{MLP}_{\rm out}$ gồm lớp tuyến tính $256\t
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{image/concat-baseline.pdf}
-\caption[Mô hình đối chứng ghép nối đặc trưng]{Luồng tính tại một lần khám của đối chứng ghép nối. Ba biểu diễn được ghép trực tiếp; mô hình theo cặp bổ sung khối tương tác trước bước ghép này.}
+\caption[Mô hình đối chứng ghép nối]{Luồng tính của mô hình đối chứng ghép nối.}
 \label{fig:concat-baseline}
 \end{figure}
 Mô hình theo cặp bổ sung một khối riêng để biểu diễn các tích chéo trước bước ghép nối. Khi so sánh hai cách hợp nhất, tôi giữ nguyên các phần chung và dùng cùng trọng số ban đầu cho các phần này. Mục~\ref{sec:matched-fusion} trình bày kết quả đối chiếu này.
 
 \Needspace{9\baselineskip}
 \section{Hợp nhất động qua tương tác theo cặp}
+\label{sec:pair-fusion}
 Từ cùng ba biểu diễn đầu vào như đối chứng ghép nối, mô hình đầy đủ kết hợp từng cặp tại mỗi lần khám để tạo ba tương tác MR, MC và RC. Trước khi tính tương tác, ba phép chiếu tuyến tính không có hệ số chệch giảm $M$ từ 128 xuống 32 chiều, $R$ từ 64 xuống 32 chiều và $C$ từ 64 xuống 16 chiều:
 \begin{equation}
  \widetilde M\in\mathbb R^{32},\qquad
@@ -241,7 +268,7 @@ Từ cùng ba biểu diễn đầu vào như đối chứng ghép nối, mô hì
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{image/mr-outer-product.pdf}
-\caption[Tích ngoài và khối MLP]{Tích ngoài tạo mọi tích chéo giữa hai vectơ cột; ma trận được trải phẳng trước khi qua MLP.}
+\caption{Phép tích ngoài đầy đủ và khối MLP tương tác}
 \label{fig:mr-outer-product}
 \end{figure}
 
@@ -256,7 +283,7 @@ Hình~\ref{fig:pair-update-routes} minh họa hai nhánh đi ra từ MR. Ở nh�
 \begin{figure}[H]
 \centering
 \includegraphics[width=\linewidth]{image/pair-update-routes.pdf}
-\caption[Sáu nhánh cập nhật biểu diễn từ ba cặp tương tác]{Mỗi cột bắt đầu từ vectơ tương tác của một cặp. Hai đường đi trong cột dẫn đến hai nguồn nhận phần bổ sung. Số chiều trong ô phép chiếu là số chiều cần cho phép cộng tại nguồn đích. RC-Free giữ bốn đường đi ở hai cột MR và MC.}
+\caption{Sơ đồ sáu nhánh cập nhật biểu diễn từ ba cặp tương tác}
 \label{fig:pair-update-routes}
 \end{figure}
 
@@ -265,12 +292,14 @@ Hình~\ref{fig:pair-update-routes} minh họa hai nhánh đi ra từ MR. Ở nh�
 \section{Tham số hóa tương tác theo cặp bằng CP}
 \label{sec:cp-method}
 
-Để giảm số trọng số cần học mà vẫn giữ nguyên kích thước đầu ra, CP thay lớp song tuyến đầu bằng các nhân tử hạng thấp. Mỗi nguồn được chiếu lên một số ít hướng học được, với số hướng do hạng $Q$ quy định. Khối CP nhân các tọa độ tương ứng với nhau rồi chiếu kết quả sang không gian đầu ra. Hình~\ref{fig:cp-block} minh họa phép tính này cho cặp MR với $Q=8$.
+Mặc dù phép hợp nhất tương tác song tuyến đầy đủ (Full Outer-Product) ở Mục~\ref{sec:pair-fusion} có khả năng bắt cặp tường minh các đặc trưng giữa hai phương thức, rào cản lớn nhất của nó nằm ở chi phí tính toán và số lượng tham số khổng lồ. Một lớp song tuyến đầy đủ đòi hỏi phải học một tensor trọng số ba chiều $\mathcal W\in\mathbb R^{d_h\times d_x\times d_y}$. Khi số chiều đặc trưng hoặc số kênh ẩn tăng lên, số lượng tham số này bùng nổ rất nhanh, không chỉ gây áp lực lớn lên bộ nhớ tính toán mà còn làm tăng nghiêm trọng nguy cơ quá khớp (overfitting) trên các bộ dữ liệu y tế vốn có cỡ mẫu hạn chế như ADNI.
+
+Để giải quyết mâu thuẫn giữa năng lực biểu diễn tương tác và độ phức tạp tham số, tôi áp dụng kỹ thuật phân rã tensor CANDECOMP/PARAFAC (CP) \cite{kolda2009tensor,liu2018lowrank}. Nguyên lý cốt lõi của phân rã CP là xấp xỉ tensor trọng số ba chiều phức tạp thành tổng của $Q$ tích ngoài giữa các vectơ một chiều, trong đó $Q \ll \min(d_x d_y, d_h)$ là hạng phân rã (rank). Nhờ cấu trúc hạng thấp này, thay vì phải thực hiện tích ngoài tường minh trong không gian gốc, hai vectơ đặc trưng đầu vào trước hết được chiếu tuyến tính về một không gian tiềm ẩn thấp chiều ($Q$ chiều), sau đó nhân từng phần tử (Hadamard product) để tạo tương tác, rồi mới chiếu tiếp sang không gian ẩn $d_h$. Hình~\ref{fig:cp-block} minh họa trực quan luồng tính toán này cho cặp MR với hạng $Q=8$.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{image/outer-vs-cp.pdf}
-\caption[Luồng tính của khối CP]{CP kết hợp các biểu diễn hạng thấp rồi tạo đặc trưng tương tác; MLP phía sau giữ nguyên.}
+\caption{Luồng tính toán của khối tương tác CP hạng thấp}
 \label{fig:cp-block}
 \end{figure}
 Với lớp đầy đủ, chiều ẩn thứ $s$ được tính bằng
@@ -278,18 +307,18 @@ Với lớp đầy đủ, chiều ẩn thứ $s$ được tính bằng
  h_s=\sum_{i=1}^{d_x}\sum_{j=1}^{d_y}\mathcal W_{sij}x_i y_j+b_s,
  \qquad \mathcal W\in\mathbb R^{d_h\times d_x\times d_y}.
 \end{equation}
-Thay vì học toàn bộ trọng số trên, CP tham số hóa \emph{tensor trọng số của ánh xạ song tuyến} theo cấu trúc hạng thấp \cite{kolda2009tensor,liu2018lowrank}:
+Thay vì phải lưu trữ và học trực tiếp toàn bộ khối trọng số khổng lồ trên, CP tham số hóa \emph{tensor trọng số của ánh xạ song tuyến} thông qua các ma trận nhân tử hạng thấp \cite{kolda2009tensor,liu2018lowrank}:
 \begin{equation}
  \mathcal W_{sij}\approx\sum_{q=1}^{Q}O_{sq}A_{iq}B_{jq}.
  \label{eq:cp-weight}
 \end{equation}
-Trong cách biểu diễn này, các ma trận $A\in\mathbb R^{d_x\times Q}$, $B\in\mathbb R^{d_y\times Q}$ và $O\in\mathbb R^{d_h\times Q}$ được học cùng mạng. Hai đầu vào được chiếu về $Q$ chiều, nhân từng phần tử rồi chiếu ra $d_h$ chiều. Phép tính thuận tương ứng là
+Trong cách biểu diễn phân rã này, mạng chỉ cần học ba ma trận nhân tử $A\in\mathbb R^{d_x\times Q}$, $B\in\mathbb R^{d_y\times Q}$ và $O\in\mathbb R^{d_h\times Q}$. Quá trình tính toán thuận diễn ra hết sức tự nhiên và hiệu quả: hai vectơ đầu vào $x$ và $y$ được chiếu độc lập về không gian $Q$ chiều thông qua $A$ và $B$, tạo thành hai vectơ tọa độ $u$ và $v$; tiếp đó, phép nhân từng phần tử giữa $u$ và $v$ nắm bắt tương tác chéo giữa hai nguồn dữ liệu; cuối cùng, ma trận $O$ chiếu kết quả tương tác này lên không gian ẩn $d_h$:
 \begin{align}
  u&=A^\top x,\qquad v=B^\top y,\qquad q=u\odot v,\label{eq:cp-lowrank}\\
  h&=Oq+b,\qquad E_k=\operatorname{PostMLP}_k(h),
  \label{eq:cpblock}
 \end{align}
-với $E_k$ là biểu diễn tương tác đầu ra của cặp $k\in\{\mathrm{MR},\mathrm{MC},\mathrm{RC}\}$. Các ma trận $A$ và $B$ không có hệ số chệch; $b$ của lớp đầu được giữ trong $Oq+b$. MLP sau tương tác vẫn gồm GELU, Dropout 0.10, lớp tuyến tính $d_h\to d_o$ và LayerNorm. Đối chứng CP chỉ thay phép biến đổi tương tác đầu, giữ kích thước đầu ra, MLP phía sau, bộ mã hóa, nhánh truyền, cổng, hệ số điều chỉnh và khối thời gian.
+với $E_k$ là biểu diễn tương tác đầu ra của cặp $k\in\{\mathrm{MR},\mathrm{MC},\mathrm{RC}\}$. Cần lưu ý rằng các ma trận chiếu $A$ và $B$ không sử dụng hệ số chệch để bảo toàn tính đối xứng của phép nhân từng phần tử; hệ số chệch $b$ của lớp đầu được tích hợp trực tiếp vào phép chiếu đầu ra $Oq+b$. Khối mạng perceptron đa tầng phía sau ($\operatorname{PostMLP}_k$) vẫn giữ nguyên cấu trúc chuẩn hóa và phi tuyến gồm hàm kích hoạt GELU, Dropout 0.10, lớp tuyến tính $d_h\to d_o$ và chuẩn hóa LayerNorm. Nhờ vậy, mô hình đối chứng CP chỉ thay đổi duy nhất phép biến đổi tương tác đầu tiên, trong khi bảo lưu toàn bộ kích thước đầu ra, MLP phía sau, bộ mã hóa, các nhánh truyền phần dư, cổng điều tiết, hệ số điều chỉnh và khối thời gian. Cách bố trí này giúp cô lập hoàn toàn biến số nghiên cứu, bảo đảm rằng bất kỳ sự khác biệt nào về hiệu năng đều phản ánh chính xác hiệu quả của việc tham số hóa hạng thấp.
 
 
 
@@ -308,19 +337,28 @@ RC & $(32,16)$ & 4 & 64 & 32 & Loại \\
 \end{tabular}
 \end{table}
 
-Bảng~\ref{tab:cpconfig} trình bày hạng CP dùng trong từng cặp tương tác. Với $d_h$ đầu ra, lớp song tuyến đầy đủ có $d_hd_xd_y+d_h$ tham số. Cách tham số hóa CP cần $Q(d_x+d_y+d_h)+d_h$ tham số cho cùng lớp. Hai công thức định lượng phần chênh lệch ở lớp song tuyến đầu tiên của mỗi khối. Bộ mã hóa MRI chiếm phần lớn số tham số toàn mạng.
+Bảng~\ref{tab:cpconfig} trình bày chi tiết cấu hình hạng CP và kích thước các lớp cho từng cặp tương tác. Việc ấn định hạng $Q=8$ cho hai cặp MR và MC cùng $Q=4$ cho cặp RC phản ánh sự cân đối có chủ đích giữa năng lực biểu diễn và kích thước đặc trưng của từng phương thức (cặp RC có số chiều đầu vào nhỏ hơn nên chỉ cần hạng thấp hơn).
+
+Hiệu quả giảm độ phức tạp của phân rã CP có thể được định lượng rõ ràng qua sự khác biệt giữa hai công thức tham số: một lớp song tuyến đầy đủ đòi hỏi $d_h d_x d_y + d_h$ tham số (với độ phức tạp tăng theo tích $d_x d_y$), trong khi cách tham số hóa CP chỉ tiêu tốn $Q(d_x + d_y + d_h) + d_h$ tham số (với độ phức tạp chỉ tăng tuyến tính theo tổng $d_x + d_y$). Đây chính là nền tảng lý thuyết giải thích vì sao CP có thể \textbf{cắt giảm hơn 98\%} số lượng trọng số ở các lớp tương tác đầu tiên. Dẫu vậy, xét trên quy mô toàn mạng, bộ mã hóa hình ảnh 3D ResNet-18 vẫn chiếm phần lớn số tham số; do đó, vai trò cốt lõi của CP không chỉ là thu nhỏ mô hình tổng thể, mà quan trọng hơn là đóng vai trò như một cơ chế điều chuẩn (regularization) hiệu quả, ngăn chặn hiện tượng quá khớp ở chính các tầng hợp nhất đa phương thức.
 
 \section{Truyền phần dư qua cổng điều tiết động}
 \label{sec:gated-routing}
-Trong mô hình đối chứng, ba biểu diễn được ghép trực tiếp trước khi đưa vào khối thời gian. Với mô hình tương tác theo cặp, tôi giữ lại đường truyền gốc của từng nguồn và bổ sung thông tin từ những cặp tương tác có chứa nguồn đó. Nhờ vậy, ngay cả khi cổng điều tiết làm giảm mức đóng góp của đặc trưng tương tác, mạng vẫn tiếp nhận được thông tin riêng từ đường biểu diễn gốc.
 
-Chẳng hạn, cặp MRI--radiomics tạo ra một biểu diễn tương tác chung, nhưng vì hai nguồn có số chiều khác nhau nên mỗi nguồn cần một phép chiếu riêng để đưa đặc trưng về không gian tương ứng. Sau bước chiếu, mỗi cổng xác định mức thông tin bổ sung cho nguồn đích ở từng người tại mỗi lần khám, trong khi hệ số $\lambda$ điều chỉnh độ lớn và dấu chung của nhánh truyền. Thiết kế kế thừa ý tưởng điều tiết phần dư từ \cite{ryumina2026residual,liu2026motion} và tích hợp thành công thức dưới đây.
+Sau khi đã trích xuất được đặc trưng tương tác từ các khối CP, bài toán kiến trúc cốt lõi tiếp theo là: \emph{Làm thế nào để truyền tải và tích hợp thông tin tương tác này vào biểu diễn của từng phương thức mà không làm suy hao hoặc sai lệch tín hiệu gốc?}
 
-Với cặp $k$ và nguồn đích $d$, ký hiệu $U_d$ là biểu diễn gốc. Đại lượng
+Trong mô hình đối chứng ghép nối thông thường, các đặc trưng được gộp cứng nhắc lại với nhau trước khi đưa vào mô hình thời gian. Cách tiếp cận này tiềm ẩn nhiều rủi ro trong bài toán y sinh: sự tương tác giữa các phương thức không phải lúc nào cũng mang lại giá trị gia tăng đồng đều ở mọi bệnh nhân hay mọi thời điểm thăm khám. Ở một số ca bệnh hoặc lần khám có độ nhiễu cao (chẳng hạn chất lượng ảnh MRI kém hoặc kết quả đo lâm sàng dao động), việc ép buộc mô hình tiếp nhận toàn bộ tín hiệu tương tác có thể làm xáo trộn các đặc trưng bệnh học vốn có của từng nguồn đơn lẻ.
+
+Để khắc phục nhược điểm này, tôi đề xuất cơ chế \emph{kết nối phần dư qua cổng điều tiết động} (gated residual routing), kế thừa và phát triển từ các nguyên lý điều tiết phần dư trong học sâu đa phương thức \cite{ryumina2026residual,liu2026motion}. Triết lý của cơ chế này là bảo toàn nguyên vẹn ``đường truyền gốc'' (identity path) của từng phương thức, đồng thời xem thông tin tương tác như một lượng bổ chính phần dư có điều kiện. Nhờ đó, ngay cả khi tín hiệu tương tác bị nhiễu hoặc cổng điều tiết khép lại, mô hình vẫn duy trì được nguồn thông tin độc lập và tin cậy từ biểu diễn ban đầu.
+
+Cơ chế điều tiết này được hiện thực hóa qua ba tầng xử lý chặt chẽ:
+\begin{enumerate}
+\item \emph{Phép chiếu tương thích theo phương thức đích}: Mỗi cặp tương tác $k$ (như MR hay MC) tạo ra một biểu diễn tương tác chung $E_k$. Tuy nhiên, do các phương thức đích $d$ có kích thước không gian đặc trưng khác nhau, đặc trưng $E_k$ trước tiên được chiếu về không gian của phương thức đích thông qua một ánh xạ tuyến tính và chuẩn hóa qua LayerNorm:
 \begin{equation}
- \widehat E_{k\to d}=\LN_{k\to d}(W_{k\to d}E_k+b_{k\to d})\label{eq:target-projection}
+ \widehat E_{k\to d}=\LN_{k\to d}(W_{k\to d}E_k+b_{k\to d}).\label{eq:target-projection}
 \end{equation}
-là đặc trưng tương tác sau phép chiếu theo nguồn đích. Phép chiếu sử dụng ánh xạ tuyến tính có hệ số chệch, tiếp nối bằng chuẩn hóa LayerNorm. Bước giảm chiều đầu vào trước CP chỉ dùng ánh xạ tuyến tính không có hệ số chệch; cả hai bước đều không dùng hàm kích hoạt phi tuyến. Cổng nhận đồng thời biểu diễn gốc đã chuẩn hóa và đặc trưng tương tác:
+Ánh xạ này sử dụng hệ số chệch để tăng tính linh hoạt khi dịch chuyển hệ tọa độ đặc trưng, trong khi bước giảm chiều trước CP hoàn toàn không dùng hệ số chệch. Cả hai bước đều không sử dụng hàm kích hoạt phi tuyến nhằm bảo toàn tuyến tính của tín hiệu trước khi vào cổng.
+
+\item \emph{Cổng điều tiết động theo từng bệnh nhân}: Cổng $g_{k\to d}$ hoạt động như một chiếc ``van thông minh'', tiếp nhận đồng thời cả biểu diễn gốc đã chuẩn hóa của phương thức đích lẫn đặc trưng tương tác đã chiếu để đánh giá xem: với \emph{cá thể cụ thể này tại lần khám cụ thể này}, thông tin tương tác có thực sự hữu ích hay không:
 \begin{equation}
  g_{k\to d}=\sigma\!\left(
  w_{k\to d}^{\top}\operatorname{GELU}\!\left[
@@ -328,40 +366,51 @@ là đặc trưng tương tác sau phép chiếu theo nguồn đích. Phép chi�
  +a_{k\to d}\right]+c_{k\to d}\right).
  \label{eq:dynamic-gate}
 \end{equation}
-MLP của mỗi cổng có 32 chiều ẩn và tạo một giá trị vô hướng trong khoảng $(0,1)$ cho từng người ở mỗi lần khám. Mô hình nhân giá trị này với tất cả các chiều đặc trưng của nhánh tương ứng. Vì mỗi cổng dùng một hàm sigmoid riêng, các nhánh có thể cùng nhận giá trị cổng cao hoặc thấp mà không phải chia sẻ tổng trọng số như khi dùng softmax. Trọng số của cổng được khởi tạo theo phương pháp Xavier~\cite{glorot2010understanding} và hệ số chệch ban đầu bằng không.
+Mạng MLP của mỗi cổng gồm một lớp ẩn 32 chiều với kích hoạt GELU và tạo ra một giá trị vô hướng trong khoảng $(0,1)$ thông qua hàm sigmoid độc lập. Việc sử dụng sigmoid riêng cho từng cổng (thay vì softmax trên tất cả các nhánh) mang ý nghĩa then chốt: các nhánh tương tác có thể cùng mở rộng nếu tất cả đều hữu ích, hoặc cùng khép lại nếu dữ liệu bị nhiễu, mà không bị ràng buộc phải chia sẻ một tổng trọng số cố định. Trọng số của cổng được khởi tạo theo phân phối Xavier~\cite{glorot2010understanding} với hệ số chệch ban đầu bằng không.
+
+\item \emph{Hệ số tỉ lệ toàn cục học được}: Bên cạnh chiếc van động $g_{k\to d}$ điều chỉnh theo từng mẫu, mỗi nhánh còn được trang bị một hệ số vô hướng $\lambda_{k\to d}$ dùng chung cho toàn bộ tập dữ liệu và mọi mốc thời gian. Hệ số này được khởi tạo tại $\lambda=0.1$ và \emph{hoàn toàn không bị ràng buộc về dấu}. Nếu cổng $g$ quyết định độ mở tức thời theo ngữ cảnh của từng bệnh nhân, thì $\lambda$ đóng vai trò như một ``chiết áp nền'' học được trong quá trình tối ưu, xác định cường độ đóng góp tổng thể và chiều hướng tác động (tương hỗ tích cực hay triệt tiêu lẫn nhau) của toàn bộ nhánh truyền.
+\end{enumerate}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{image/gated-residual-route.pdf}
-\caption[Cấu trúc một nhánh phần dư có cổng điều tiết]{Đóng góp tương tác được điều tiết bởi cổng $g$ và hệ số $\lambda$, cộng vào biểu diễn gốc rồi chuẩn hóa.}
+\caption{Cấu trúc một nhánh phần dư có cổng điều tiết động}
 \label{fig:route}
 \end{figure}
 
-Bên cạnh cổng phụ thuộc đầu vào, mỗi nhánh có một hệ số vô hướng $\lambda_{k\to d}$ được học riêng nhưng dùng chung cho mọi cá thể và mọi lần khám. Hệ số này được khởi tạo ở $\lambda=0.1$ và \emph{không ràng buộc dấu}. Trong khi cổng điều tiết mức bổ sung theo đầu vào, $\lambda$ quyết định độ lớn và dấu chung của nhánh. Hai thành phần này có vai trò khác với trọng số attention.
-
-Biểu diễn phương thức đích được cập nhật bằng
+Tổng hợp lại, biểu diễn của phương thức đích $d$ sau khi nhận các luồng bổ chính tương tác được xác định bởi:
 \begin{equation}
  Z_d=\LN_d^{\rm out}\left(
  U_d+\sum_{k\in\mathcal P(d)}\lambda_{k\to d}\,g_{k\to d}\,\widehat E_{k\to d}
- \right).
+ \right),
  \label{eq:ours-residual}
 \end{equation}
-Trong đó, $\mathcal P(d)$ là tập các cặp tương tác còn hoạt động truyền tới nhánh đích $d$. Đường truyền gốc dùng trực tiếp $U_d$. LayerNorm ở phép chiếu theo đích, đầu vào cổng và sau tổng phần dư là ba phép chuẩn hóa khác nhau \cite{ba2016layernorm}. Mức đóng góp thực tế phụ thuộc đồng thời vào $\lambda$, cổng và độ lớn đặc trưng. Với một nhánh, cổng gần 0 làm phần tương tác bổ sung nhỏ đi, trong khi đường biểu diễn gốc vẫn được giữ. Cổng gần 1 cho phép truyền phần lớn tín hiệu tương tác sau điều chỉnh. Dấu của phần bổ sung phụ thuộc vào hệ số $\lambda$ và từng tọa độ đặc trưng.
+trong đó $\mathcal P(d)$ là tập hợp các cặp tương tác còn hoạt động hướng tới phương thức đích $d$. Cần nhấn mạnh rằng ba phép chuẩn hóa LayerNorm xuất hiện trong quy trình — tại phép chiếu đích ($\LN_{k\to d}$), tại đầu vào cổng ($\LN_d^{\rm gate}$), và sau tổng phần dư ($\LN_d^{\rm out}$) — là ba tầng chuẩn hóa hoàn toàn độc lập với các tham số riêng biệt \cite{ba2016layernorm}. Sự phân tách này ngăn ngừa hiện tượng dịch chuyển phân phối và kiểm soát chặt chẽ biên độ tín hiệu qua các tầng, giúp việc huấn luyện mô hình luôn duy trì được độ ổn định số học cao. Mức đóng góp thực tế của thông tin tương tác vì vậy phụ thuộc đồng thời vào độ mở của cổng, hệ số $\lambda$ và độ lớn của đặc trưng: khi cổng khép gần về 0, nhánh tương tác gần như bị triệt tiêu để bảo vệ biểu diễn gốc; ngược lại, khi cổng mở gần về 1, tín hiệu tương tác sau khi được điều chỉnh biên độ sẽ hòa nhập tối đa vào dòng chảy đặc trưng của phương thức đích.
 
 \section{Cấu trúc RC-Free}
 \label{sec:rcfree-method}
-Dựa trên kết quả thí nghiệm loại bỏ thành phần của mô hình CP đầy đủ, tôi xây dựng cấu trúc RC-Free và đánh giá kiến trúc này qua ba lần khởi tạo. RC-Free giữ cả ba nguồn đầu vào, trong đó MRI là nguồn chung của hai tương tác MR và MC. Khi khối RC được loại bỏ, biểu diễn radiomics $R$ và biểu diễn lâm sàng $C$ vẫn đi theo đường truyền gốc và mỗi biểu diễn đều nhận phần bổ sung từ tương tác với MRI trước khi ghép nối.
 
-Hình~\ref{fig:rcfree-update} cho thấy cách đọc ba phương trình cập nhật dưới đây. Chẳng hạn, nếu theo hai mũi tên từ khối MR, ta thấy cùng một tương tác được dùng để cập nhật cả radiomics và MRI. MRI còn nhận thêm thông tin từ MC, nên phương trình của MRI có hai số hạng bổ sung. Sau bước cộng và chuẩn hóa, ba vectơ được ghép theo thứ tự MRI, radiomics và lâm sàng.
+Trong mô hình tích ngoài CP đầy đủ (Full CP), ta xem xét toàn bộ ba cặp tương tác có thể có giữa ba phương thức: MR, MC và RC, dẫn đến việc phải duy trì tới sáu nhánh truyền phần dư có cổng. Tuy nhiên, một câu hỏi kiến trúc mang tính bản chất nảy sinh: \emph{Liệu có nhất thiết phải thiết lập tương tác trực tiếp giữa tất cả các cặp, hay một cấu trúc tinh giản hơn vẫn có thể đạt hiệu quả tương đương, thậm chí vượt trội hơn?}
+
+Xét về bản chất y sinh và hình ảnh học của các nguồn dữ liệu trong bài toán dự báo Alzheimer: ảnh MRI là dữ liệu hình ảnh cấu trúc ba chiều nguyên bản, phản ánh hình thái và mức độ teo thoái hóa của toàn bộ não bộ; các đặc trưng Radiomics là những chỉ số kết cấu định lượng được trích xuất từ chính các vùng não trên ảnh MRI đó; trong khi dữ liệu lâm sàng (Clinical) phản ánh tình trạng nhận thức và hoạt động chức năng toàn diện của người bệnh. Rõ ràng, hình ảnh MRI đóng vai trò như một ``mỏ neo'' thông tin trung tâm, có mối liên hệ mật thiết cả với đặc trưng vi mô của mô não (thông qua Radiomics) lẫn biểu hiện bệnh học vĩ mô (thông qua Clinical). Ngược lại, mối tương tác trực tiếp giữa Radiomics và Clinical (cặp RC) khi không có sự tham chiếu của hình ảnh MRI gốc có thể trở nên dư thừa, hoặc thậm chí tạo ra các tương quan giả (spurious correlations) do nhiễu đo lường trên các thang điểm nhận thức.
+
+Từ nhận định sâu sắc trên, tôi đề xuất kiến trúc \textbf{RC-Free} (loại bỏ cặp tương tác Radiomics--Clinical). Trong thiết kế này, khối tương tác trực tiếp RC được lược bỏ hoàn toàn, đặt biểu diễn hình ảnh MRI làm ``trung tâm kết nối'' cho hai tương tác cốt lõi: MRI--Radiomics (MR) và MRI--Clinical (MC).
+
+Hình~\ref{fig:rcfree-update} trực quan hóa cơ chế truyền thông tin tinh gọn của RC-Free tại một lần khám. Nhìn vào sơ đồ, luồng dữ liệu diễn ra như sau:
+\begin{itemize}
+\item Cả ba phương thức đầu vào vẫn được duy trì đầy đủ, bảo đảm không làm mất bất kỳ nguồn thông tin nào.
+\item Số nhánh truyền phần dư có cổng được tinh giản từ sáu xuống còn bốn nhánh: hình ảnh MRI nhận thông tin bổ chính từ cả hai tương tác MR và MC; đặc trưng Radiomics nhận bổ chính từ MR; và dữ liệu lâm sàng nhận bổ chính từ MC.
+\item Radiomics và dữ liệu lâm sàng tuy không tương tác trực tiếp với nhau, nhưng vẫn được liên kết gián tiếp thông qua trung tâm MRI trước khi các biểu diễn được ghép nối thành một vectơ thống nhất.
+\end{itemize}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\linewidth]{image/rcfree-update.pdf}
-\caption{Bốn nhánh cập nhật trong RC-Free tại một lần khám.}
+\caption{Bốn nhánh cập nhật đặc trưng trong mô hình RC-Free}
 \label{fig:rcfree-update}
 \end{figure}
 
-Đặt $D_{k\to d}=\lambda_{k\to d}g_{k\to d}\widehat E_{k\to d}$, các đầu ra là
+Đặt $D_{k\to d}=\lambda_{k\to d}g_{k\to d}\widehat E_{k\to d}$ là lượng bổ chính tương tác từ cặp $k$ sang phương thức $d$, các phương trình cập nhật đặc trưng trong RC-Free được xác định như sau:
 \begin{align}
  M_{\rm out}&=\LN_M^{\rm out}(M+D_{(\mathrm{MR}\to M)}+D_{(\mathrm{MC}\to M)}),\label{eq:rcfree-first}\\
  R_{\rm out}&=\LN_R^{\rm out}(R+D_{(\mathrm{MR}\to R)}),\\
@@ -369,15 +418,21 @@ Hình~\ref{fig:rcfree-update} cho thấy cách đọc ba phương trình cập n
  \label{eq:rcfree-residual}
 \end{align}
 
-
-
-Hai khối CP cho MR và MC đều có hạng 8. Bốn nhánh truyền tương ứng có bốn phép chiếu theo đích, bốn cổng động và bốn hệ số điều chỉnh học được. Các biểu diễn MRI, radiomics và lâm sàng sau cập nhật lần lượt có 128, 64 và 64 chiều, nên mô hình giữ nguyên ánh xạ sau ghép nối và khối thời gian.
+Cụ thể, hai khối CP cho MR và MC đều được ấn định hạng $Q=8$. Bốn nhánh truyền tương ứng được kiểm soát bởi bốn phép chiếu theo đích, bốn cổng động độc lập và bốn hệ số điều chỉnh $\lambda$ học được. Sau các phép cộng phần dư và chuẩn hóa LayerNorm, các biểu diễn đầu ra $M_{\rm out}, R_{\rm out}, C_{\rm out}$ lần lượt có kích thước 128, 64 và 64 chiều. Ba vectơ này sau đó được ghép nối liên tiếp thành vectơ đặc trưng đa phương thức $F_t \in \mathbb R^{256}$ tại mỗi lần khám $t$, sẵn sàng làm đầu vào cho khối mô hình hóa chuỗi thời gian tiếp theo. Nhờ việc giữ nguyên kích thước sau ghép nối này, việc chuyển từ Full CP sang RC-Free không làm thay đổi cấu trúc của bất kỳ tầng tính toán nào phía sau, tạo điều kiện thuận lợi để đối chiếu hiệu năng một cách công bằng.
 
 \section{Mô hình thời gian và attention}
 \label{sec:temporal-method}
-Sau khi hợp nhất các biểu diễn tại từng lần khám, tôi sử dụng T-LSTM để xử lý chuỗi quan sát có khoảng cách thời gian không đồng đều \cite{baytas2017patient,aghajanian2025longitudinal}. Cụ thể, mô hình giảm đóng góp của phần bộ nhớ ngắn hạn khi khoảng cách giữa hai lần khám tăng. Khoảng thời gian tại lần khám đầu tiên được đặt bằng không. Ở các lần khám tiếp theo, tôi tính số ngày thực tế giữa hai lần chụp liên tiếp và quy đổi sang năm theo công thức $\Delta t_t=(s_t-s_{t-1})/365.25$. T-LSTM sử dụng trực tiếp khoảng thời gian này để điều chỉnh trạng thái bộ nhớ mà không cần bổ sung một biểu diễn thời gian được học riêng.
 
-Từ bộ nhớ trước đó $c_{t-1}$, mô hình tách thành phần ngắn hạn $c_{t-1}^{S}$ và phần còn lại $c_{t-1}^{L}$, rồi điều chỉnh theo hệ số $\gamma_t$:
+Sau khi đã thu được các vectơ đặc trưng đa phương thức $F_t$ tại từng thời điểm thăm khám, nhiệm vụ tiếp theo là mô hình hóa tiến trình suy giảm bệnh lý theo chiều thời gian. Dự báo tiến triển bệnh Alzheimer đòi hỏi phải khai thác dữ liệu quan sát dọc (longitudinal data). Tuy nhiên, bài toán y sinh thực tế đặt ra hai thách thức lớn mà các kiến trúc học sâu tuần tự thông thường không thể xử lý thỏa đáng:
+\begin{enumerate}
+\item \emph{Khoảng cách thời gian không đồng đều giữa các lần khám}: Khác với các chuỗi thời gian lý thuyết có chu kỳ đo lường cố định, người bệnh trong các nghiên cứu lâm sàng như ADNI tái khám theo những khoảng thời gian biến thiên thực tế (có khi 6 tháng, có khi 1 năm hoặc lâu hơn). Một mạng LSTM tiêu chuẩn vốn giả định các bước thời gian cách đều nhau, do đó sẽ đánh đồng khoảng cách vài tháng với khoảng cách hàng năm, bỏ qua quy luật bệnh học hiển nhiên: khoảng cách giữa hai lần chụp càng dài thì các biến động tức thời từ lần khám trước càng bị suy giảm và khó dự đoán hơn.
+
+\item \emph{Độ quan trọng không đồng đều giữa các mốc thăm khám}: Các dấu hiệu thoái hóa thần kinh then chốt (như teo hồi hải mã hay tụt dốc điểm nhận thức) không diễn ra dàn trải mà thường bộc lộ rõ nét tại một số thời điểm chuyển giai đoạn nhất định. Do đó, việc chỉ lấy trạng thái ẩn ở bước cuối cùng $h_T$ có thể làm mất mát các tín hiệu cảnh báo sớm ở giai đoạn đầu, trong khi lấy trung bình cộng lại làm loãng các thông tin quan trọng.
+\end{enumerate}
+
+Để giải quyết trọn vẹn thách thức thứ nhất, tôi tích hợp mạng Time-Aware LSTM (T-LSTM) \cite{baytas2017patient,aghajanian2025longitudinal}. Nguyên lý cốt lõi của T-LSTM là sử dụng trực tiếp khoảng thời gian thực tế trôi qua giữa hai lần khám để điều chỉnh trạng thái bộ nhớ của mạng. Cụ thể, khoảng thời gian tại lần khám đầu tiên được quy ước bằng không. Tại các lần khám tiếp theo $t \geq 2$, khoảng cách thực tế giữa hai lần chụp liên tiếp $s_t$ và $s_{t-1}$ (tính theo ngày) được quy đổi sang đơn vị năm: $\Delta t_t = (s_t - s_{t-1}) / 365.25$. T-LSTM sử dụng trực tiếp khoảng thời gian này để điều chỉnh trạng thái bộ nhớ mà không cần bổ sung một biểu diễn thời gian được học riêng.
+
+Từ bộ nhớ trước đó $c_{t-1}$, mô hình tách thành phần ngắn hạn $c_{t-1}^{S}$ (chứa các biến động tức thời) và phần còn lại $c_{t-1}^{L}$ (chứa các đặc trưng bệnh lý bền vững), rồi điều chỉnh theo hệ số suy giảm phi tuyến $\gamma_t$:
 \begin{align}
  c_{t-1}^{S}&=\tanh(W_Sc_{t-1}+b_S),\qquad
  c_{t-1}^{L}=c_{t-1}-c_{t-1}^{S},\label{eq:tlstm-first}\\
@@ -385,78 +440,96 @@ Từ bộ nhớ trước đó $c_{t-1}$, mô hình tách thành phần ngắn h�
  c_{t-1}^{*}=c_{t-1}^{L}+\gamma_t c_{t-1}^{S}.
  \label{eq:tlstm-memory}
 \end{align}
-Các cổng đầu vào $i_t$, quên $f_t$, đầu ra $o_t$ và bộ nhớ ứng viên $\widetilde c_t$ được tính từ $F_t$, $h_{t-1}$ bằng các ánh xạ tuyến tính có hệ số chệch trên đầu vào và trạng thái trước. Các cổng $i_t,f_t,o_t$ dùng sigmoid; bộ nhớ ứng viên dùng tanh. Bộ nhớ và trạng thái ẩn được cập nhật:
+Khi $\Delta t_t$ càng lớn, $\gamma_t$ càng giảm, phản ánh chính xác hiện tượng thông tin ngắn hạn từ quá khứ xa bị phai mờ tự nhiên. Bộ nhớ hiệu chỉnh $c_{t-1}^{*}$ này sau đó được đưa vào các cổng cập nhật của LSTM:
 \begin{equation}
  c_t=f_t\odot c_{t-1}^{*}+i_t\odot\widetilde c_t,
  \qquad h_t=o_t\odot\tanh(c_t).\label{eq:tlstm-state}
 \end{equation}
-T-LSTM gồm một lớp một chiều với trạng thái ẩn 128 chiều, trong đó hệ số suy giảm của bộ nhớ ngắn hạn phụ thuộc vào khoảng cách giữa hai lần khám. Nếu một lần khám được đánh dấu không hợp lệ, mô hình giữ trạng thái trước đó. Trong nhóm nghiên cứu này, cả ba lần khám của mỗi người đều hợp lệ.
+Trong đó, các cổng đầu vào $i_t$, quên $f_t$, đầu ra $o_t$ và bộ nhớ ứng viên $\widetilde c_t$ được tính từ $F_t$ và $h_{t-1}$ bằng các ánh xạ tuyến tính có hệ số chệch (dùng sigmoid cho các cổng và tanh cho bộ nhớ ứng viên). T-LSTM gồm một lớp một chiều với trạng thái ẩn 128 chiều. Nếu một lần khám được đánh dấu không hợp lệ, mô hình giữ trạng thái trước đó; trong nhóm nghiên cứu này, cả ba lần khám của mỗi người đều hợp lệ.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{image/temporal-model.pdf}
-\caption[T-LSTM và attention theo thời gian]{T-LSTM nhận chuỗi và khoảng cách thời gian giữa các lần chụp. Cơ chế attention tổng hợp trạng thái trước khi qua Cox.}
+\caption{Mô hình thời gian T-LSTM và cơ chế attention}
 \label{fig:temporal}
 \end{figure}
 
-Attention cộng chỉ tổng hợp các lần khám hợp lệ, theo cách chấm điểm học được \cite{bahdanau2015attention}:
+Để giải quyết thách thức thứ hai, tôi tiếp tục xây dựng một cơ chế Attention cộng theo thời gian (additive temporal attention) \cite{bahdanau2015attention} đặt phía sau T-LSTM, như được minh họa trong Hình~\ref{fig:temporal}. Cơ chế này học cách gán trọng số thích ứng cho từng lần khám:
 \begin{equation}
  e_t=v_a^\top\tanh(W_a h_t+b_a),\qquad
  \alpha_t=\frac{\exp(e_t)}{\sum_{j\in\mathcal V}\exp(e_j)},\qquad
  z=\sum_{t\in\mathcal V}\alpha_t h_t.
  \label{eq:temporal-attention}
 \end{equation}
-Ở đây, $\mathcal V$ là tập các lần khám hợp lệ. Phép chiếu $128\to64\to1$ chấm điểm từng trạng thái ẩn để xác định trọng số của trạng thái đó trong biểu diễn tổng hợp $z\in\mathbb R^{128}$. T-LSTM điều chỉnh cách duy trì và cập nhật thông tin quá khứ theo khoảng cách giữa các lần khám, còn attention quyết định mức đóng góp của mỗi trạng thái vào biểu diễn chung. Vì mỗi trạng thái ẩn đã tổng hợp lịch sử đến lần khám tương ứng, trọng số attention tác động lên cả phần thông tin lịch sử chứa trong trạng thái đó.
+Ở đây, $\mathcal V$ là tập hợp các lần khám hợp lệ. Phép chiếu $128\to64\to1$ chấm điểm từng trạng thái ẩn để xác định trọng số $\alpha_t$ của trạng thái đó trong biểu diễn tổng hợp $z\in\mathbb R^{128}$. Sự kết hợp giữa T-LSTM và Attention mang lại một cơ chế mô hình hóa thời gian toàn diện: T-LSTM đảm nhận việc tích lũy và điều tiết dòng chảy lịch sử theo khoảng cách thực tế, còn Attention đảm nhận việc chắt lọc những dấu mốc then chốt để tạo nên biểu diễn chung phục vụ cho bài toán tiên lượng sống còn.
 
 \section{Hàm mục tiêu Cox}
 \label{sec:training-method}
-Từ biểu diễn chuỗi đã tổng hợp, tôi sử dụng một khối MLP gồm lớp tuyến tính $128\to64$, GELU, Dropout 0.30 và lớp tuyến tính $64\to1$ để tạo điểm log-nguy cơ $\eta_i$. Điểm này được đưa trực tiếp vào mô hình Cox, không qua sigmoid hay softmax. Theo giả định nguy cơ tỷ lệ \cite{cox1972regression},
-\begin{equation}
- h(\tau\mid z_i)=h_0(\tau)\exp(\eta_i).
-\end{equation}
-Theo mô hình Cox, tại cùng một thời điểm theo dõi, người có điểm log-nguy cơ cao hơn được ước lượng có nguy cơ tức thời lớn hơn. Hàm mất mát Cox so sánh điểm của mỗi người có biến cố với điểm của những người còn trong tập nguy cơ tại thời điểm tương ứng. Người bị kiểm duyệt vẫn đóng góp vào tập nguy cơ cho đến hết thời gian họ được theo dõi.
 
-Gọi $\tau_k$ là các thời điểm biến cố khác nhau, $\mathcal D_k$ là nhóm biến cố tại $\tau_k$, $d_k=|\mathcal D_k|$ và $\mathcal R_k=\{j:t_j\geq\tau_k\}$. Hàm mất mát là đối của log-hợp lý riêng phần, xử lý biến cố trùng thời gian theo Breslow \cite{breslow1974covariance} và lấy trung bình trên $N_e$ biến cố:
+Từ biểu diễn chuỗi đã tổng hợp $z$, mục tiêu cuối cùng là dự đoán nguy cơ tiến triển suy giảm nhận thức trong tương lai. Bài toán này không thể giải quyết bằng các hàm mất mát phân loại nhị phân thông thường (như Cross-Entropy), bởi lẽ trong dữ liệu y tế theo dõi dọc, phần lớn người tham gia là dữ liệu kiểm duyệt phải (right-censored) — tức là đến thời điểm nghiên cứu kết thúc hoặc lần tái khám cuối cùng, họ vẫn chưa biểu hiện suy giảm nhận thức. Nếu loại bỏ những bệnh nhân này, mô hình sẽ mắc sai lệch chọn mẫu nghiêm trọng; còn nếu gắn nhãn họ là ``không bệnh'', mô hình sẽ bỏ qua khoảng thời gian họ đã duy trì tình trạng ổn định.
+
+Để giải quyết triệt để bài toán sống còn có kiểm duyệt, tôi đưa biểu diễn $z$ qua một khối mạng perceptron đa tầng tiên lượng gồm lớp tuyến tính $128\to64$, kích hoạt GELU, Dropout 0.30 và lớp tuyến tính $64\to1$ để tính một giá trị log-nguy cơ vô hướng $\eta_i$ cho từng cá thể $i$. Điểm này được đưa trực tiếp vào mô hình nguy cơ tỷ lệ Cox \cite{cox1972regression} mà không qua bất kỳ hàm kích hoạt phi tuyến nào:
+\begin{equation}
+ h(\tau\mid z_i)=h_0(\tau)\exp(\eta_i),
+\end{equation}
+trong đó $h(\tau\mid z_i)$ là hàm nguy cơ tức thời tại thời điểm $\tau$, còn $h_0(\tau)$ là hàm nguy cơ nền chung. Theo mô hình này, tại bất kỳ thời điểm nào, người có chỉ số log-nguy cơ $\eta_i$ cao hơn sẽ có nguy cơ tức thời gặp biến cố suy giảm nhận thức lớn hơn theo cấp số mũ.
+
+Hàm mất mát để huấn luyện mạng được xây dựng dựa trên nguyên lý đối log-hợp lý riêng phần (negative partial log-likelihood), xử lý các trường hợp trùng thời điểm biến cố theo quy tắc Breslow \cite{breslow1974covariance} và lấy trung bình trên $N_e$ biến cố quan sát được:
 \begin{equation}
  \mathcal L_{\rm Cox}=-\frac{1}{N_e}\sum_k
  \left[\sum_{i\in\mathcal D_k}\eta_i
  -d_k\log\!\left(\sum_{j\in\mathcal R_k}\exp(\eta_j)\right)\right].
  \label{eq:cox-method}
 \end{equation}
+Ở đây, $\tau_k$ là các mốc thời gian ghi nhận biến cố phân biệt, $\mathcal D_k$ là tập hợp những người xảy ra biến cố tại $\tau_k$ với số lượng $d_k=|\mathcal D_k|$, và $\mathcal R_k=\{j:t_j\geq\tau_k\}$ là tập nguy cơ gồm tất cả những người vẫn đang được theo dõi và chưa gặp biến cố ngay trước thời điểm $\tau_k$.
 
+Ý nghĩa cốt lõi của hàm mất mát Cox nằm ở cơ chế ``so kè thứ tự'': tại mỗi thời điểm một người gặp biến cố, mô hình phạt nặng nếu điểm nguy cơ $\eta_i$ của người đó không vượt trội so với điểm số của tất cả những người khác vẫn đang an toàn trong tập nguy cơ $\mathcal R_k$. Nhờ cơ chế này, ngay cả những người bị kiểm duyệt (không có biến cố) vẫn đóng góp tích cực vào việc huấn luyện mạng bằng cách đóng vai trò làm nhóm chứng so sánh trong tập nguy cơ cho đến tận ngày khám cuối cùng của họ.
 
-Thuật toán~\ref{alg:rcfree-forward} tóm lược toàn bộ luồng tính xuôi của mô hình sau khi các thành phần đã được định nghĩa. Các bộ mã hóa và khối hợp nhất dùng chung trọng số qua ba lần khám; bốn nhánh tương tác có cổng được tính từ các biểu diễn trong cùng một lần khám.
+Thuật toán~\ref{alg:rcfree-forward} tóm lược toàn bộ luồng tính toán xuôi (forward pass) của mô hình RC-Free từ lúc tiếp nhận ba nguồn dữ liệu thô tại ba lần khám cho đến khi xuất ra điểm log-nguy cơ phục vụ tối ưu hóa hàm mất mát Cox. Các bộ mã hóa và khối hợp nhất dùng chung trọng số qua ba lần khám; bốn nhánh tương tác có cổng được tính từ các biểu diễn trong cùng một lần khám.
 \input{algorithms/rcfree_forward}
 
 \section{Đánh giá xếp hạng và phân tầng nguy cơ}
 \label{sec:survival-evaluation}
-Để đánh giá khả năng xếp hạng và phân tầng nguy cơ, tôi sử dụng trực tiếp điểm dự đoán từ ba mô hình RC-Free đã lưu, mỗi mô hình ứng với một lần khởi tạo. Bước đánh giá này không huấn luyện lại mô hình hay tinh chỉnh thêm siêu tham số. Với từng người, RID, $\eta_i$, $t_i$ và $\delta_i$ được đối chiếu với bảng kê dữ liệu cố định; các tập không trùng RID.
 
+Để kiểm chứng toàn diện giá trị thực tiễn của mô hình RC-Free, việc chỉ nhìn vào một chỉ số đánh giá đơn lẻ là chưa đủ. Một hệ thống học sâu hỗ trợ ra quyết định lâm sàng trong bệnh Alzheimer cần phải trả lời thỏa đáng ba câu hỏi cốt lõi của bác sĩ:
+\begin{enumerate}
+\item \emph{Khả năng xếp hạng toàn cục}: Liệu mô hình có luôn gán mức nguy cơ cao hơn cho những bệnh nhân sẽ tiến triển suy giảm nhận thức sớm hơn hay không?
+\item \emph{Khả năng phân tầng nguy cơ thực tế}: Nếu phân chia bệnh nhân thành hai nhóm nguy cơ cao và thấp, diễn tiến sống còn thực tế của hai nhóm này có tách rời nhau rõ rệt theo thời gian hay không?
+\item \emph{Độ chính xác tại các mốc can thiệp cụ thể}: Tại các mốc thời gian lâm sàng then chốt (như 2 năm, 3 năm hay 5 năm), mô hình có khả năng phân biệt chính xác giữa người sẽ gặp biến cố và người duy trì tình trạng ổn định hay không?
+\end{enumerate}
+
+Ba câu hỏi này tương ứng với ba lăng kính đánh giá bổ trợ cho nhau: Chỉ số phù hợp Harrell's C-index, phân tích đường cong sống còn Kaplan--Meier, và diện tích dưới đường cong ROC phụ thuộc thời gian (IPCW-AUC), như được hệ thống hóa trong Hình~\ref{fig:evaluation-map}. Toàn bộ các đánh giá này được thực hiện trực tiếp trên điểm nguy cơ dự đoán từ ba mô hình RC-Free độc lập (tương ứng với ba lần khởi tạo ngẫu nhiên) mà không hề trải qua bất kỳ bước huấn luyện lại hay tinh chỉnh siêu tham số nào, bảo đảm tính khách quan tuyệt đối.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{image/evaluation-map.pdf}
-\caption[Ba góc nhìn đánh giá điểm nguy cơ]{Vai trò bổ sung của C-index, Kaplan--Meier và AUC khi đánh giá điểm nguy cơ.}
+\caption{Ba góc nhìn đánh giá và phân tầng điểm nguy cơ sống còn}
 \label{fig:evaluation-map}
 \end{figure}
 
 \subsection{C-index}
-Theo quy ước Harrell \cite{harrell1996multivariable}, C-index xét các cặp $(i,j)$ thỏa mãn $\delta_i=1$ và $t_i<t_j$, tức là khi người thứ nhất có biến cố, người thứ hai vẫn đang được theo dõi và chưa ghi nhận biến cố. Nếu người có biến cố sớm hơn cũng có điểm nguy cơ cao hơn ($\eta_i>\eta_j$), cặp đó được tính 1 điểm. Hai điểm nguy cơ bằng nhau được tính 0.5 điểm, còn thứ tự xếp hạng ngược lại được tính 0 điểm. Những người có thời gian theo dõi bằng nhau không tạo thành cặp so sánh. Tôi tổng hợp C-index của ba lần khởi tạo bằng giá trị trung bình và độ lệch chuẩn mẫu (SD, mẫu số $n-1$). SD mô tả mức biến thiên giữa các lần chạy trên cùng nhóm người tham gia.
+Chỉ số phù hợp C-index (Concordance Index) theo quy ước Harrell \cite{harrell1996multivariable} là thước đo chuẩn mực nhất để đánh giá năng lực xếp hạng của mô hình sống còn trên toàn bộ dải thời gian theo dõi. Về mặt trực giác, C-index đo lường xác suất mà thứ tự nguy cơ do mô hình dự đoán đồng thuận với thứ tự xảy ra biến cố thực tế giữa hai bệnh nhân bất kỳ.
+
+Cụ thể, xét tất cả các cặp cá thể $(i,j)$ thỏa mãn điều kiện có thể so sánh được: người thứ nhất có biến cố ($\delta_i=1$) và thời điểm biến cố của người đó diễn ra trước thời điểm kết thúc theo dõi của người thứ hai ($t_i<t_j$). Nếu mô hình dự báo chính xác rằng người gặp biến cố sớm hơn có điểm nguy cơ cao hơn ($\eta_i>\eta_j$), cặp đó được chấm 1 điểm đồng thuận. Trường hợp mô hình dự đoán hai người có cùng điểm nguy cơ ($\eta_i=\eta_j$), cặp đó được chấm 0.5 điểm. Ngược lại, nếu thứ tự dự báo bị đảo ngược ($\eta_i<\eta_j$), cặp đó nhận 0 điểm. Các cặp có thời gian theo dõi bằng nhau hoặc cả hai cùng bị kiểm duyệt không thể xác định thứ tự nên không được đưa vào so sánh. C-index bằng 0.5 tương đương với mức đoán ngẫu nhiên, trong khi 1.0 đại diện cho khả năng phân biệt hoàn hảo. Kết quả C-index qua ba lần khởi tạo được báo cáo dưới dạng trung bình $\pm$ độ lệch chuẩn mẫu (SD, mẫu số $n-1$) nhằm phản ánh độ ổn định của kiến trúc trước biến thiên ngẫu nhiên của trọng số ban đầu.
 
 \subsection{Kaplan--Meier và nhóm nguy cơ đồng thuận}
-Tôi sử dụng trung vị điểm nguy cơ $\eta$ trên tập huấn luyện của từng lần khởi tạo làm ngưỡng phân nhóm. Người có điểm vượt ngưỡng thuộc nhóm nguy cơ cao, còn người có điểm bằng hoặc thấp hơn ngưỡng thuộc nhóm nguy cơ thấp. Để xác định nhóm nguy cơ cuối cùng của mỗi người, tôi chọn nhóm mà ít nhất hai trong ba lần khởi tạo cùng xác định.
+Trong thực hành y khoa, các chỉ số điểm số liên tục cần được chuyển hóa thành các phân tầng nguy cơ rõ ràng để hỗ trợ bác sĩ phân loại bệnh nhân và đưa ra phác đồ theo dõi thích hợp. Để thực hiện việc này một cách hoàn toàn khách quan và không chịu thiên lệch từ tập kiểm tra, tôi sử dụng trung vị của điểm nguy cơ $\eta$ trên tập huấn luyện làm ngưỡng phân nhóm. Người có điểm nguy cơ vượt trên ngưỡng trung vị được xếp vào nhóm nguy cơ cao, trong khi những người có điểm bằng hoặc thấp hơn ngưỡng thuộc nhóm nguy cơ thấp.
 
-Sau khi phân nhóm, tôi sử dụng đường Kaplan--Meier (KM) để ước lượng xác suất chưa ghi nhận biến cố theo thời gian ở từng nhóm \cite{kaplan1958nonparametric}. Hình biểu diễn hai đường cong cùng khoảng tin cậy (CI) 95\%, các dấu kiểm duyệt và số người còn nguy cơ ngay trước các mốc 0, 2, 3 và 5 năm. Kiểm định log-rank so sánh hai đường cong, còn mô hình Cox đơn biến ước lượng tỷ số nguy cơ (HR) của nhóm nguy cơ cao so với nhóm nguy cơ thấp cùng CI 95\%. Tôi kiểm tra giả định nguy cơ tỷ lệ bằng phần dư Schoenfeld với thời gian được biến đổi theo thứ hạng. Mặc dù đồ thị chỉ thể hiện năm năm đầu, kiểm định log-rank và ước lượng HR sử dụng toàn bộ thời gian theo dõi.
+Tuy nhiên, việc phân nhóm chỉ dựa trên một mô hình đơn lẻ có thể chịu ảnh hưởng bởi tính ngẫu nhiên của lần khởi tạo đó. Do đó, tôi áp dụng \emph{nguyên tắc đồng thuận đa số} (majority voting): một người tham gia được xếp vào nhóm nguy cơ cao (hoặc thấp) nếu có ít nhất hai trong ba lần khởi tạo cùng phân loại người đó vào nhóm này. 
+
+Sau khi xác lập nhóm đồng thuận, đường cong Kaplan--Meier (KM) \cite{kaplan1958nonparametric} được sử dụng để ước lượng xác suất chưa ghi nhận biến cố suy giảm nhận thức theo thời gian ở từng nhóm. Hai đường cong được trình bày kèm theo dải khoảng tin cậy (CI) 95\%, các dấu kiểm duyệt tại thời điểm rời theo dõi, cùng bảng số lượng người còn nguy cơ (number at risk) ngay trước các mốc 0, 2, 3 và 5 năm. Sự khác biệt giữa hai đường cong được kiểm định chặt chẽ bằng kiểm định log-rank để xác định ý nghĩa thống kê. Đồng thời, một mô hình hồi quy Cox đơn biến được áp dụng trên nhãn phân nhóm để định lượng tỷ số nguy cơ (Hazard Ratio - HR) cùng khoảng tin cậy 95\%, cho biết người thuộc nhóm nguy cơ cao có tốc độ gặp biến cố gấp bao nhiêu lần so với nhóm nguy cơ thấp. Giả định nguy cơ tỷ lệ được kiểm tra cẩn trọng thông qua phần dư Schoenfeld với thời gian được biến đổi theo thứ hạng. Mặc dù đồ thị chỉ thể hiện năm năm đầu nhằm tập trung vào giai đoạn can thiệp sớm, kiểm định log-rank và ước lượng HR sử dụng trọn vẹn toàn bộ thời gian theo dõi.
 
 \subsection{AUC theo thời gian tại 2, 3 và 5 năm}
-Tại mỗi mốc đánh giá $h$, tôi xác định hai nhóm dùng để tính AUC. Nhóm biến cố $\mathcal C_h=\{i:\delta_i=1,t_i\leq h\}$ gồm những người đã ghi nhận biến cố trước hoặc tại mốc này, còn nhóm đối chứng $\mathcal D_h=\{j:t_j>h\}$ gồm những người vẫn được theo dõi sau mốc đó. Những người bị kiểm duyệt trước hoặc tại $h$ không thuộc nhóm nào vì tình trạng biến cố của họ tại thời điểm đánh giá chưa xác định. Để xét ảnh hưởng của kiểm duyệt, tôi sử dụng trọng số nghịch đảo xác suất kiểm duyệt (IPCW) cho các ca biến cố quan sát được. Hàm $\widehat G(u)$ dùng để tính trọng số được ước lượng từ tập huấn luyện và biểu diễn xác suất chưa bị kiểm duyệt đến thời điểm $u$ \cite{polsterl2020scikit,hung2010time}.
+Bên cạnh khả năng xếp hạng toàn cục của C-index, các bác sĩ thường đối mặt với các câu hỏi tiên lượng cụ thể tại những cửa sổ thời gian xác định: ``Liệu bệnh nhân này có tiến triển trong vòng 2 năm tới hay không? 3 năm? hay 5 năm?''. Để trả lời chính xác câu hỏi này, tôi sử dụng diện tích dưới đường cong ROC phụ thuộc thời gian (time-dependent cumulative/dynamic AUC).
 
-Với $w_i=1/\widehat G(t_i)$ cho $i\in\mathcal C_h$, ước lượng AUC tích lũy/động có dạng
+Tại mỗi mốc thời gian đánh giá $h \in \{2, 3, 5\text{ năm}\}$, tập bệnh nhân được phân chia thành hai nhóm: nhóm biến cố $\mathcal C_h=\{i:\delta_i=1,t_i\leq h\}$ gồm những người đã thực sự suy giảm nhận thức trước hoặc tại mốc $h$; và nhóm đối chứng $\mathcal D_h=\{j:t_j>h\}$ gồm những người vẫn duy trì tình trạng ổn định sau mốc $h$. Thách thức toán học lớn nhất ở đây là hiện tượng kiểm duyệt: những người bị kiểm duyệt trước thời điểm $h$ không thể biết chắc chắn tình trạng bệnh lý tại $h$, do đó không thể gán vào nhóm nào. Nếu đơn thuần loại bỏ những người này, mẫu đánh giá sẽ bị sai lệch nghiêm trọng.
+
+Để giải quyết bài toán kiểm duyệt một cách chuẩn xác, tôi áp dụng phương pháp gán trọng số nghịch đảo xác suất kiểm duyệt (Inverse Probability of Censoring Weighting - IPCW) \cite{polsterl2020scikit,hung2010time}. Trọng số IPCW bù đắp xác suất bị mất dấu bằng cách gán trọng số $w_i = 1/\widehat G(t_i)$ cho mỗi ca biến cố quan sát được, trong đó hàm phân phối kiểm duyệt $\widehat G(u)$ được ước lượng từ tập huấn luyện thông qua đường Kaplan--Meier cho biến cố kiểm duyệt. Công thức ước lượng AUC tích lũy/động có dạng:
 \begin{equation}
  \widehat{\operatorname{AUC}}(h)=
  \frac{\displaystyle\sum_{i\in\mathcal C_h}w_i
-                 \sum_{j\in\mathcal D_h}\kappa(\eta_i,\eta_j)}
-      {\displaystyle |\mathcal D_h|\sum_{i\in\mathcal C_h}w_i},
+ \sum_{j\in\mathcal D_h}\kappa(\eta_i,\eta_j)}
+ {\displaystyle |\mathcal D_h|\sum_{i\in\mathcal C_h}w_i},
  \qquad
  \kappa(a,b)=\begin{cases}
  1,&a>b,\\
@@ -465,10 +538,8 @@ Với $w_i=1/\widehat G(t_i)$ cho $i\in\mathcal C_h$, ước lượng AUC tích 
  \end{cases}
  \label{eq:ipcw-auc}
 \end{equation}
-Công thức~\eqref{eq:ipcw-auc} tính trung bình có trọng số trên các cặp biến cố--đối chứng, trong đó AUC càng lớn khi điểm nguy cơ của người có biến cố thường cao hơn điểm của người thuộc nhóm đối chứng. Nếu mỗi người trong nhóm đối chứng được gán trọng số chung $1/\widehat G(h)$, hệ số này sẽ triệt tiêu giữa tử số và mẫu số, từ đó thu được dạng công thức đã trình bày. Khi tính bằng \texttt{scikit-survival}, các điểm nguy cơ kề nhau sau sắp xếp chênh lệch không quá $10^{-8}$ được gom thành nhóm đồng điểm. Chỉ tính AUC khi cả hai nhóm đều có người và xác suất chưa bị kiểm duyệt tại các thời điểm cần dùng còn dương.
+Ý nghĩa của Công thức~\eqref{eq:ipcw-auc} là tính toán tỷ lệ các cặp (biến cố, đối chứng) mà mô hình xếp hạng đúng, có điều chỉnh trọng số để đại diện cho toàn bộ quần thể ban đầu. Khi triển khai tính toán bằng thư viện \texttt{scikit-survival}, các điểm nguy cơ kề nhau chênh lệch dưới $10^{-8}$ được coi là đồng điểm. Đồng thời, để tránh nguy cơ ngoại suy phân phối kiểm duyệt khi thời gian theo dõi tối đa ở tập xác thực (18.26 năm) vượt quá tập huấn luyện (13.95 năm), quy trình áp dụng kỹ thuật chặn thời gian theo dõi tại ngưỡng $h+\varepsilon$ (với $\varepsilon$ được xác định chính xác qua hàm \texttt{nextafter}). 
 
-Khi tính AUC bằng thư viện, quy trình dùng một bản sao của nhãn và chặn các thời gian theo dõi vượt $h+\varepsilon$ tại mốc này. Cách xử lý này giữ nguyên hai nhóm $\mathcal C_h$, $\mathcal D_h$ và trọng số trong Công thức~\eqref{eq:ipcw-auc}, đồng thời tránh ngoại suy phân phối kiểm duyệt khi thời gian theo dõi tối đa ở tập xác thực (18.26 năm) vượt thời gian tối đa ở tập huấn luyện (13.95 năm). Trong triển khai, hàm \texttt{nextafter} xác định $h+\varepsilon$ là giá trị dấu phẩy động kế tiếp lớn hơn $h$.
-
-AUC được tính riêng từng lần khởi tạo rồi tổng hợp bằng trung bình $\pm$ SD; mốc không đủ điều kiện được ghi NA kèm lý do. Chương~\ref{chap:results} trình bày lần lượt khả năng xếp hạng qua C-index, phân biệt tại từng mốc qua AUC và khác biệt giữa hai nhóm qua Kaplan--Meier.
+Tổng kết lại, bộ ba chỉ số C-index, Kaplan--Meier và IPCW-AUC tạo nên một khung đánh giá toàn diện và khắt khe, kiểm chứng vững chắc năng lực của mô hình RC-Free từ góc độ lý thuyết xếp hạng đến ứng dụng phân tầng nguy cơ thực tiễn trong y khoa. Toàn bộ các kết quả thực nghiệm chi tiết sẽ được trình bày và phân tích có hệ thống trong Chương~\ref{chap:results}.
 
 \FloatBarrier

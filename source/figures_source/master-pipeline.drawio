@@ -19,11 +19,11 @@
         </mxCell>
         <mxCell id="Adown" edge="1" parent="1" style="edgeStyle=none;rounded=0;html=0;endArrow=block;endSize=7;strokeColor=#28313C;strokeWidth=1.35;dashed=0;">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="213" y="95" as="sourcePoint" />
+            <mxPoint x="213" y="86" as="sourcePoint" />
             <mxPoint x="125" y="184" as="targetPoint" />
             <Array as="points">
-              <mxPoint x="213" y="174" />
-              <mxPoint x="125" y="174" />
+              <mxPoint x="213" y="160" />
+              <mxPoint x="125" y="160" />
             </Array>
           </mxGeometry>
         </mxCell>
@@ -145,30 +145,30 @@
           <mxGeometry x="770" y="272" width="210" height="30" as="geometry" />
         </mxCell>
         <mxCell id="modality0" value="MRI" vertex="1" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fontFamily=Arial;fontColor=#28313C;fontSize=16;align=center;verticalAlign=middle;fontStyle=0;fillColor=#DCEBFA;strokeColor=#172C46;strokeWidth=1;spacing=2;">
-          <mxGeometry x="25" y="84" width="166" height="23" as="geometry" />
+          <mxGeometry x="25" y="76" width="166" height="21" as="geometry" />
         </mxCell>
         <mxCell id="modality1" value="Radiomics" vertex="1" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fontFamily=Arial;fontColor=#28313C;fontSize=16;align=center;verticalAlign=middle;fontStyle=0;fillColor=#E2F1E3;strokeColor=#172C46;strokeWidth=1;spacing=2;">
-          <mxGeometry x="25" y="112" width="166" height="23" as="geometry" />
+          <mxGeometry x="25" y="101" width="166" height="21" as="geometry" />
         </mxCell>
         <mxCell id="modality2" value="Lâm sàng" vertex="1" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fontFamily=Arial;fontColor=#28313C;fontSize=16;align=center;verticalAlign=middle;fontStyle=0;fillColor=#FFF1CD;strokeColor=#172C46;strokeWidth=1;spacing=2;">
-          <mxGeometry x="25" y="140" width="166" height="23" as="geometry" />
+          <mxGeometry x="25" y="126" width="166" height="21" as="geometry" />
         </mxCell>
         <mxCell id="modality-flow-0" edge="1" parent="1" style="edgeStyle=none;rounded=0;html=0;endArrow=none;endSize=7;strokeColor=#28313C;strokeWidth=1.35;dashed=0;">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="191" y="95" as="sourcePoint" />
-            <mxPoint x="213" y="95" as="targetPoint" />
+            <mxPoint x="191" y="86" as="sourcePoint" />
+            <mxPoint x="213" y="86" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="modality-flow-1" edge="1" parent="1" style="edgeStyle=none;rounded=0;html=0;endArrow=none;endSize=7;strokeColor=#28313C;strokeWidth=1.35;dashed=0;">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="191" y="123" as="sourcePoint" />
-            <mxPoint x="213" y="123" as="targetPoint" />
+            <mxPoint x="191" y="111" as="sourcePoint" />
+            <mxPoint x="213" y="111" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="modality-flow-2" edge="1" parent="1" style="edgeStyle=none;rounded=0;html=0;endArrow=none;endSize=7;strokeColor=#28313C;strokeWidth=1.35;dashed=0;">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="191" y="151" as="sourcePoint" />
-            <mxPoint x="213" y="151" as="targetPoint" />
+            <mxPoint x="191" y="136" as="sourcePoint" />
+            <mxPoint x="213" y="136" as="targetPoint" />
           </mxGeometry>
         </mxCell>
       </root>
