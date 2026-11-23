@@ -98,27 +98,33 @@ Toàn mạng & 33760941 & 33534957 \\
 
 CP giảm 98.38\% số tham số của ba lớp song tuyến đầu và 90.90\% số tham số của ba khối tương tác khi tính cả MLP. Trên toàn mạng, số tham số giảm 0.67\% do bộ mã hóa MRI chiếm phần lớn số tham số. C-index xác thực trung bình của Full CP thấp hơn Full Outer-Product 0.0066, tính từ các giá trị chưa làm tròn (Bảng~\ref{tab:standard-bench}). Tôi chấp nhận mức giảm C-index này vì CP giảm được nhiều tham số ở các lớp tương tác. Từ Full CP, tôi thử bỏ cặp RC để giảm thêm số tham số và cải thiện C-index xác thực.
 
-\subsection{So sánh cấu trúc hai cặp MR và MC với cấu trúc một cặp}
+\subsection{Lựa chọn cấu trúc tương tác cặp}
 \label{sec:new-topology}
-Từ kết quả thăm dò về việc loại bỏ cặp RC, tôi đối chiếu RC-Free với hai cấu trúc chỉ giữ cặp MR hoặc chỉ giữ cặp MC. Cả ba nguồn đầu vào và đường truyền gốc đều được giữ lại trong mọi cấu trúc. Ba lần chạy dùng cùng cấu hình huấn luyện, dù trọng số khởi tạo của các khối chung có thể khác nhau giữa các cấu trúc.
+Để đánh giá việc giữ hai cặp MR và MC, tôi so sánh cả tám tổ hợp của ba cặp MR, MC và RC. Mọi cấu trúc đều giữ ba nguồn đầu vào và các đường truyền gốc. Cấu trúc 0 CP tắt cả ba cặp tương tác. Tôi dùng cùng cách chia dữ liệu, cấu hình huấn luyện và ba mã khởi tạo cho mỗi cấu trúc, dù trọng số ban đầu của các khối chung có thể khác nhau.
 
 \begin{table}[H]
 \centering\small
-\caption[Đối chứng cấu trúc tương tác]{C-index xác thực qua ba lần khởi tạo của các cấu trúc giữ đủ ba nguồn đầu vào.}
+\caption[Đối chứng cấu trúc tương tác]{Số tham số toàn mạng và C-index xác thực (trung bình $\pm$ SD qua ba lần khởi tạo).}
 \label{tab:new-topology}
-\begin{tabularx}{\linewidth}{@{}Y c r@{}}
+\begin{tabularx}{\linewidth}{@{}Y c r r@{}}
 \toprule
-\textbf{Cấu trúc} & \textbf{Cặp / nhánh} & \textbf{Trung bình $\pm$ SD} \\
+\textbf{Cấu trúc} & \textbf{Cặp / nhánh} & \textbf{Số tham số} & \textbf{C-index} \\
 \midrule
-Full CP & 3 / 6 & $0.8278\pm0.0250$ \\
-MR-only & 1 / 2 & $0.8299\pm0.0267$ \\
-MC-only & 1 / 2 & $0.8236\pm0.0237$ \\
-RC-Free (MR+MC) & 2 / 4 & $0.8347\pm0.0237$ \\
+0 CP & 0 / 0 & 33\,448\,449 & $0.8434\pm0.0288$ \\
+MR-only & 1 / 2 & 33\,484\,165 & $0.8299\pm0.0267$ \\
+MC-only & 1 / 2 & 33\,484\,037 & $0.8236\pm0.0237$ \\
+RC-only & 1 / 2 & 33\,464\,165 & $0.8319\pm0.0214$ \\
+RC-Free (MR+MC) & 2 / 4 & 33\,519\,497 & $0.8347\pm0.0237$ \\
+MR-Free (MC+RC) & 2 / 4 & 33\,499\,625 & $0.8243\pm0.0249$ \\
+MC-Free (MR+RC) & 2 / 4 & 33\,499\,753 & $0.8222\pm0.0156$ \\
+Full CP & 3 / 6 & 33\,534\,957 & $0.8278\pm0.0250$ \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-Với hai cặp tương tác, RC-Free đạt C-index xác thực trung bình 0.8347, cao hơn mức 0.8278 của Full CP với ba cặp, dù thứ hạng giữa các cấu trúc thay đổi theo lần khởi tạo.
+0 CP đạt C-index xác thực trung bình cao nhất (0.8434) và có ít tham số nhất. RC-Free có thêm 71\,048 tham số để mô hình hóa hai cặp có MRI. Qua ba lần khởi tạo, C-index của RC-Free thấp hơn 0 CP lần lượt 0.0219, 0.0021 và 0.0021. Chênh lệch trung bình là 0.0087. Độ lệch chuẩn của RC-Free nhỏ hơn (0.0237 so với 0.0288), cho thấy mức dao động quan sát được qua ba lần khởi tạo trên cùng tập xác thực nhỏ hơn.
+
+Trong bảy cấu trúc có tương tác cặp tường minh, RC-Free đạt C-index trung bình cao nhất (0.8347). So với Full CP, bỏ cặp RC giảm số nhánh từ sáu xuống bốn, bớt 15\,460 tham số và tăng C-index trung bình từ 0.8278 lên 0.8347. So với Full Outer-Product (Bảng~\ref{tab:standard-bench}), RC-Free dùng ít hơn 241\,444 tham số toàn mạng (0.72\%) với C-index trung bình gần bằng nhau (0.8347 và 0.8344). Vì vậy, khi mục tiêu là giữ tương tác tường minh giữa MRI với radiomics và giữa MRI với dữ liệu lâm sàng, tôi chọn RC-Free cho phân tích sống còn tiếp theo. Việc bỏ cặp RC loại được các phép tính của hai nhánh tương ứng. Mức tiết kiệm thời gian suy luận và chi phí vận hành toàn mô hình cần được đo trực tiếp.
 
 \section{Phân tích sống còn của RC-Free}
 \label{sec:posthoc-test}
