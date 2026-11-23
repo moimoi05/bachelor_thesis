@@ -1,14 +1,16 @@
 \chapter{Phương pháp}
 \label{chap:method}
 
-\section{Tổng quan mô hình RC-Free}
+\section{Quy trình chính với 0 CP}
 \label{sec:final-pipeline}
-Hình~\ref{fig:overall} trình bày bốn khối của mô hình RC-Free. Tại mỗi lần khám, ba bộ mã hóa tạo biểu diễn cho ảnh MRI ($M$), đặc trưng radiomics ($R$) và dữ liệu lâm sàng ($C$). Từ ba biểu diễn này, khối RC-Free tính hai tương tác MRI--radiomics (MR) và MRI--lâm sàng (MC), rồi đưa thông tin từ mỗi tương tác trở về hai biểu diễn thành phần qua tổng cộng bốn nhánh có cổng. Mỗi bộ mã hóa và khối hợp nhất dùng chung trọng số qua cả ba lần khám. T-LSTM xử lý chuỗi đặc trưng đã hợp nhất, sau đó cơ chế attention tổng hợp các trạng thái ẩn thành một vectơ để khối Cox tính điểm nguy cơ.
+Tại lần khám $t$, bộ mã hóa MRI tạo vectơ 128 chiều, bộ mã hóa radiomics và bộ mã hóa lâm sàng mỗi bộ tạo vectơ 64 chiều. Trong 0 CP, mỗi vectơ đi theo đường truyền gốc qua LayerNorm. Tôi ghép ba vectơ theo thứ tự MRI, radiomics, lâm sàng thành vectơ 256 chiều. Một lớp tuyến tính đưa vectơ này về 128 chiều, tiếp theo là GELU, dropout và LayerNorm. T-LSTM nhận chuỗi ba vectơ cùng khoảng thời gian giữa các lần khám. Attention gộp các trạng thái ẩn và đầu Cox trả về một điểm log-nguy cơ. Như vậy, cả ba nguồn cùng tham gia dự đoán khi số nhánh tương tác theo cặp bằng không.
+
+Để đối chiếu, Hình~\ref{fig:overall} trình bày bốn khối của mô hình RC-Free. Tại mỗi lần khám, ba bộ mã hóa tạo biểu diễn cho ảnh MRI ($M$), đặc trưng radiomics ($R$) và dữ liệu lâm sàng ($C$). Từ ba biểu diễn này, khối RC-Free tính hai tương tác MRI--radiomics (MR) và MRI--lâm sàng (MC), rồi đưa thông tin từ mỗi tương tác trở về hai biểu diễn thành phần qua tổng cộng bốn nhánh có cổng. Mỗi bộ mã hóa và khối hợp nhất dùng chung trọng số qua cả ba lần khám. T-LSTM xử lý chuỗi đặc trưng đã hợp nhất, sau đó cơ chế attention tổng hợp các trạng thái ẩn thành một vectơ để khối Cox tính điểm nguy cơ.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{image/final-pipeline.pdf}
-\caption[Sơ đồ quy trình xử lý tổng thể]{Ba bộ mã hóa tạo biểu diễn theo nguồn. Khối RC-Free kết hợp các nguồn qua MR và MC trước khi mô hình thời gian và khối Cox tính điểm nguy cơ.}
+\caption[Sơ đồ đối chứng RC-Free]{Ba bộ mã hóa tạo biểu diễn theo nguồn. Khối RC-Free kết hợp các nguồn qua MR và MC trước khi mô hình thời gian và khối Cox tính điểm nguy cơ.}
 \label{fig:overall}
 \end{figure}
 \FloatBarrier
@@ -197,7 +199,7 @@ Với các mã khởi tạo 20260727, 20260728 và 20260729, số thành phần 
 
 \begin{table}[H]
 \centering\small
-\caption[Phân biệt công trình gốc, bản tái lập có điều chỉnh và phương pháp chính]{Dữ liệu, cấu hình và vai trò của ba phương pháp.}
+\caption[Phân biệt công trình gốc, bản tái lập có điều chỉnh và phương pháp chính]{Dữ liệu, cấu hình và vai trò của các phương pháp.}
 \label{tab:reference-methods}
 \begin{tabularx}{\textwidth}{@{}L{3.2cm}Y Y@{}}
 \toprule
@@ -205,7 +207,8 @@ Với các mã khởi tạo 20260727, 20260728 và 20260729, số thành phần 
 \midrule
 Aghajanian gốc \cite{aghajanian2025longitudinal} & 228 người có MCI; SPM12, mô não và radiomics chất xám & CNN--PCA--T-LSTM; huấn luyện hai bước; nguồn tham chiếu \\
 Bản tái lập có điều chỉnh & 359 người; ảnh MRI đã cố định được đổi kích thước cho CNN & CNN/PCA theo lần khởi tạo; T-LSTM 64; mô hình đối chứng \\
-RC-Free Pairwise & 359 người; MRI $144^3$, radiomics toàn não, lâm sàng và chỉ báo có dữ liệu & MedicalNet; CP MR/MC; phần dư có cổng; T-LSTM 128; kiến trúc chính \\
+0 CP & Cùng 359 người và ba nguồn như RC-Free & Ghép nối ba biểu diễn đã chuẩn hóa; T-LSTM 128; kiến trúc chính \\
+RC-Free Pairwise & 359 người; MRI $144^3$, radiomics toàn não, lâm sàng và chỉ báo có dữ liệu & MedicalNet; CP MR/MC; phần dư có cổng; T-LSTM 128; đối chứng có tương tác \\
 \bottomrule
 \end{tabularx}
 \end{table}

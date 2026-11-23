@@ -9,7 +9,7 @@ Bộ dữ liệu gồm 359 người tham gia, mỗi người có ba lần chụp
 
 Tôi huấn luyện mô hình bằng bộ tối ưu AdamW \cite{loshchilov2019adamw} với tốc độ học ban đầu $10^{-4}$, hệ số suy giảm trọng số $10^{-4}$ và $(\beta_1,\beta_2)=(0.9,0.999)$. Với tối đa sáu người trong mỗi lô, quy trình huấn luyện tích lũy gradient qua hai bước và sử dụng độ chính xác hỗn hợp FP16 để tiết kiệm bộ nhớ \cite{micikevicius2018mixed}. Riêng hàm mất mát Cox được tính bằng FP32 và log-sum-exp để duy trì độ ổn định số học. Chuẩn gradient được giới hạn ở mức 1.0 và quá trình huấn luyện kéo dài tối đa 100 vòng. Tôi dùng \texttt{ReduceLROnPlateau} (bộ điều chỉnh tốc độ học của PyTorch, tự động giảm tốc độ học khi chỉ số theo dõi ngừng cải thiện) \cite{pytorchReduceLROnPlateau,paszke2019pytorch}. Bộ điều chỉnh theo dõi hàm mất mát Cox trên tập xác thực, giảm một nửa tốc độ học khi số vòng liên tiếp không cải thiện vượt quá năm và áp dụng mức sàn $10^{-6}$.
 
-Sau 10 vòng đầu, quy tắc dừng sớm theo dõi C-index xác thực với ngưỡng cải thiện 0.002 và thời gian chờ 20 vòng, còn tiêu chí lưu mô hình là C-index xác thực cao nhất. Để tạo lô, bộ lấy mẫu sử dụng các cặp có thể so sánh theo tiêu chí Cox sao cho mỗi người xuất hiện trong đúng một lô ở mỗi vòng. Dù gradient được tích lũy qua hai bước, tập nguy cơ $\mathcal R_k$ vẫn được xác định riêng cho từng lô. Qua ba lần khởi tạo, cả 4032~lô đều hợp lệ, với 42 lô mỗi vòng. Khi đánh giá, tập nguy cơ được xác định trên toàn bộ tập dữ liệu tương ứng.
+Sau 10 vòng đầu, quy tắc dừng sớm theo dõi C-index xác thực với ngưỡng cải thiện 0.002 và thời gian chờ 20 vòng, còn tiêu chí lưu mô hình là C-index xác thực cao nhất. Để tạo lô, bộ lấy mẫu sử dụng các cặp có thể so sánh theo tiêu chí Cox sao cho mỗi người xuất hiện trong đúng một lô ở mỗi vòng. Dù gradient được tích lũy qua hai bước, tập nguy cơ $\mathcal R_k$ vẫn được xác định riêng cho từng lô. Trong ba lượt RC-Free, cả 4032~lô đều hợp lệ, với 42 lô mỗi vòng. Khi đánh giá, tập nguy cơ được xác định trên toàn bộ tập dữ liệu tương ứng.
 
 Ba lần huấn luyện sử dụng lần lượt các giá trị khởi tạo ngẫu nhiên (seed) 20260727, 20260728 và 20260729 trên cùng cách chia dữ liệu. Theo quy ước ở Mục~\ref{sec:survival-evaluation}, có 480 cặp có thể so sánh trên tập xác thực và 528 cặp trên tập kiểm tra. Các bảng tổng hợp báo cáo trung bình và độ lệch chuẩn mẫu (SD) của ba lần chạy.
 
@@ -73,7 +73,7 @@ Full Outer-Product & $0.8285\pm0.0272$ \\
 
 Khi so sánh trong cùng điều kiện, tích ngoài đạt C-index xác thực trung bình 0.8285, cao hơn mức 0.8149 của ghép nối (Bảng~\ref{tab:matched-fusion}). Mức tăng trung bình tính từ các giá trị chưa làm tròn là 0.0135. Từ kết quả này, tôi chọn Full Outer-Product làm mốc để so sánh với Full CP và RC-Free (Bảng~\ref{tab:standard-bench}). Mỗi mô hình được huấn luyện ba lần với cùng ba seed đã nêu ở Mục~\ref{sec:experimental-protocol}. Trọng số ban đầu được tạo riêng cho mỗi mô hình, nên các phần chung có thể bắt đầu với trọng số khác nhau.
 
-\section{CP và lựa chọn cấu trúc RC-Free}
+\section{CP và lựa chọn cấu trúc hợp nhất}
 \label{sec:cp-results}
 \label{sec:ablation-results}
 \label{sec:rcfree-multiseed}
@@ -124,7 +124,9 @@ Full CP & 3 / 6 & 33\,534\,957 & $0.8278\pm0.0250$ \\
 
 0 CP đạt C-index xác thực trung bình cao nhất (0.8434) và có ít tham số nhất. RC-Free có thêm 71\,048 tham số để mô hình hóa hai cặp có MRI. Qua ba lần khởi tạo, C-index của RC-Free thấp hơn 0 CP lần lượt 0.0219, 0.0021 và 0.0021. Chênh lệch trung bình là 0.0087. Độ lệch chuẩn của RC-Free nhỏ hơn (0.0237 so với 0.0288), cho thấy mức dao động quan sát được qua ba lần khởi tạo trên cùng tập xác thực nhỏ hơn.
 
-Trong bảy cấu trúc có tương tác cặp tường minh, RC-Free đạt C-index trung bình cao nhất (0.8347). So với Full CP, bỏ cặp RC giảm số nhánh từ sáu xuống bốn, bớt 15\,460 tham số và tăng C-index trung bình từ 0.8278 lên 0.8347. So với Full Outer-Product (Bảng~\ref{tab:standard-bench}), RC-Free dùng ít hơn 241\,444 tham số toàn mạng (0.72\%) với C-index trung bình gần bằng nhau (0.8347 và 0.8344). Vì vậy, khi mục tiêu là giữ tương tác tường minh giữa MRI với radiomics và giữa MRI với dữ liệu lâm sàng, tôi chọn RC-Free cho phân tích sống còn tiếp theo. Việc bỏ cặp RC loại được các phép tính của hai nhánh tương ứng. Mức tiết kiệm thời gian suy luận và chi phí vận hành toàn mô hình cần được đo trực tiếp.
+Trong bảy cấu trúc có tương tác cặp tường minh, RC-Free đạt C-index trung bình cao nhất (0.8347). So với Full CP, bỏ cặp RC giảm số nhánh từ sáu xuống bốn, bớt 15\,460 tham số và tăng C-index trung bình từ 0.8278 lên 0.8347. So với Full Outer-Product (Bảng~\ref{tab:standard-bench}), RC-Free dùng ít hơn 241\,444 tham số toàn mạng (0.72\%) với C-index trung bình gần bằng nhau (0.8347 và 0.8344). RC-Free là đối chứng có tương tác tường minh cho các phân tích phân tầng nguy cơ tiếp theo.
+
+Tôi chọn 0 CP làm quy trình chính theo C-index xác thực trung bình. Sau khi chốt lựa chọn, ba checkpoint 0 CP đạt C-index kiểm tra lần lượt là 0.8939, 0.8807 và 0.8996, trung bình $0.8914\pm0.0097$. Tập kiểm tra từng được dùng trong phân tích hậu nghiệm. Trong RC-Free, việc bỏ cặp RC loại được các phép tính của hai nhánh tương ứng. Mức tiết kiệm thời gian suy luận và chi phí vận hành toàn mô hình cần được đo trực tiếp.
 
 \section{Phân tích sống còn của RC-Free}
 \label{sec:posthoc-test}
@@ -171,7 +173,7 @@ Kết quả cho RQ1 và RQ2 đến từ loạt thăm dò một lần khởi tạ
 \item[RQ2.] Mô hình ghép nối ba nguồn đạt C-index 0.8125, cao hơn mức 0.7833 của cấu hình MRI dọc kết hợp attention. Tuy nhiên, chênh lệch này không chỉ phản ánh sự khác biệt về nguồn dữ liệu đầu vào mà còn chịu ảnh hưởng của cỡ lô và quy trình huấn luyện giữa hai cấu hình (Bảng~\ref{tab:exploratory}).
 \item[RQ3.] Khi hai mô hình dùng cùng cách huấn luyện và cùng trọng số ban đầu cho các phần chung, tích ngoài đạt C-index xác thực trung bình cao hơn ghép nối 0.0135. Cách cho điểm cao hơn thay đổi giữa các lần chạy (Bảng~\ref{tab:matched-fusion}).
 \item[RQ4.] Phân rã CP giúp giảm 98.38\% số tham số của ba lớp song tuyến đầu, đồng thời làm C-index xác thực trung bình giảm 0.0066 so với cấu trúc Full Outer-Product (Bảng~\ref{tab:standard-bench} và~\ref{tab:interaction-parameters}).
-\item[RQ5.] Trong các cấu trúc được khảo sát, tôi lựa chọn RC-Free với hai cặp tương tác MR và MC, qua đó vẫn duy trì cả ba nguồn dữ liệu đầu vào nhưng giảm số cặp tương tác từ ba xuống hai. Cấu trúc này đạt C-index xác thực trung bình 0.8347, cao hơn Full CP (0.8278), MR-only (0.8299) và MC-only (0.8236) trong cùng loạt so sánh (Bảng~\ref{tab:new-topology}).
+\item[RQ5.] Khi giữ cả ba nguồn, 0 CP đứng đầu tám cấu trúc theo C-index xác thực trung bình (0.8434). RC-Free đứng đầu nhóm có tương tác tường minh (0.8347) và có SD qua ba lần khởi tạo nhỏ hơn 0 CP (0.0237 so với 0.0288).
 \end{description}
 
 Các kết quả đối chứng cho thấy mức giảm số tham số và chênh lệch về khả năng phân biệt nguy cơ phụ thuộc vào cách rút gọn các khối tương tác. Chương~\ref{chap:discussion} phân tích ý nghĩa của các kết quả này đối với việc lựa chọn kiến trúc RC-Free và phân tầng nguy cơ tiến triển.
