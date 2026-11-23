@@ -14,9 +14,10 @@ FIGURES = {
     "2.1": "concept-survival", "2.2": "concept-longitudinal", "2.3": "concept-sources",
     "2.4": "concept-fusion", "2.5": "cp-concept-general", "2.6": "literature-gates",
     "3.1": "final-pipeline", "3.2": "cohort-construction", "3.3": "input-three-sources",
-    "3.4": "clinical-18-inputs", "3.5": "concat-baseline", "3.6": "mr-outer-product",
-    "3.7": "outer-vs-cp", "3.8": "gated-residual-route", "3.9": "temporal-model",
-    "3.10": "evaluation-map", "4.1": "empirical-training", "4.2": "empirical-ipcw-roc",
+    "3.4": "mri-preprocessing", "3.5": "mri-registration", "3.6": "clinical-18-inputs",
+    "3.7": "concat-baseline", "3.8": "mr-outer-product", "3.9": "pair-update-routes", "3.10": "outer-vs-cp",
+    "3.11": "gated-residual-route", "3.12": "rcfree-update", "3.13": "temporal-model",
+    "3.14": "evaluation-map", "4.1": "empirical-training", "4.2": "empirical-ipcw-roc",
     "4.3": "survival-km", "A.1": "master-pipeline",
 }
 
@@ -24,10 +25,10 @@ def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 def audit(reference=None,pdf=None,render=None):
-    chapters = [*(S / 'chapters').glob('chapter*.tex'), S / 'chapters/appendix.tex']
+    chapters = [*sorted((S / 'chapters').glob('chapter*.tex')), S / 'chapters/appendix.tex']
     tex = '\n'.join(p.read_text(encoding='utf-8') for p in chapters)
     figures = re.findall(r'\\includegraphics\[[^]]*\]\{image/([^}]+)\.pdf\}', tex)
-    assert len(figures) == len(FIGURES) and set(figures) == set(FIGURES.values()), figures
+    assert figures == list(FIGURES.values()), figures
     result = {'figures': {}, 'evidence_identical': None, 'tables_identical': None}
     for name in figures:
         path=S/'image'/f'{name}.pdf'
@@ -38,7 +39,7 @@ def audit(reference=None,pdf=None,render=None):
         svg = ElementTree.parse(S / 'image' / f'{name}.svg')
         assert any(node.tag.endswith('}text') and ''.join(node.itertext()).strip()
                    for node in svg.iter()), name
-        assert bool(page.get_images()) == (name == 'input-three-sources'), name
+        assert bool(page.get_images()) == (name in {'input-three-sources', 'mri-preprocessing', 'mri-registration'}), name
         assert '\ufffd' not in page.get_text(), name
         outside=[]
         for block in page.get_text('dict')['blocks']:
@@ -74,9 +75,20 @@ def audit(reference=None,pdf=None,render=None):
         assert set(captions) == set(FIGURES), captions
         appendix = doc[captions['A.1'] - 1]
         assert appendix.rect.width > appendix.rect.height
-        listing = next(p for p in doc if {"Hình 1.1", "Hình A.1"} <= set(p.get_text().splitlines()))
-        destinations = {link.get('page') for link in listing.get_links()}
-        assert {p - 1 for p in captions.values()} <= destinations
+        listed = {}
+        for page in doc.pages(0, captions["1.1"] - 1):
+            words = page.get_text("words")
+            for link in page.get_links():
+                destination = link.get("page", -1)
+                if destination < 0:
+                    continue
+                linked_words = [
+                    word[4] for word in words
+                    if link["from"].contains(fitz.Point((word[0] + word[2]) / 2, (word[1] + word[3]) / 2))
+                ]
+                if len(linked_words) >= 2 and linked_words[0] == "Hình" and linked_words[1] in captions:
+                    listed[linked_words[1]] = destination + 1
+        assert listed == captions, (listed, captions)
         result['figure_caption_pages'] = captions
         if render:
             out=Path(render);out.mkdir(exist_ok=True,parents=True)

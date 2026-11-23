@@ -79,7 +79,7 @@ def cohort():
         text(ax, .700, branch_y, reason, 9.5, ha='left')
 
     arrow(ax, (center, .326), (center, .285), lw=.95)
-    text(ax, .5, .252, '1 077 lần khám  ·  106 biến cố  ·  253 kiểm duyệt',
+    text(ax, .5, .252, '1077 lần khám  ·  106 biến cố  ·  253 kiểm duyệt',
          10.5, 'bold')
     line(ax, (.035, .218), (.963, .218), NAVY, .75)
     text(ax, .035, .187, 'Chuẩn bị dữ liệu', 11, 'bold', ha='left')
@@ -129,6 +129,23 @@ def outer():
     arrow(ax, (.787, .1315), (.787, .070), lw=.95)
     text(ax, .787, .018, r'$E_{\mathrm{MR}}\in\mathbb{R}^{64}$', 10.5)
     emit(fig, 'mr-outer-product')
+
+
+def pair_routes():
+    fig, ax = scene(7.4, 3.2)
+    for x, pair, left, right in [
+        (.17, 'MR · 64 chiều', ('MRI', 128, MRI), ('Radiomics', 64, RADIOMICS)),
+        (.50, 'MC · 64 chiều', ('MRI', 128, MRI), ('Lâm sàng', 64, CLINICAL)),
+        (.83, 'RC · 32 chiều', ('Radiomics', 64, RADIOMICS), ('Lâm sàng', 64, CLINICAL)),
+    ]:
+        box(ax, x, .83, .25, .14, pair, FUSION, 10)
+        for offset, (source, dims, color) in zip((-.077, .077), (left, right)):
+            end = x + offset
+            arrow(ax, (x, .755), (end, .61))
+            box(ax, end, .50, .148, .20, f'Chiếu riêng\n{dims} chiều', PALE, 9)
+            arrow(ax, (end, .39), (end, .275))
+            box(ax, end, .19, .148, .15, source, color, 9)
+    save(fig, 'pair-update-routes')
 
 
 def cp():
@@ -190,6 +207,26 @@ def residual():
     radius_y = .022 * fig.get_figwidth() * .96 / (fig.get_figheight() * .95) * .85
     route(ax, [(.734, .152), (.792, .152), (.792, .695-radius_y)])
     emit(fig, 'gated-residual-route')
+
+
+def rcfree_update():
+    fig, ax = scene(7.4, 3.3)
+    text(ax, .15, .94, 'Tương tác theo cặp', 10, 'bold')
+    text(ax, .57, .94, 'Cộng vào biểu diễn gốc', 10, 'bold')
+    box(ax, .15, .69, .26, .18, 'MRI × radiomics\nCP hạng 8 · MR', FUSION, 10)
+    box(ax, .15, .31, .26, .18, 'MRI × lâm sàng\nCP hạng 8 · MC', FUSION, 10)
+    for start, end in [(.72, .78), (.66, .53), (.34, .47), (.28, .22)]:
+        arrow(ax, (.282, start), (.435, end))
+    for y, label, color in [
+        (.79, 'R + phần từ MR\nLayerNorm · 64 chiều', RADIOMICS),
+        (.50, 'M + phần từ MR và MC\nLayerNorm · 128 chiều', MRI),
+        (.21, 'C + phần từ MC\nLayerNorm · 64 chiều', CLINICAL),
+    ]:
+        box(ax, .57, y, .26, .20, label, color, 9.5)
+        arrow(ax, (.702, y), (.797, .50 + (y-.5)*.34))
+    box(ax, .89, .50, .18, .32, 'Ghép nối\n$M_{\\mathrm{out}}, R_{\\mathrm{out}}, C_{\\mathrm{out}}$\n256 chiều', PALE, 10)
+    text(ax, .5, .025, 'Mỗi mũi tên từ khối CP là một nhánh có phép chiếu, cổng và hệ số riêng.', 9)
+    save(fig, 'rcfree-update')
 
 
 def temporal():
@@ -289,6 +326,6 @@ def inputfigure(redacted=False):
 
 
 if __name__=='__main__':
-    for f in [timeline, cohort, outer, cp, residual, temporal, inputfigure]:
+    for f in [timeline, cohort, outer, pair_routes, cp, residual, rcfree_update, temporal, inputfigure]:
         f()
-    print('Seven thesis figures generated (PDF/SVG/PNG 300 DPI).')
+    print('Nine thesis figures generated (PDF/SVG/PNG 300 DPI).')

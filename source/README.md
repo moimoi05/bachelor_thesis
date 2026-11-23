@@ -11,7 +11,7 @@ THESIS_TECTONIC=/path/to/tectonic bash build.sh
 Có thể dùng XeLaTeX/BibTeX nếu không cài Tectonic. Xem `COMPILE.md`.
 Không cần GPU, checkpoint hoặc dữ liệu bệnh nhân để biên dịch.
 
-Bộ hình đã đánh số gồm 21 hình, với PDF để nhúng, SVG có chữ chỉnh sửa
+Bộ hình đã đánh số gồm 25 hình, với PDF để nhúng, SVG có chữ chỉnh sửa
 được và PNG 300 dpi. Xem lệnh dựng lại hình trong `COMPILE.md`. Hai sơ đồ tổng thể 3.1 và
 A.1 có thêm tệp nguồn `.drawio`. Hình AUC tổng hợp ngoài bản in được lưu
 để tham khảo.

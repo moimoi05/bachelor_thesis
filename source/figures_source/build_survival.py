@@ -46,12 +46,14 @@ def build_tables(auc, km):
     benchmark = json.loads((EVIDENCE / 'FINAL_STANDARDIZED_VALIDATION_BENCHMARK.json').read_text(encoding='utf-8'))
     final = json.loads((EVIDENCE / 'A6_FINAL_TRAIN_VAL_TEST_EVALUATION.json').read_text(encoding='utf-8'))
     names={'P10':'CNN--PCA--T-LSTM (thích nghi)','P05B':'Full Outer-Product (loạt chính)',
-           'P05-CP':'Full CP Pairwise','A6':'RC-Free Pairwise','B1':r'RC-Free Fixed-$\lambda$'}
+           'P05-CP':'Full CP Pairwise','A6':'RC-Free Pairwise'}
     rows=[]
     for r in benchmark['deep_models']:
+        if r['model'] not in names:
+            continue
         params=r['parameters_by_seed']
         par=num(params[0]/1e6,2) if len(set(params))==1 else num(min(params)/1e6,2)+r'\text{--}'+num(max(params)/1e6,2)
-        pairs={'P10':'0 / 0','P05B':'3 / 6','P05-CP':'3 / 6','A6':'2 / 4','B1':'2 / 4'}[r['model']]
+        pairs={'P10':'0 / 0','P05B':'3 / 6','P05-CP':'3 / 6','A6':'2 / 4'}[r['model']]
         rows.append([names[r['model']],mean_sd(r['mean'],r['sample_sd'],4),'$'+par+'$',pairs])
     table('benchmark.tex','C-index validation qua ba seed, mean $\\pm$ SD. Số tham số toàn mạng làm tròn theo triệu (M); cặp/nhánh đếm tương tác tường minh.',
           'tab:standard-bench',['Mô hình','C-index $\\uparrow$','Tham số (M)','Cặp/nhánh'],rows,'@{}Y r r c@{}')

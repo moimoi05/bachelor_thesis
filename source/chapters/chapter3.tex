@@ -29,12 +29,12 @@ Bảng kiểm soát chất lượng chính thức chưa được liên kết v�
 
 
 
-Hình~\ref{fig:cohort} tóm tắt quá trình lọc từ 899 người có MRI và liên kết định danh thành công xuống 359 người, mỗi người đúng ba MRI, tổng cộng 1\,077 ảnh. Trong 359 người được chọn, 106 người có biến cố và 253 người bị kiểm duyệt. Xét theo giai đoạn tuyển vào nghiên cứu, 78 người thuộc ADNI1, 80 người thuộc ADNIGO và 201 người thuộc ADNI2.
+Hình~\ref{fig:cohort} tóm tắt quá trình lọc từ 899 người có MRI và liên kết định danh thành công xuống 359 người, mỗi người đúng ba MRI, tổng cộng 1077 ảnh. Trong 359 người được chọn, 106 người có biến cố và 253 người bị kiểm duyệt. Xét theo giai đoạn tuyển vào nghiên cứu, 78 người thuộc ADNI1, 80 người thuộc ADNIGO và 201 người thuộc ADNI2.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{image/cohort-construction.pdf}
-\caption[Quy trình xây dựng nhóm nghiên cứu dọc]{Quy trình lọc và chuẩn bị dữ liệu gồm 359 người với 1\,077 lần thăm khám. Ba nguồn được ghép theo lần khám, chia tập theo RID và tiền xử lý dựa trên tập huấn luyện.}
+\caption[Quy trình xây dựng nhóm nghiên cứu dọc]{Quy trình lọc và chuẩn bị dữ liệu gồm 359 người với 1077 lần thăm khám. Ba nguồn được ghép theo lần khám, chia tập theo RID và tiền xử lý dựa trên tập huấn luyện.}
 \label{fig:cohort}
 \end{figure}
 
@@ -92,16 +92,61 @@ Hình~\ref{fig:input-three-sources} minh họa ba dạng thông tin được li�
 
 
 \subsection{MRI và bộ mã hóa dùng chung}
-Đối với nhánh ảnh, tôi đưa MRI T1 về hướng trục RAS và sử dụng SynthStrip để tách não \cite{hoopes2022synthstrip}. Hai ảnh MRI ở lần chụp thứ hai và thứ ba được căn chỉnh về ảnh đầu bằng phép đăng ký cứng (rigid registration) với sáu bậc tự do, gồm ba phép tịnh tiến và ba phép quay. Sau đó, ảnh MRI đầu tiên được căn chỉnh về mẫu MNI152NLin2009cAsym bằng cùng phương pháp. Sau khi căn chỉnh, ba MRI của mỗi người nằm trên lưới không gian chung $144\times144\times144$, với kích thước voxel là 1.5~mm theo cả ba trục. Tôi chuẩn hóa cường độ theo z-score trong mặt nạ não (brain mask) của từng ảnh và đặt các voxel ngoài mặt nạ bằng không. Ảnh được nội suy tuyến tính, còn mặt nạ được nội suy theo phương pháp láng giềng gần nhất. Quy trình chỉ áp dụng đăng ký cứng, không sử dụng hiệu chỉnh N4, biến đổi affine làm thay đổi tỷ lệ hay đăng ký phi tuyến.
+Mỗi người tham gia có ba ảnh cộng hưởng từ có trọng số T1 (MRI T1-weighted), ghi nhận cấu trúc não ở ba lần khám. Ngay cả khi hình dạng một cấu trúc chưa thay đổi, vị trí của nó trên ảnh vẫn có thể khác giữa hai lần chụp. Chẳng hạn, nếu người tham gia hơi nghiêng đầu ở lần chụp thứ hai, hồi hải mã trái có thể xuất hiện ở vị trí khác so với lần đầu. Khi đối chiếu hai ảnh, độ lệch do tư thế đầu dễ bị nhầm với thay đổi hình thái mà mô hình cần khai thác, chẳng hạn như teo hồi hải mã hoặc giãn não thất. Vì vậy, tôi đưa ba ảnh về cùng hệ tọa độ và lưới lấy mẫu, đồng thời chuẩn hóa thang cường độ riêng cho từng ảnh. Hình~\ref{fig:mri-preprocessing} tóm tắt quy trình từ ba lần chụp đến đầu vào của nhánh ảnh.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{image/mri-preprocessing.pdf}
+\caption[Quy trình tiền xử lý ba ảnh MRI T1]{Quy trình tiền xử lý ba ảnh MRI T1 của cùng một người trước khi đưa vào bộ mã hóa ảnh. Lát cắt minh họa lấy từ ảnh MRI đã xử lý trong Hình~\ref{fig:input-three-sources}.}
+\label{fig:mri-preprocessing}
+\end{figure}
+
+\noindent\textbf{Chuẩn hóa hướng ảnh và tách não.}
+Mỗi ảnh MRI là một khối dữ liệu ba chiều. Mỗi phần tử, gọi là voxel, mang một giá trị cường độ tại một vị trí trên lưới. Do các ảnh có thể được lưu theo những quy ước hướng khác nhau, trước tiên tôi đưa chúng về quy ước RAS (\emph{Right--Anterior--Superior}). Theo quy ước này, ba chiều dương lần lượt hướng về bên phải, phía trước và phía trên của người được chụp. Sau bước này, các trục có cùng ý nghĩa giải phẫu, nhưng tư thế đầu giữa các lần chụp vẫn có thể khác nhau.
+
+Trên ảnh có cả não, hộp sọ, da đầu và các mô xung quanh. Tôi dùng SynthStrip, một phương pháp học sâu, để xác định vùng não cần giữ lại \cite{hoopes2022synthstrip}. Kết quả là một mặt nạ não (\emph{brain mask}) có cùng vị trí không gian với ảnh: voxel mang giá trị 1 thuộc vùng cần giữ, còn voxel mang giá trị 0 nằm ngoài vùng đó. Mặt nạ xác định phạm vi lấy số liệu cho bước chuẩn hóa cường độ. Đây là mặt nạ chung của vùng não, không phân biệt riêng chất xám, chất trắng hay dịch não tủy.
+
+\noindent\textbf{Căn chỉnh giữa các lần khám.}
+Tôi chọn ảnh MRI đầu tiên của mỗi người làm ảnh tham chiếu, rồi căn chỉnh riêng ảnh thứ hai và ảnh thứ ba về ảnh đầu bằng phép đăng ký cứng (\emph{rigid registration}). Phép biến đổi này có sáu bậc tự do: ba phép tịnh tiến dọc theo các trục không gian và ba phép quay quanh các trục đó. Nếu ở lần chụp thứ hai đầu vừa dịch sang bên vừa nghiêng, thành phần tịnh tiến điều chỉnh độ lệch vị trí, còn thành phần quay điều chỉnh góc nghiêng. Với một điểm có tọa độ $\mathbf{x}$ trong ảnh cần căn chỉnh, tọa độ tương ứng $\mathbf{x}'$ trong hệ tham chiếu được biểu diễn bởi
+\[
+ \mathbf{x}'=\mathbf{R}\mathbf{x}+\mathbf{t},
+\]
+trong đó $\mathbf{R}$ là ma trận quay và $\mathbf{t}$ là vectơ tịnh tiến. Cùng một phép quay và tịnh tiến tác động lên toàn bộ ảnh nên khoảng cách giữa hai điểm bất kỳ trong ảnh được bảo toàn. Nhờ đó, có thể đối chiếu vị trí hồi hải mã hay não thất giữa các lần chụp mà phép căn chỉnh không co giãn từng cấu trúc để ép chúng trùng khớp.
+
+\noindent\textbf{Đưa chuỗi ảnh về hệ tọa độ MNI.}
+Sau khi hai ảnh chụp sau đã có mốc tham chiếu là ảnh đầu, mỗi người vẫn có một mốc riêng. Để các chuỗi ảnh của nhiều người có chung hệ tọa độ, tôi căn chỉnh ảnh đầu của từng người về mẫu não tham chiếu MNI152NLin2009cAsym, cũng bằng phép đăng ký cứng sáu bậc tự do. Hình~\ref{fig:mri-registration} minh họa quan hệ giữa hai bước. Đối với một điểm trên ảnh lần hai, vị trí của nó được quy chiếu về ảnh lần đầu, rồi từ hệ tọa độ của ảnh lần đầu sang hệ tọa độ MNI. Quan hệ này cũng áp dụng cho ảnh lần ba. Như vậy, ảnh đầu làm mốc so sánh giữa các lần khám của một người, còn mẫu MNI làm mốc chung giữa những người tham gia.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{image/mri-registration.pdf}
+\caption[Căn chỉnh MRI giữa các lần khám và về mẫu MNI]{Các mũi tên biểu thị chiều quy chiếu từ lần hai và lần ba về lần đầu, rồi từ lần đầu về mẫu MNI. Ba ảnh minh họa dùng cùng một lát cắt MRI thật, với góc xoay mô phỏng tư thế đầu ở hai lần chụp sau.}
+\label{fig:mri-registration}
+\end{figure}
+
+Phép đăng ký cứng giữ nguyên hình dạng và kích thước hình học của não. Quy trình không dùng biến đổi affine có thành phần co giãn hoặc biến dạng xiên, cũng không dùng đăng ký phi tuyến để làm biến dạng cục bộ. Lựa chọn này giới hạn những thay đổi hình học do bước căn chỉnh đưa vào ảnh. Vì hình dạng não tự nhiên khác nhau giữa các cá thể, việc dùng chung hệ tọa độ MNI không bảo đảm ranh giới của mọi cấu trúc giải phẫu đều trùng nhau giữa hai người.
+
+\noindent\textbf{Lấy mẫu lại ảnh và mặt nạ.}
+Sau căn chỉnh, ba ảnh của mỗi người được biểu diễn trên một lưới chung $144\times144\times144$ voxel. Kích thước voxel là 1.5~mm theo cả ba trục, tức là khoảng cách giữa tâm hai voxel kề nhau dọc một trục bằng 1.5~mm. Khi lấy mẫu lại (\emph{resampling}), tâm voxel trên lưới mới có thể nằm giữa các vị trí đã lấy mẫu trên ảnh ban đầu. Đối với ảnh MRI, tôi dùng nội suy tuyến tính để ước lượng cường độ từ các voxel lân cận. Chẳng hạn, trong ví dụ một chiều, nếu hai vị trí liền kề có cường độ 100 và 200 thì giá trị nội suy ở chính giữa là 150.
+
+Với mặt nạ nhị phân, nội suy như vậy có thể tạo ra giá trị nằm giữa 0 và 1, làm mất ý nghĩa của nhãn vùng não. Thay vào đó, tôi dùng nội suy láng giềng gần nhất (\emph{nearest-neighbor interpolation}): mỗi voxel trên lưới mới nhận nhãn của voxel nguồn gần nhất. Nhờ vậy, ảnh và mặt nạ cùng nằm trên lưới đầu ra, còn mặt nạ vẫn chỉ nhận giá trị 0 hoặc 1.
+
+\noindent\textbf{Chuẩn hóa cường độ trong vùng não.}
+Cường độ MRI T1 mang tính tương đối: cùng một loại mô có thể cho giá trị khác nhau giữa hai lần chụp do thiết bị hoặc thiết lập thu nhận. Để giảm khác biệt về thang cường độ, tôi chuẩn hóa z-score riêng cho từng ảnh. Gọi $I(v)$ là cường độ tại voxel $v$ bên trong mặt nạ, còn $\mu$ và $\sigma$ lần lượt là trung bình và độ lệch chuẩn tính trên tất cả các voxel thuộc mặt nạ của chính ảnh đó. Với $\sigma>0$, cường độ sau chuẩn hóa là
+\[
+ z(v)=\frac{I(v)-\mu}{\sigma}.
+\]
+Chẳng hạn, nếu $\mu=100$, $\sigma=20$ và $I(v)=130$ thì $z(v)=(130-100)/20=1.5$. Giá trị này cho biết cường độ tại voxel đang xét cao hơn trung bình trong vùng não của ảnh 1.5 độ lệch chuẩn. Sau chuẩn hóa, cường độ trong mặt nạ có trung bình bằng 0 và độ lệch chuẩn bằng 1. Các voxel ngoài mặt nạ không tham gia tính hai thống kê này và được đặt bằng 0 ở ảnh đầu ra.
+
+Chuẩn hóa z-score thay đổi thang cường độ chung của từng ảnh và giữ nguyên vị trí các voxel. Quy trình không áp dụng hiệu chỉnh N4, vốn nhằm xử lý hiện tượng cường độ không đồng đều theo vị trí trong ảnh (\emph{bias field}). Sau tiền xử lý, bộ mã hóa nhận ba ảnh MRI đã tách não trên cùng lưới và cùng hệ tọa độ. Khác biệt về tư thế đầu và thang cường độ được giảm bớt để mô hình có thể khai thác những thay đổi cấu trúc còn lại qua ba lần khám.
 
 Sau tiền xử lý, cả ba MRI dùng chung bộ mã hóa ResNet-18 3D triển khai bằng MONAI, khởi tạo từ trọng số MedicalNet; sau đây gọi ngắn là ResNet-18 3D \cite{he2016deep,cardoso2022monai}. Mỗi tầng trong bốn tầng của mạng có hai khối cơ bản (BasicBlock), mỗi khối gồm hai phép tích chập với nhân $3^3$, chuẩn hóa BatchNorm, hàm kích hoạt ReLU và đường nối phần dư \cite{ioffe2015batchnorm,nair2010rectified}. Số kênh của bốn tầng lần lượt là 64, 128, 256 và 512. Sau gộp toàn cục, vectơ 512 chiều qua lớp tuyến tính $512\to128$, GELU, Dropout 0.20 và LayerNorm để tạo $M$ \cite{hendrycks2016gelu,srivastava2014dropout,ba2016layernorm}. Khi khởi tạo bộ mã hóa bằng trọng số MedicalNet từ Med3D \cite{chen2019med3d}, tôi nạp đầy đủ trọng số và trạng thái BatchNorm của mạng trích xuất đặc trưng, đồng thời bỏ khối đầu ra tiền huấn luyện. Toàn mạng được tinh chỉnh ngay từ vòng huấn luyện đầu tiên.
 
-Bảng~\ref{tab:mri-encoder-shapes} trình bày kích thước bản đồ đặc trưng theo cấu hình MONAI (phiên bản 1.5.2)\footnote{Mã nguồn phiên bản: \url{https://github.com/Project-MONAI/MONAI/blob/1.5.2/monai/networks/nets/resnet.py}.}. Ba lần khám được xử lý bằng cùng bộ mã hóa; các vectơ sau gộp được xếp thành chuỗi $T=3$ trước phép chiếu.
+Bảng~\ref{tab:mri-encoder-shapes} trình bày kích thước bản đồ đặc trưng theo cấu hình MONAI (phiên bản 1.5.2)\footnote{Mã nguồn phiên bản: \url{https://github.com/Project-MONAI/MONAI/blob/1.5.2/monai/networks/nets/resnet.py}.}. Mỗi bản đồ đặc trưng có dạng $[B,C_{\mathrm{ch}},D,H,W]$, trong đó $B$ là cỡ lô, $C_{\mathrm{ch}}$ là số kênh và $D,H,W$ là ba kích thước không gian. Ký hiệu $C$ dùng riêng cho nhánh lâm sàng. Cả ba lần khám dùng chung bộ mã hóa. Sau bước gộp, các vectơ được xếp thành chuỗi $[B,T,F]$ trước phép chiếu, với $T=3$ là số lần khám và $F$ là số chiều đặc trưng.
 
 \begin{table}[H]
 \centering
 \small
-\caption[Kích thước trong bộ mã hóa MRI]{Bản đồ đặc trưng có kích thước $[B,C_{\mathrm{ch}},D,H,W]$; $B$ là cỡ lô, $C_{\mathrm{ch}}$ là số kênh, $D,H,W$ là ba kích thước không gian. Chuỗi vectơ có dạng $[B,T,F]$, với $T=3$ lần khám và $F$ là số chiều đặc trưng. Ký hiệu $C$ riêng chỉ nhánh lâm sàng.}
+\caption{Kích thước đặc trưng trong bộ mã hóa MRI}
 \label{tab:mri-encoder-shapes}
 \begin{tabularx}{\textwidth}{@{}Y l@{}}
 \toprule
@@ -182,7 +227,7 @@ Khối đầu ra $\operatorname{MLP}_{\rm out}$ gồm lớp tuyến tính $256\t
 \caption[Mô hình đối chứng ghép nối đặc trưng]{Luồng tính tại một lần khám của đối chứng ghép nối. Ba biểu diễn được ghép trực tiếp; mô hình theo cặp bổ sung khối tương tác trước bước ghép này.}
 \label{fig:concat-baseline}
 \end{figure}
-Mô hình theo cặp bổ sung một khối riêng để biểu diễn các tích chéo trước bước ghép nối. Trong loạt so sánh có kiểm soát, các thành phần chung và cách khởi tạo được giữ đồng nhất; Mục~\ref{sec:matched-fusion} trình bày kết quả đối chiếu này.
+Mô hình theo cặp bổ sung một khối riêng để biểu diễn các tích chéo trước bước ghép nối. Khi so sánh hai cách hợp nhất, tôi giữ nguyên các phần chung và dùng cùng trọng số ban đầu cho các phần này. Mục~\ref{sec:matched-fusion} trình bày kết quả đối chiếu này.
 
 \Needspace{9\baselineskip}
 \section{Hợp nhất động qua tương tác theo cặp}
@@ -200,15 +245,22 @@ Từ cùng ba biểu diễn đầu vào như đối chứng ghép nối, mô hì
 \label{fig:mr-outer-product}
 \end{figure}
 
-Với mỗi cặp tương tác $k\in\{\mathrm{MR},\mathrm{MC},\mathrm{RC}\}$, tôi ký hiệu hai vectơ đầu vào là $x\in\mathbb R^{d_x\times1}$ và $y\in\mathbb R^{d_y\times1}$, tương ứng với hai biểu diễn đã giảm chiều lấy từ $(\widetilde M,\widetilde R,\widetilde C)$. Tích ngoài $xy^\top\in\mathbb R^{d_x\times d_y}$ tạo ra ma trận chứa tích của từng tọa độ của $x$ với từng tọa độ của $y$, sau đó mô hình trải phẳng ma trận thành vectơ $v=\operatorname{vec}(xy^\top)$ để đưa vào MLP. Do số chiều đầu vào khác nhau giữa các cặp, MR tạo ra $32\times32=1\,024$ giá trị tương tác, trong khi MC và RC mỗi cặp tạo ra $32\times16=512$ giá trị.
+Với mỗi cặp tương tác $k\in\{\mathrm{MR},\mathrm{MC},\mathrm{RC}\}$, tôi ký hiệu hai vectơ đầu vào là $x\in\mathbb R^{d_x\times1}$ và $y\in\mathbb R^{d_y\times1}$, tương ứng với hai biểu diễn đã giảm chiều lấy từ $(\widetilde M,\widetilde R,\widetilde C)$. Tích ngoài $xy^\top\in\mathbb R^{d_x\times d_y}$ tạo ra ma trận chứa tích của từng tọa độ của $x$ với từng tọa độ của $y$, sau đó mô hình trải phẳng ma trận thành vectơ $v=\operatorname{vec}(xy^\top)$ để đưa vào MLP. Do số chiều đầu vào khác nhau giữa các cặp, MR tạo ra $32\times32=1024$ giá trị tương tác, trong khi MC và RC mỗi cặp tạo ra $32\times16=512$ giá trị.
 
 MLP của mỗi cặp ánh xạ vectơ vừa trải phẳng thành biểu diễn tương tác: MR dùng $1024\to128\to64$, MC dùng $512\to128\to64$, RC dùng $512\to64\to32$. Giữa hai lớp tuyến tính có GELU và Dropout 0.10; LayerNorm đặt cuối mỗi khối.
 
-Để có thể cộng đặc trưng tương tác vào biểu diễn gốc, mô hình chiếu đặc trưng của mỗi cặp về kích thước của từng nguồn trong cặp. MR truyền về $M$ và $R$, MC về $M$ và $C$, còn RC về $R$ và $C$, tạo thành sáu nhánh truyền. Mỗi nhánh dùng một phép chiếu tuyến tính và một LayerNorm riêng để đưa đặc trưng về 128 chiều nếu đích là $M$, hoặc 64 chiều nếu đích là $R$ hay $C$.
+Xét cặp MRI và radiomics (MR) của một người tại một lần khám. Sau khi xử lý cặp này, MLP cho một vectơ 64 chiều biểu diễn thông tin tương tác giữa hai nguồn. Mô hình dùng vectơ đó để bổ sung thông tin cho cả biểu diễn MRI $M$ và biểu diễn radiomics $R$. Vì phép cộng được thực hiện theo từng tọa độ, phần bổ sung phải có cùng số chiều với biểu diễn nhận nó.
 
+Hình~\ref{fig:pair-update-routes} minh họa hai nhánh đi ra từ MR. Ở nhánh dẫn đến MRI, một lớp tuyến tính biến vectơ tương tác 64 chiều thành vectơ 128 chiều để có thể cộng vào $M$. Ở nhánh dẫn đến radiomics, một lớp tuyến tính khác ánh xạ từ 64 chiều sang 64 chiều. Dù số chiều đã khớp với $R$, lớp này vẫn học cách kết hợp các tọa độ của vectơ tương tác cho riêng nguồn radiomics. Sau phép chiếu, mỗi nhánh chuẩn hóa vectơ bằng LayerNorm riêng. Cổng của nhánh điều tiết mức đóng góp tại lần khám đang xét. Mô hình nhân vectơ đã chuẩn hóa với giá trị cổng và hệ số của nhánh trước khi cộng vào biểu diễn gốc.
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{image/pair-update-routes.pdf}
+\caption[Sáu nhánh cập nhật biểu diễn từ ba cặp tương tác]{Mỗi cột bắt đầu từ vectơ tương tác của một cặp. Hai đường đi trong cột dẫn đến hai nguồn nhận phần bổ sung. Số chiều trong ô phép chiếu là số chiều cần cho phép cộng tại nguồn đích. RC-Free giữ bốn đường đi ở hai cột MR và MC.}
+\label{fig:pair-update-routes}
+\end{figure}
 
-Mô hình giữ biểu diễn gốc và dùng cổng điều tiết để kiểm soát đóng góp tương tác. Mọi tương tác chỉ diễn ra trong cùng một người tại cùng một lần khám. Cấu trúc đầy đủ này là cơ sở khảo sát việc bỏ tương tác RC trong RC-Free.
+Đọc sơ đồ theo nguồn nhận cho thấy MRI nhận thông tin từ MR và MC, radiomics nhận từ MR và RC, còn dữ liệu lâm sàng nhận từ MC và RC. Mỗi nguồn giữ vectơ gốc và cộng các phần bổ sung dành cho mình. Cả sáu nhánh đều sử dụng dữ liệu của cùng một người ở cùng một lần khám. Khi bỏ cặp RC, hai nhánh từ RC đến radiomics và lâm sàng cũng được bỏ. Trong RC-Free, radiomics vẫn nhận thông tin từ MR và dữ liệu lâm sàng vẫn nhận thông tin từ MC, nên cả ba nguồn tiếp tục tham gia vào biểu diễn hợp nhất.
 
 \section{Tham số hóa tương tác theo cặp bằng CP}
 \label{sec:cp-method}
@@ -243,7 +295,7 @@ với $E_k$ là biểu diễn tương tác đầu ra của cặp $k\in\{\mathrm{
 
 \begin{table}[H]
 \centering
-\caption[Cấu hình CP của mô hình đầy đủ và kiến trúc cuối]{Cấu hình CP của mô hình đầy đủ và kiến trúc cuối.}
+\caption{Cấu hình CP theo cặp tương tác}
 \label{tab:cpconfig}
 \begin{tabular}{lccccc}
 \toprule
@@ -276,7 +328,7 @@ là đặc trưng tương tác sau phép chiếu theo nguồn đích. Phép chi�
  +a_{k\to d}\right]+c_{k\to d}\right).
  \label{eq:dynamic-gate}
 \end{equation}
-MLP của mỗi cổng có 32 chiều ẩn và tạo một giá trị vô hướng trong khoảng $(0,1)$ cho từng người ở mỗi lần khám. Mô hình nhân giá trị này với tất cả các chiều đặc trưng của nhánh tương ứng. Vì mỗi cổng dùng một hàm sigmoid riêng, các nhánh có thể cùng nhận giá trị cổng cao hoặc thấp mà không phải chia sẻ tổng trọng số như khi dùng softmax. Trọng số của cổng được khởi tạo theo phương pháp Xavier và hệ số chệch ban đầu bằng không.
+MLP của mỗi cổng có 32 chiều ẩn và tạo một giá trị vô hướng trong khoảng $(0,1)$ cho từng người ở mỗi lần khám. Mô hình nhân giá trị này với tất cả các chiều đặc trưng của nhánh tương ứng. Vì mỗi cổng dùng một hàm sigmoid riêng, các nhánh có thể cùng nhận giá trị cổng cao hoặc thấp mà không phải chia sẻ tổng trọng số như khi dùng softmax. Trọng số của cổng được khởi tạo theo phương pháp Xavier~\cite{glorot2010understanding} và hệ số chệch ban đầu bằng không.
 
 \begin{figure}[H]
 \centering
@@ -300,6 +352,15 @@ Trong đó, $\mathcal P(d)$ là tập các cặp tương tác còn hoạt độn
 \label{sec:rcfree-method}
 Dựa trên kết quả thí nghiệm loại bỏ thành phần của mô hình CP đầy đủ, tôi xây dựng cấu trúc RC-Free và đánh giá kiến trúc này qua ba lần khởi tạo. RC-Free giữ cả ba nguồn đầu vào, trong đó MRI là nguồn chung của hai tương tác MR và MC. Khi khối RC được loại bỏ, biểu diễn radiomics $R$ và biểu diễn lâm sàng $C$ vẫn đi theo đường truyền gốc và mỗi biểu diễn đều nhận phần bổ sung từ tương tác với MRI trước khi ghép nối.
 
+Hình~\ref{fig:rcfree-update} cho thấy cách đọc ba phương trình cập nhật dưới đây. Chẳng hạn, nếu theo hai mũi tên từ khối MR, ta thấy cùng một tương tác được dùng để cập nhật cả radiomics và MRI. MRI còn nhận thêm thông tin từ MC, nên phương trình của MRI có hai số hạng bổ sung. Sau bước cộng và chuẩn hóa, ba vectơ được ghép theo thứ tự MRI, radiomics và lâm sàng.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{image/rcfree-update.pdf}
+\caption{Bốn nhánh cập nhật trong RC-Free tại một lần khám.}
+\label{fig:rcfree-update}
+\end{figure}
+
 Đặt $D_{k\to d}=\lambda_{k\to d}g_{k\to d}\widehat E_{k\to d}$, các đầu ra là
 \begin{align}
  M_{\rm out}&=\LN_M^{\rm out}(M+D_{(\mathrm{MR}\to M)}+D_{(\mathrm{MC}\to M)}),\label{eq:rcfree-first}\\
@@ -310,7 +371,7 @@ Dựa trên kết quả thí nghiệm loại bỏ thành phần của mô hình 
 
 
 
-Hai khối CP cho MR và MC đều có hạng 8. Bốn nhánh truyền tương ứng có bốn phép chiếu theo đích, bốn cổng động và bốn hệ số điều chỉnh học được. Các biểu diễn MRI, radiomics và lâm sàng sau cập nhật lần lượt có 128, 64 và 64 chiều, nên mô hình giữ nguyên ánh xạ sau ghép nối và khối thời gian. Trong biến thể đối chứng RC-Free Fixed-$\lambda$, cả bốn hệ số điều chỉnh được cố định ở mức 0.1 để khảo sát vai trò của việc học các hệ số này.
+Hai khối CP cho MR và MC đều có hạng 8. Bốn nhánh truyền tương ứng có bốn phép chiếu theo đích, bốn cổng động và bốn hệ số điều chỉnh học được. Các biểu diễn MRI, radiomics và lâm sàng sau cập nhật lần lượt có 128, 64 và 64 chiều, nên mô hình giữ nguyên ánh xạ sau ghép nối và khối thời gian.
 
 \section{Mô hình thời gian và attention}
 \label{sec:temporal-method}

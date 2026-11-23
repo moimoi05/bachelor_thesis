@@ -22,6 +22,7 @@ python figures_source/export_architecture.py --drawio C:\path\draw.io.exe
 python figures_source/render_revision.py
 python figures_source/build_explanatory.py
 python figures_source/build_cp_concept.py
+python figures_source/build_mri_preprocessing.py
 python figures_source/render_empirical.py
 python figures_source/build_survival.py --km-only
 ```
@@ -51,4 +52,4 @@ trong khi hình có thể dùng `λ` (U+03BB); cần nhận diện cả hai khi 
 python figures_source/check_release.py --pdf main.pdf --render C:\path\thesis-qa
 ```
 
-Kiểm tra bao gồm 21 hình và liên kết danh mục hình, hướng trang phụ lục và định dạng xuất.
+Kiểm tra bao gồm 25 hình và liên kết danh mục hình, hướng trang phụ lục và định dạng xuất.

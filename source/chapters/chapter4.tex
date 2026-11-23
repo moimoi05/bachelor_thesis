@@ -5,37 +5,40 @@ Chương này đánh giá khả năng phân biệt nguy cơ của các mô hình
 
 \section{Thiết lập thực nghiệm}
 \label{sec:experimental-protocol}
-Bộ dữ liệu gồm 359 người tham gia, mỗi người có ba lần chụp MRI, với tổng cộng 1\,077 ảnh. Tôi chia dữ liệu theo RID thành ba tập. Tập huấn luyện gồm 251 người với 74 biến cố, còn tập xác thực và tập kiểm tra mỗi tập gồm 54 người với 16 biến cố. Để tránh rò rỉ thông tin giữa các tập, các tham số dùng cho điền thiếu, chuẩn hóa và PCA được ước lượng trên tập huấn luyện rồi áp dụng cho hai tập còn lại. Các kết quả đánh giá được tính từ trọng số mô hình đã lưu trong quá trình huấn luyện.
+Bộ dữ liệu gồm 359 người tham gia, mỗi người có ba lần chụp MRI, với tổng cộng 1077 ảnh. Tôi chia dữ liệu theo RID thành ba tập. Tập huấn luyện gồm 251 người với 74 biến cố, còn tập xác thực và tập kiểm tra mỗi tập gồm 54 người với 16 biến cố. Để tránh rò rỉ thông tin giữa các tập, các tham số dùng cho điền thiếu, chuẩn hóa và PCA được ước lượng trên tập huấn luyện rồi áp dụng cho hai tập còn lại. Các kết quả đánh giá được tính từ trọng số mô hình đã lưu trong quá trình huấn luyện.
 
-Tôi huấn luyện mô hình bằng bộ tối ưu AdamW \cite{loshchilov2019adamw} với tốc độ học ban đầu $10^{-4}$, hệ số suy giảm trọng số $10^{-4}$ và $(\beta_1,\beta_2)=(0.9,0.999)$. Với tối đa sáu người trong mỗi lô, quy trình huấn luyện tích lũy gradient qua hai bước và sử dụng độ chính xác hỗn hợp FP16 để tiết kiệm bộ nhớ \cite{micikevicius2018mixed}. Riêng hàm mất mát Cox được tính bằng FP32 và log-sum-exp để duy trì độ ổn định số học. Chuẩn gradient được giới hạn ở mức 1.0 và quá trình huấn luyện kéo dài tối đa 100 vòng. Khi hàm mất mát Cox trên tập xác thực ngừng cải thiện, ReduceLROnPlateau giảm một nửa tốc độ học với thời gian chờ năm vòng và mức sàn $10^{-6}$.
+Tôi huấn luyện mô hình bằng bộ tối ưu AdamW \cite{loshchilov2019adamw} với tốc độ học ban đầu $10^{-4}$, hệ số suy giảm trọng số $10^{-4}$ và $(\beta_1,\beta_2)=(0.9,0.999)$. Với tối đa sáu người trong mỗi lô, quy trình huấn luyện tích lũy gradient qua hai bước và sử dụng độ chính xác hỗn hợp FP16 để tiết kiệm bộ nhớ \cite{micikevicius2018mixed}. Riêng hàm mất mát Cox được tính bằng FP32 và log-sum-exp để duy trì độ ổn định số học. Chuẩn gradient được giới hạn ở mức 1.0 và quá trình huấn luyện kéo dài tối đa 100 vòng. Tôi dùng \texttt{ReduceLROnPlateau} (bộ điều chỉnh tốc độ học của PyTorch, tự động giảm tốc độ học khi chỉ số theo dõi ngừng cải thiện) \cite{pytorchReduceLROnPlateau,paszke2019pytorch}. Bộ điều chỉnh theo dõi hàm mất mát Cox trên tập xác thực, giảm một nửa tốc độ học khi số vòng liên tiếp không cải thiện vượt quá năm và áp dụng mức sàn $10^{-6}$.
 
-Sau 10 vòng đầu, quy tắc dừng sớm theo dõi C-index xác thực với ngưỡng cải thiện 0.002 và thời gian chờ 20 vòng, còn tiêu chí lưu mô hình là C-index xác thực cao nhất. Để tạo lô, bộ lấy mẫu sử dụng các cặp có thể so sánh theo tiêu chí Cox sao cho mỗi người xuất hiện trong đúng một lô ở mỗi vòng. Dù gradient được tích lũy qua hai bước, tập nguy cơ $\mathcal R_k$ vẫn được xác định riêng cho từng lô. Qua ba lần khởi tạo, cả 4\,032 lô đều hợp lệ, với 42 lô mỗi vòng. Khi đánh giá, tập nguy cơ được xác định trên toàn bộ tập dữ liệu tương ứng.
+Sau 10 vòng đầu, quy tắc dừng sớm theo dõi C-index xác thực với ngưỡng cải thiện 0.002 và thời gian chờ 20 vòng, còn tiêu chí lưu mô hình là C-index xác thực cao nhất. Để tạo lô, bộ lấy mẫu sử dụng các cặp có thể so sánh theo tiêu chí Cox sao cho mỗi người xuất hiện trong đúng một lô ở mỗi vòng. Dù gradient được tích lũy qua hai bước, tập nguy cơ $\mathcal R_k$ vẫn được xác định riêng cho từng lô. Qua ba lần khởi tạo, cả 4032~lô đều hợp lệ, với 42 lô mỗi vòng. Khi đánh giá, tập nguy cơ được xác định trên toàn bộ tập dữ liệu tương ứng.
 
 Ba lần huấn luyện sử dụng lần lượt các giá trị khởi tạo ngẫu nhiên (seed) 20260727, 20260728 và 20260729 trên cùng cách chia dữ liệu. Theo quy ước ở Mục~\ref{sec:survival-evaluation}, có 480 cặp có thể so sánh trên tập xác thực và 528 cặp trên tập kiểm tra. Các bảng tổng hợp báo cáo trung bình và độ lệch chuẩn mẫu (SD) của ba lần chạy.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{image/empirical-training.pdf}
-\caption[Diễn biến huấn luyện RC-Free qua ba lần khởi tạo]{Diễn biến huấn luyện RC-Free. Ở ô (a), đường liền biểu diễn hàm mất mát huấn luyện trung bình theo lô (trục trái), đường đứt biểu diễn hàm mất mát xác thực tính trên toàn tập (trục phải). Ô (b) biểu diễn C-index xác thực. Dấu sao đánh dấu vòng có mô hình được chọn, hình vuông đánh dấu vòng dừng.}
+\caption{Diễn biến huấn luyện RC-Free}
 \label{fig:empirical-training}
+\captionsetup{justification=raggedright}
+\caption*{Ở ô (a), đường liền biểu diễn hàm mất mát huấn luyện trung bình theo lô (trục trái), đường đứt biểu diễn hàm mất mát xác thực tính trên toàn tập (trục phải). Ô (b) biểu diễn C-index xác thực. Dấu sao đánh dấu vòng có mô hình được chọn, hình vuông đánh dấu vòng dừng.}
 \end{figure}
 
 Qua ba lần khởi tạo, hàm mất mát trên tập huấn luyện giảm từ khoảng 1.33--1.37 ở vòng đầu xuống 0.22--0.31 ở vòng cuối, trong khi giá trị tương ứng trên tập xác thực tăng từ 3.24--3.28 lên 3.99--4.53 (Hình~\ref{fig:empirical-training}). Dù kích thước tập nguy cơ khác nhau khiến hai hàm mất mát có thang giá trị khác nhau, xu hướng biến thiên trái chiều cho thấy mô hình có dấu hiệu quá khớp theo mục tiêu Cox. Đặc biệt, với cỡ lô nhỏ, mỗi lần cập nhật chỉ dựa trên một số ít cặp có thể so sánh, điều này có thể ảnh hưởng đến độ ổn định của quá trình tối ưu.
 
-Theo thứ tự ba seed đã nêu, các mô hình được chọn ở vòng 16, 7 và 25 với C-index xác thực tương ứng là 0.8417, 0.8542 và 0.8083, còn các lượt chạy kết thúc ở vòng 36, 30 và 30. Ở lượt thứ ba, việc lưu mô hình tại vòng 25 và dừng huấn luyện ở vòng 30 phản ánh hai tiêu chí khác nhau. Trọng số được lưu mỗi khi C-index xác thực đạt giá trị cao nhất mới, còn bộ đếm dừng sớm chỉ đặt lại khi mức cải thiện vượt 0.002. Mô hình được chọn ở mỗi lượt chạy sau đó được dùng để tính C-index trên tập kiểm tra hậu nghiệm.
+\Needspace{6\baselineskip}
+Trong mỗi lượt chạy, tôi lưu mô hình mỗi khi C-index trên tập xác thực đạt mức cao nhất mới. Với quy tắc dừng sớm, tôi chỉ đặt lại bộ đếm khi C-index trên tập xác thực cải thiện hơn 0.002. Qua ba lượt chạy, các mô hình tốt nhất lần lượt được lưu ở vòng 16, 7 và 25, với C-index xác thực tương ứng là 0.8417, 0.8542 và 0.8083. Quá trình huấn luyện của ba lượt kết thúc ở vòng 36, 30 và 30. Sau khi mỗi lượt kết thúc, tôi dùng mô hình đã chọn để tính C-index trên tập kiểm tra.
 
 \section{So sánh các mô hình qua ba lần khởi tạo}
 \label{sec:standardized-benchmark}
 \label{sec:paper-adaptation-results}
-Tôi tổ chức thí nghiệm theo ba mục đích. Để khảo sát dữ liệu đầu vào, loạt thăm dò so sánh các cấu hình ở một lần khởi tạo (Bảng~\ref{tab:exploratory}). Để khảo sát riêng phép hợp nhất, đối chứng giữa ghép nối và tích ngoài giữ nguyên cấu hình huấn luyện và trọng số khởi tạo của các khối chung (Bảng~\ref{tab:matched-fusion}). Trong loạt chính, các kiến trúc được so sánh về C-index xác thực và số tham số qua ba lần khởi tạo (Bảng~\ref{tab:standard-bench}).
+Tôi tổ chức thí nghiệm theo ba mục đích. Để khảo sát dữ liệu đầu vào, loạt thăm dò so sánh các cấu hình ở một lần khởi tạo (Bảng~\ref{tab:exploratory}). Để so sánh hai cách hợp nhất, tôi dùng cùng cách huấn luyện và cùng trọng số ban đầu cho các phần chung của hai mô hình (Bảng~\ref{tab:matched-fusion}). Trong loạt chính, các kiến trúc được so sánh về C-index xác thực và số tham số qua ba lần khởi tạo (Bảng~\ref{tab:standard-bench}).
 \input{tables/benchmark.tex}
 
 Trong loạt chính, Full Outer-Product và RC-Free đạt C-index xác thực trung bình lần lượt là 0.8344 và 0.8347. RC-Free sử dụng hai cặp tương tác và bốn nhánh truyền, so với ba cặp và sáu nhánh của Full Outer-Product. Với CNN--PCA--T-LSTM, số thành phần PCA ở ba lần chạy lần lượt là 38, 69 và 2, tương ứng với C-index xác thực 0.6625, 0.7708 và 0.7917. Lượt chạy giữ ít thành phần nhất đạt C-index cao nhất trong ba lượt.
 
-\subsection{Đối chiếu thăm dò về dữ liệu đầu vào}
+\subsection{So sánh các cấu hình đầu vào}
 \begin{table}[H]
 \centering\small
-\caption[Kết quả thăm dò cho RQ1--RQ2]{Kết quả thăm dò cho RQ1--RQ2 trên tập xác thực với seed 20260727.}
+\caption[So sánh cấu hình đầu vào cho RQ1--RQ2]{Kết quả thử các cấu hình đầu vào trên tập xác thực với seed 20260727.}
 \label{tab:exploratory}
 \begin{tabularx}{\linewidth}{@{}Y r@{}}
 \toprule
@@ -44,31 +47,31 @@ Mô hình & C-index \\
 MRI cuối & 0.7333 \\
 MRI dọc và T-LSTM & 0.7333 \\
 MRI dọc, T-LSTM và attention & 0.7833 \\
-Ghép nối ba nguồn (thăm dò) & 0.8125 \\
+Ghép nối ba nguồn dữ liệu & 0.8125 \\
 \bottomrule
 \end{tabularx}
 \end{table}
-Với seed 20260727, mô hình dùng MRI cuối và mô hình kết hợp chuỗi MRI với T-LSTM cùng đạt C-index xác thực 0.7333. Cấu hình dọc có thêm attention đạt 0.7833, còn cấu hình ghép nối ba nguồn (Simple Multimodal Fusion) đạt 0.8125 (Bảng~\ref{tab:exploratory}). Các cấu hình khác nhau cả về đầu vào lẫn quy trình huấn luyện.
+Ở cấu hình ghép nối, các đặc trưng từ chuỗi MRI, radiomics và dữ liệu lâm sàng được nối thành một vectơ. Lần thử này đạt C-index xác thực 0.8125, cao hơn 0.0292 so với cấu hình chỉ dùng MRI tốt nhất. Từ kết quả đó, tôi giữ cả ba nguồn cho mô hình chính. Để đo đóng góp riêng của từng nguồn, cần lần lượt loại từng nguồn trong cùng điều kiện huấn luyện.
 
-\subsection{Ghép nối và tích ngoài trong điều kiện kiểm soát}
+\subsection{So sánh ghép nối và tích ngoài}
 \label{sec:matched-fusion}
-Để đối chiếu hai phép hợp nhất, tôi giữ nguyên ResNet-18 3D, T-LSTM với kích thước ẩn 128, cơ chế attention, hàm mất mát Cox với quy tắc Breslow và cấu hình huấn luyện. Trong mỗi cặp mô hình, các khối chung cũng sử dụng cùng trọng số ban đầu. Do điều kiện khởi tạo khác với loạt chính, kết quả đối chứng được trình bày riêng trong Bảng~\ref{tab:matched-fusion}.
+Để đối chiếu hai phép hợp nhất, tôi giữ nguyên ResNet-18 3D, T-LSTM với kích thước ẩn 128, cơ chế attention, hàm mất mát Cox với quy tắc Breslow và cấu hình huấn luyện. Trong mỗi lần so sánh, hai mô hình dùng cùng trọng số ban đầu cho các phần chung. Cách chọn trọng số ban đầu ở đây khác với loạt thí nghiệm chính, nên tôi trình bày kết quả riêng trong Bảng~\ref{tab:matched-fusion}.
 
 \begin{table}[H]
 \centering\small
-\caption[Đối chứng hợp nhất có kiểm soát]{C-index xác thực của hai phép hợp nhất khi kiểm soát khởi tạo, trình bày dưới dạng trung bình $\pm$ SD.}
+\caption[So sánh ghép nối và tích ngoài]{C-index xác thực của ghép nối và tích ngoài trong cùng điều kiện (trung bình $\pm$ SD).}
 \label{tab:matched-fusion}
 \begin{tabularx}{\linewidth}{@{}Y r@{}}
 \toprule
 \textbf{Cấu trúc hợp nhất} & \textbf{C-index $\uparrow$} \\
 \midrule
 Concatenation & $0.8149\pm0.0214$ \\
-Full Outer-Product (đối chứng kiểm soát) & $0.8285\pm0.0272$ \\
+Full Outer-Product & $0.8285\pm0.0272$ \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-Tính từ các giá trị chưa làm tròn, C-index xác thực trung bình của tích ngoài cao hơn ghép nối 0.0135 trong đối chứng có kiểm soát. Xét từng lần khởi tạo, tích ngoài chỉ đạt C-index cao hơn ở seed 20260728, còn ghép nối cho kết quả cao hơn ở hai seed còn lại. Các thí nghiệm tiếp theo về CP và RC-Free sử dụng điều kiện khởi tạo của loạt chính.
+Khi so sánh trong cùng điều kiện, tích ngoài đạt C-index xác thực trung bình 0.8285, cao hơn mức 0.8149 của ghép nối (Bảng~\ref{tab:matched-fusion}). Mức tăng trung bình tính từ các giá trị chưa làm tròn là 0.0135. Từ kết quả này, tôi chọn Full Outer-Product làm mốc để so sánh với Full CP và RC-Free (Bảng~\ref{tab:standard-bench}). Mỗi mô hình được huấn luyện ba lần với cùng ba seed đã nêu ở Mục~\ref{sec:experimental-protocol}. Trọng số ban đầu được tạo riêng cho mỗi mô hình, nên các phần chung có thể bắt đầu với trọng số khác nhau.
 
 \section{CP và lựa chọn cấu trúc RC-Free}
 \label{sec:cp-results}
@@ -86,14 +89,14 @@ Phân rã CP thay đổi cách tham số hóa lớp song tuyến đầu của m�
 \toprule
 \textbf{Phạm vi} & \textbf{Full Outer-Product} & \textbf{Full CP} \\
 \midrule
-Ba lớp song tuyến đầu & 229\,696 & 3\,712 \\
-Ba khối tương tác, gồm MLP & 248\,608 & 22\,624 \\
-Toàn mạng & 33\,760\,941 & 33\,534\,957 \\
+Ba lớp song tuyến đầu & 229696 & 3712 \\
+Ba khối tương tác, gồm MLP & 248608 & 22624 \\
+Toàn mạng & 33760941 & 33534957 \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-CP giảm 98.38\% số tham số của ba lớp song tuyến đầu và 90.90\% số tham số của ba khối tương tác khi tính cả MLP. Trên toàn mạng, số tham số giảm 0.67\% do bộ mã hóa MRI chiếm phần lớn số tham số. C-index xác thực trung bình của Full CP thấp hơn Full Outer-Product 0.0066, tính từ các giá trị chưa làm tròn (Bảng~\ref{tab:standard-bench}).
+CP giảm 98.38\% số tham số của ba lớp song tuyến đầu và 90.90\% số tham số của ba khối tương tác khi tính cả MLP. Trên toàn mạng, số tham số giảm 0.67\% do bộ mã hóa MRI chiếm phần lớn số tham số. C-index xác thực trung bình của Full CP thấp hơn Full Outer-Product 0.0066, tính từ các giá trị chưa làm tròn (Bảng~\ref{tab:standard-bench}). Tôi chấp nhận mức giảm C-index này vì CP giảm được nhiều tham số ở các lớp tương tác. Từ Full CP, tôi thử bỏ cặp RC để giảm thêm số tham số và cải thiện C-index xác thực.
 
 \subsection{So sánh cấu trúc hai cặp MR và MC với cấu trúc một cặp}
 \label{sec:new-topology}
@@ -115,7 +118,7 @@ RC-Free (MR+MC) & 2 / 4 & $0.8347\pm0.0237$ \\
 \end{tabularx}
 \end{table}
 
-Với hai cặp tương tác, RC-Free đạt C-index xác thực trung bình 0.8347, cao hơn mức 0.8278 của Full CP với ba cặp, dù thứ hạng giữa các cấu trúc thay đổi theo lần khởi tạo. Khi cố định $\lambda$ và khi học $\lambda$, C-index xác thực có cùng giá trị trung bình 0.8347 nhưng SD lần lượt là 0.0313 và 0.0237 (Bảng~\ref{tab:standard-bench}).
+Với hai cặp tương tác, RC-Free đạt C-index xác thực trung bình 0.8347, cao hơn mức 0.8278 của Full CP với ba cặp, dù thứ hạng giữa các cấu trúc thay đổi theo lần khởi tạo.
 
 \section{Phân tích sống còn của RC-Free}
 \label{sec:posthoc-test}
@@ -160,7 +163,7 @@ Kết quả cho RQ1 và RQ2 đến từ loạt thăm dò một lần khởi tạ
 \begin{description}[leftmargin=1.35cm,labelwidth=1.1cm,itemsep=.3em]
 \item[RQ1.] Trong lần khởi tạo thăm dò, mô hình sử dụng MRI cuối và mô hình kết hợp chuỗi MRI với T-LSTM cùng đạt C-index 0.7333. Khi bổ sung attention để tổng hợp các trạng thái ẩn, C-index tăng lên 0.7833 (Bảng~\ref{tab:exploratory}).
 \item[RQ2.] Mô hình ghép nối ba nguồn đạt C-index 0.8125, cao hơn mức 0.7833 của cấu hình MRI dọc kết hợp attention. Tuy nhiên, chênh lệch này không chỉ phản ánh sự khác biệt về nguồn dữ liệu đầu vào mà còn chịu ảnh hưởng của cỡ lô và quy trình huấn luyện giữa hai cấu hình (Bảng~\ref{tab:exploratory}).
-\item[RQ3.] Trong đối chứng có kiểm soát trọng số khởi tạo của các khối chung, phép tích ngoài đạt C-index xác thực trung bình cao hơn phép ghép nối 0.0135. Tuy nhiên, khi xét riêng từng lần khởi tạo, chiều của chênh lệch thay đổi, cho thấy kết quả không nhất quán giữa các seed (Bảng~\ref{tab:matched-fusion}).
+\item[RQ3.] Khi hai mô hình dùng cùng cách huấn luyện và cùng trọng số ban đầu cho các phần chung, tích ngoài đạt C-index xác thực trung bình cao hơn ghép nối 0.0135. Cách cho điểm cao hơn thay đổi giữa các lần chạy (Bảng~\ref{tab:matched-fusion}).
 \item[RQ4.] Phân rã CP giúp giảm 98.38\% số tham số của ba lớp song tuyến đầu, đồng thời làm C-index xác thực trung bình giảm 0.0066 so với cấu trúc Full Outer-Product (Bảng~\ref{tab:standard-bench} và~\ref{tab:interaction-parameters}).
 \item[RQ5.] Trong các cấu trúc được khảo sát, tôi lựa chọn RC-Free với hai cặp tương tác MR và MC, qua đó vẫn duy trì cả ba nguồn dữ liệu đầu vào nhưng giảm số cặp tương tác từ ba xuống hai. Cấu trúc này đạt C-index xác thực trung bình 0.8347, cao hơn Full CP (0.8278), MR-only (0.8299) và MC-only (0.8236) trong cùng loạt so sánh (Bảng~\ref{tab:new-topology}).
 \end{description}
