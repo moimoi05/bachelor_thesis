@@ -1,4 +1,4 @@
-\begin{thebibliography}{50}
+\begin{thebibliography}{66}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -17,18 +17,11 @@ Sepehr Aghajanian, Fateme Mohammadifard, Ida Mohammadi, Shahryar
   182, 2025.
 \newblock \doi{10.1186/s13195-025-01827-2}.
 
-\bibitem[Petersen et~al.(2018)Petersen, Lopez, Armstrong, Getchius, Ganguli,
-  Gloss, Gronseth, Marson, Pringsheim, Day, Sager, Stevens, and
-  Rae-Grant]{petersen2018mci}
-Ronald~C. Petersen, Oscar Lopez, Melissa~J. Armstrong, Thomas S.~D. Getchius,
-  Mary Ganguli, David Gloss, Gary~S. Gronseth, Daniel Marson, Tamara
-  Pringsheim, Gregory~S. Day, Mark Sager, John Stevens, and Alexander
-  Rae-Grant.
-\newblock Practice guideline update summary: Mild cognitive impairment
-  {[Retired]}: Report of the guideline development, dissemination, and
-  implementation subcommittee of the {American Academy of Neurology}.
-\newblock \emph{Neurology}, 90\penalty0 (3):\penalty0 126--135, 2018.
-\newblock \doi{10.1212/WNL.0000000000004826}.
+\bibitem[{Centers for Disease Control and Prevention}(2024)]{cdc2024alzheimers}
+{Centers for Disease Control and Prevention}.
+\newblock About {Alzheimer's}, 2024.
+\newblock
+  \thesisurl{https://www.cdc.gov/alzheimers-dementia/about/alzheimers.html}.
 
 \bibitem[Jack et~al.(2018)Jack, Bennett, Blennow, Carrillo, Dunn, Haeberlein,
   Holtzman, Jagust, Jessen, Karlawish, Liu, Molinuevo, Montine, Phelps, Rankin,
@@ -44,6 +37,54 @@ Clifford~R. Jack, Jr., David~A. Bennett, Kaj Blennow, Maria~C. Carrillo, Billy
   2018.
 \newblock \doi{10.1016/j.jalz.2018.02.018}.
 
+\bibitem[Petersen et~al.(2018)Petersen, Lopez, Armstrong, Getchius, Ganguli,
+  Gloss, Gronseth, Marson, Pringsheim, Day, Sager, Stevens, and
+  Rae-Grant]{petersen2018mci}
+Ronald~C. Petersen, Oscar Lopez, Melissa~J. Armstrong, Thomas S.~D. Getchius,
+  Mary Ganguli, David Gloss, Gary~S. Gronseth, Daniel Marson, Tamara
+  Pringsheim, Gregory~S. Day, Mark Sager, John Stevens, and Alexander
+  Rae-Grant.
+\newblock Practice guideline update summary: Mild cognitive impairment
+  {[Retired]}: Report of the guideline development, dissemination, and
+  implementation subcommittee of the {American Academy of Neurology}.
+\newblock \emph{Neurology}, 90\penalty0 (3):\penalty0 126--135, 2018.
+\newblock \doi{10.1212/WNL.0000000000004826}.
+
+\bibitem[Dong et~al.(2021)Dong, Xie, Das, Wang, Wisse, deFlores, Wolk,
+  Yushkevich, and {Alzheimer's Disease Neuroimaging
+  Initiative}]{dong2021deepatrophy}
+Mengjin Dong, Long Xie, Sandhitsu~R. Das, Jiancong Wang, Laura E.~M. Wisse,
+  Robin deFlores, David~A. Wolk, Paul~A. Yushkevich, and {Alzheimer's Disease
+  Neuroimaging Initiative}.
+\newblock {DeepAtrophy}: Teaching a neural network to detect progressive
+  changes in longitudinal {MRI} of the hippocampal region in {Alzheimer}'s
+  disease.
+\newblock \emph{NeuroImage}, 243:\penalty0 118514, 2021.
+\newblock \doi{10.1016/j.neuroimage.2021.118514}.
+
+\bibitem[Baytas et~al.(2017)Baytas, Xiao, Zhang, Wang, Jain, and
+  Zhou]{baytas2017patient}
+Inci~M. Baytas, Cao Xiao, Xi~Zhang, Fei Wang, Anil~K. Jain, and Jiayu Zhou.
+\newblock Patient subtyping via time-aware {LSTM} networks.
+\newblock In \emph{Proceedings of the 23rd ACM SIGKDD International Conference
+  on Knowledge Discovery and Data Mining}, pages 65--74, 2017.
+\newblock \doi{10.1145/3097983.3097997}.
+
+\bibitem[Weiner et~al.(2015)Weiner, Veitch, Aisen, Beckett, Cairns, Cedarbaum,
+  Donohue, Green, Harvey, Jack, Jagust, Morris, Petersen, Saykin, Shaw,
+  Thompson, Toga, Trojanowski, and {Alzheimer's Disease Neuroimaging
+  Initiative}]{weiner2015impact}
+Michael~W. Weiner, Dallas~P. Veitch, Paul~S. Aisen, Laurel~A. Beckett, Nigel~J.
+  Cairns, Jesse Cedarbaum, Michael~C. Donohue, Robert~C. Green, Danielle
+  Harvey, Clifford~R. Jack, Jr., William Jagust, John~C. Morris, Ronald~C.
+  Petersen, Andrew~J. Saykin, Leslie Shaw, Paul~M. Thompson, Arthur~W. Toga,
+  John~Q. Trojanowski, and {Alzheimer's Disease Neuroimaging Initiative}.
+\newblock Impact of the {Alzheimer's Disease Neuroimaging Initiative}, 2004 to
+  2014.
+\newblock \emph{Alzheimer's \& Dementia}, 11\penalty0 (7):\penalty0 865--884,
+  2015.
+\newblock \doi{10.1016/j.jalz.2015.04.005}.
+
 \bibitem[van Griethuysen et~al.(2017)van Griethuysen, Fedorov, Parmar, Hosny,
   Aucoin, Narayan, Beets-Tan, Fillion-Robin, Pieper, and
   Aerts]{vangriethuysen2017computational}
@@ -53,21 +94,6 @@ Joost J.~M. van Griethuysen, Andriy Fedorov, Chintan Parmar, Ahmed Hosny,
 \newblock Computational radiomics system to decode the radiographic phenotype.
 \newblock \emph{Cancer Research}, 77\penalty0 (21):\penalty0 e104--e107, 2017.
 \newblock \doi{10.1158/0008-5472.CAN-17-0339}.
-
-\bibitem[Weiner et~al.(2015)Weiner, Veitch, Aisen, Beckett, Cairns, Cedarbaum,
-  Donohue, Green, Harvey, Jack, Jagust, Morris, Petersen, Saykin, Shaw,
-  Thompson, Toga, Trojanowski, and {Alzheimer's Disease Neuroimaging
-  Initiative}]{weiner2015impact}
-Michael~W. Weiner, Dallas~P. Veitch, Paul~S. Aisen, Laurel~A. Beckett, Nigel~J.
-  Cairns, Jesse Cedarbaum, Michael~C. Donohue, Robert~C. Green, Danielle
-  Harvey, Clifford~R. Jack, Jr., William Jagust, John~C. Morris, Ronald~C.
-  Petersen, Andrew~J. Saykin, Leslie~M. Shaw, Paul~M. Thompson, Arthur~W. Toga,
-  John~Q. Trojanowski, and {Alzheimer's Disease Neuroimaging Initiative}.
-\newblock Impact of the {Alzheimer's Disease Neuroimaging Initiative}, 2004 to
-  2014.
-\newblock \emph{Alzheimer's \& Dementia}, 11\penalty0 (7):\penalty0 865--884,
-  2015.
-\newblock \doi{10.1016/j.jalz.2015.04.005}.
 
 \bibitem[Folstein et~al.(1975)Folstein, Folstein, and McHugh]{folstein1975mmse}
 Marshal~F. Folstein, Susan~E. Folstein, and Paul~R. McHugh.
@@ -84,24 +110,6 @@ John~C. Morris.
 \newblock \emph{Neurology}, 43\penalty0 (11):\penalty0 2412--2414, 1993.
 \newblock \doi{10.1212/WNL.43.11.2412-a}.
 
-\bibitem[Baltru{\v s}aitis et~al.(2019)Baltru{\v s}aitis, Ahuja, and
-  Morency]{baltrusaitis2019multimodal}
-Tadas Baltru{\v s}aitis, Chaitanya Ahuja, and Louis-Philippe Morency.
-\newblock Multimodal machine learning: A survey and taxonomy.
-\newblock \emph{IEEE Transactions on Pattern Analysis and Machine
-  Intelligence}, 41\penalty0 (2):\penalty0 423--443, 2019.
-\newblock \doi{10.1109/TPAMI.2018.2798607}.
-
-\bibitem[Zadeh et~al.(2017)Zadeh, Chen, Poria, Cambria, and
-  Morency]{zadeh2017tensor}
-Amir Zadeh, Minghai Chen, Soujanya Poria, Erik Cambria, and Louis-Philippe
-  Morency.
-\newblock Tensor fusion network for multimodal sentiment analysis.
-\newblock In \emph{Proceedings of the 2017 Conference on Empirical Methods in
-  Natural Language Processing}, pages 1103--1114. Association for Computational
-  Linguistics, 2017.
-\newblock \doi{10.18653/v1/D17-1115}.
-
 \bibitem[Kolda and Bader(2009)]{kolda2009tensor}
 Tamara~G. Kolda and Brett~W. Bader.
 \newblock Tensor decompositions and applications.
@@ -114,30 +122,63 @@ Zhun Liu, Ying Shen, Varun~Bharadhwaj Lakshminarasimhan, Paul~Pu Liang, AmirAli
   Bagher~Zadeh, and Louis-Philippe Morency.
 \newblock Efficient low-rank multimodal fusion with modality-specific factors.
 \newblock In \emph{Proceedings of the 56th Annual Meeting of the Association
-  for Computational Linguistics}, pages 2247--2256, 2018.
+  for Computational Linguistics (Volume 1: Long Papers)}, pages 2247--2256,
+  2018.
 \newblock \doi{10.18653/v1/P18-1209}.
 
-\bibitem[Ryumina et~al.(2026)Ryumina, Markitantov, Axyonov, Shchetinin,
-  Abdulkadirov, Ryumin, and Karpov]{ryumina2026residual}
-Elena Ryumina, Maxim Markitantov, Alexandr Axyonov, Fedor Shchetinin, Timur
-  Abdulkadirov, Dmitry Ryumin, and Alexey Karpov.
-\newblock Team {RAS} in 11th {ABAW} competition: Multimodal ambivalence
-  recognition approach.
-\newblock \emph{arXiv preprint arXiv:2607.14702}, 2026.
-\newblock \doi{10.48550/arXiv.2607.14702}.
+\bibitem[{Knight Alzheimer Disease Research Center, Washington University in
+  St. Louis}(n.d.)]{knightcdrscoring}
+{Knight Alzheimer Disease Research Center, Washington University in St. Louis}.
+\newblock {CDR} scoring table, n.d.
+\newblock
+  \thesisurl{https://knightadrc.wustl.edu/professionals-clinicians/cdr-dementia-staging-instrument/cdr-scoring-table/}.
+\newblock Truy cập ngày 24/11/2026.
 
-\bibitem[Liu et~al.(2026)Liu, He, Liu, Shi, Zang, and Hao]{liu2026motion}
-Jialin Liu, Xinwen He, Pengyu Liu, Jiale Shi, Huaijuan Zang, and Yanbin Hao.
-\newblock Motion reinforces appearance: {RGB}-skeleton gated residual fusion
-  for micro-gesture online recognition.
-\newblock \emph{arXiv preprint arXiv:2606.11645}, 2026.
-\newblock \doi{10.48550/arXiv.2606.11645}.
+\bibitem[Suissa(2008)]{suissa2008immortal}
+Samy Suissa.
+\newblock Immortal time bias in pharmacoepidemiology.
+\newblock \emph{American Journal of Epidemiology}, 167\penalty0 (4):\penalty0
+  492--499, 2008.
+\newblock \doi{10.1093/aje/kwm324}.
+
+\bibitem[Zadeh et~al.(2017)Zadeh, Chen, Poria, Cambria, and
+  Morency]{zadeh2017tensor}
+Amir Zadeh, Minghai Chen, Soujanya Poria, Erik Cambria, and Louis-Philippe
+  Morency.
+\newblock Tensor fusion network for multimodal sentiment analysis.
+\newblock In \emph{Proceedings of the 2017 Conference on Empirical Methods in
+  Natural Language Processing}, pages 1103--1114. Association for Computational
+  Linguistics, 2017.
+\newblock \doi{10.18653/v1/D17-1115}.
+
+\bibitem[Chen et~al.(2019)Chen, Ma, and Zheng]{chen2019med3d}
+Sihong Chen, Kai Ma, and Yefeng Zheng.
+\newblock {Med3D}: Transfer learning for {3D} medical image analysis.
+\newblock \emph{arXiv preprint arXiv:1904.00625}, 2019.
+\newblock \thesisurl{https://arxiv.org/abs/1904.00625}.
+
+\bibitem[Jack et~al.(2008)Jack, Bernstein, Fox, Thompson, Alexander, Harvey,
+  et~al.]{jack2008adnimri}
+Clifford~R. Jack, Jr., Matt~A. Bernstein, Nick~C. Fox, Paul Thompson, Gene
+  Alexander, Danielle Harvey, et~al.
+\newblock The {Alzheimer's Disease Neuroimaging Initiative} ({ADNI}): {MRI}
+  methods.
+\newblock \emph{Journal of Magnetic Resonance Imaging}, 27\penalty0
+  (4):\penalty0 685--691, 2008.
+\newblock \doi{10.1002/jmri.21049}.
+
+\bibitem[Kaplan and Meier(1958)]{kaplan1958nonparametric}
+E.~L. Kaplan and Paul Meier.
+\newblock Nonparametric estimation from incomplete observations.
+\newblock \emph{Journal of the American Statistical Association}, 53\penalty0
+  (282):\penalty0 457--481, 1958.
+\newblock \doi{10.1080/01621459.1958.10501452}.
 
 \bibitem[Cox(1972)]{cox1972regression}
 David~R. Cox.
 \newblock Regression models and life-tables.
-\newblock \emph{Journal of the Royal Statistical Society: Series B},
-  34\penalty0 (2):\penalty0 187--202, 1972.
+\newblock \emph{Journal of the Royal Statistical Society: Series B
+  (Methodological)}, 34\penalty0 (2):\penalty0 187--202, 1972.
 \newblock \doi{10.1111/j.2517-6161.1972.tb00899.x}.
 
 \bibitem[Katzman et~al.(2018)Katzman, Shaham, Cloninger, Bates, Jiang, and
@@ -156,7 +197,7 @@ Norman~E. Breslow.
 \newblock \doi{10.2307/2529620}.
 
 \bibitem[Harrell et~al.(1996)Harrell, Lee, and Mark]{harrell1996multivariable}
-Frank~E. Harrell, Kerry~L. Lee, and Daniel~B. Mark.
+Frank~E. Harrell, Jr., Kerry~L. Lee, and Daniel~B. Mark.
 \newblock Multivariable prognostic models: Issues in developing models,
   evaluating assumptions and adequacy, and measuring and reducing errors.
 \newblock \emph{Statistics in Medicine}, 15\penalty0 (4):\penalty0 361--387,
@@ -177,20 +218,31 @@ Sepp Hochreiter and J{\"u}rgen Schmidhuber.
 \newblock \emph{Neural Computation}, 9\penalty0 (8):\penalty0 1735--1780, 1997.
 \newblock \doi{10.1162/neco.1997.9.8.1735}.
 
-\bibitem[Baytas et~al.(2017)Baytas, Xiao, Zhang, Wang, Jain, and
-  Zhou]{baytas2017patient}
-Inci~M. Baytas, Cao Xiao, Xi~Zhang, Fei Wang, Anil~K. Jain, and Jiayu Zhou.
-\newblock Patient subtyping via time-aware {LSTM} networks.
-\newblock In \emph{Proceedings of the 23rd ACM SIGKDD International Conference
-  on Knowledge Discovery and Data Mining}, pages 65--74, 2017.
-\newblock \doi{10.1145/3097983.3097997}.
-
 \bibitem[Bahdanau et~al.(2015)Bahdanau, Cho, and Bengio]{bahdanau2015attention}
 Dzmitry Bahdanau, Kyunghyun Cho, and Yoshua Bengio.
 \newblock Neural machine translation by jointly learning to align and
   translate.
 \newblock In \emph{International Conference on Learning Representations}, 2015.
 \newblock \thesisurl{https://arxiv.org/abs/1409.0473}.
+
+\bibitem[Yang et~al.(2016)Yang, Yang, Dyer, He, Smola, and
+  Hovy]{yang2016hierarchical}
+Zichao Yang, Diyi Yang, Chris Dyer, Xiaodong He, Alex Smola, and Eduard Hovy.
+\newblock Hierarchical attention networks for document classification.
+\newblock In \emph{Proceedings of the 2016 Conference of the North American
+  Chapter of the Association for Computational Linguistics: Human Language
+  Technologies}, pages 1480--1489. Association for Computational Linguistics,
+  2016.
+\newblock \doi{10.18653/v1/N16-1174}.
+
+\bibitem[Zwanenburg et~al.(2020)Zwanenburg, Vallières, Abdalah, Aerts,
+  Andrearczyk, Apte, et~al.]{zwanenburg2020ibsi}
+Alex Zwanenburg, Martin Vallières, Mahmoud~A. Abdalah, Hugo J. W.~L. Aerts,
+  Vincent Andrearczyk, Aditya Apte, et~al.
+\newblock The {Image Biomarker Standardization Initiative}: Standardized
+  quantitative radiomics for high-throughput image-based phenotyping.
+\newblock \emph{Radiology}, 295\penalty0 (2):\penalty0 328--338, 2020.
+\newblock \doi{10.1148/radiol.2020191145}.
 
 \bibitem[He et~al.(2016)He, Zhang, Ren, and Sun]{he2016deep}
 Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun.
@@ -199,15 +251,12 @@ Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun.
   Pattern Recognition}, pages 770--778, 2016.
 \newblock \doi{10.1109/CVPR.2016.90}.
 
-\bibitem[Chen et~al.(2019)Chen, Ma, and Zheng]{chen2019med3d}
-Sihong Chen, Kai Ma, and Yefeng Zheng.
-\newblock {Med3D}: Transfer learning for {3D} medical image analysis.
-\newblock \emph{arXiv preprint arXiv:1904.00625}, 2019.
-\newblock \thesisurl{https://arxiv.org/abs/1904.00625}.
-
-\bibitem[Li et~al.(2019{\natexlab{a}})Li, Habes, Wolk, and
-  Fan]{li2019hippocampal}
-Hongming Li, Mohamad Habes, David~A. Wolk, and Yong Fan.
+\bibitem[Li et~al.(2019{\natexlab{a}})Li, Habes, Wolk, Fan, and {Alzheimer's
+  Disease Neuroimaging Initiative and the Australian Imaging Biomarkers and
+  Lifestyle Study of Aging}]{li2019hippocampal}
+Hongming Li, Mohamad Habes, David~A. Wolk, Yong Fan, and {Alzheimer's Disease
+  Neuroimaging Initiative and the Australian Imaging Biomarkers and Lifestyle
+  Study of Aging}.
 \newblock A deep learning model for early prediction of {Alzheimer}'s disease
   dementia based on hippocampal magnetic resonance imaging data.
 \newblock \emph{Alzheimer's \& Dementia}, 15\penalty0 (8):\penalty0 1059--1070,
@@ -220,6 +269,14 @@ Ian~T. Jolliffe and Jorge Cadima.
 \newblock \emph{Philosophical Transactions of the Royal Society A},
   374\penalty0 (2065):\penalty0 20150202, 2016.
 \newblock \doi{10.1098/rsta.2015.0202}.
+
+\bibitem[Baltru{\v s}aitis et~al.(2019)Baltru{\v s}aitis, Ahuja, and
+  Morency]{baltrusaitis2019multimodal}
+Tadas Baltru{\v s}aitis, Chaitanya Ahuja, and Louis-Philippe Morency.
+\newblock Multimodal machine learning: A survey and taxonomy.
+\newblock \emph{IEEE Transactions on Pattern Analysis and Machine
+  Intelligence}, 41\penalty0 (2):\penalty0 423--443, 2019.
+\newblock \doi{10.1109/TPAMI.2018.2798607}.
 
 \bibitem[Carroll and Chang(1970)]{carroll1970candecomp}
 J.~Douglas Carroll and Jih-Jie Chang.
@@ -236,17 +293,34 @@ Hedi Ben-Younes, Remi Cadene, Matthieu Cord, and Nicolas Thome.
   Vision}, pages 2631--2639, 2017.
 \newblock \doi{10.1109/ICCV.2017.285}.
 
-\bibitem[Nakagawa et~al.(2020)Nakagawa, Ishida, Naito, Nagai, Yamaguchi, and
-  Onoda]{nakagawa2020survival}
+\bibitem[Ryumina et~al.(2026)Ryumina, Markitantov, Axyonov, Shchetinin,
+  Abdulkadirov, Ryumin, and Karpov]{ryumina2026residual}
+Elena Ryumina, Maxim Markitantov, Alexandr Axyonov, Fedor Shchetinin, Timur
+  Abdulkadirov, Dmitry Ryumin, and Alexey Karpov.
+\newblock Team {RAS} in 11th {ABAW} competition: Multimodal ambivalence
+  recognition approach.
+\newblock \emph{arXiv preprint arXiv:2607.14702}, 2026.
+\newblock \doi{10.48550/arXiv.2607.14702}.
+
+\bibitem[Liu et~al.(2026)Liu, He, Liu, Shi, Zang, and Hao]{liu2026motion}
+Jialin Liu, Xinwen He, Pengyu Liu, Jiale Shi, Huaijuan Zang, and Yanbin Hao.
+\newblock Motion reinforces appearance: {RGB}-skeleton gated residual fusion
+  for micro-gesture online recognition.
+\newblock \emph{arXiv preprint arXiv:2606.11645}, 2026.
+\newblock \doi{10.48550/arXiv.2606.11645}.
+
+\bibitem[Nakagawa et~al.(2020)Nakagawa, Ishida, Naito, Nagai, Yamaguchi, Onoda,
+  and {Alzheimer's Disease Neuroimaging Initiative}]{nakagawa2020survival}
 Tomonori Nakagawa, Manabu Ishida, Junpei Naito, Atsushi Nagai, Shuhei
-  Yamaguchi, and Keiichi Onoda.
+  Yamaguchi, Keiichi Onoda, and {Alzheimer's Disease Neuroimaging Initiative}.
 \newblock Prediction of conversion to {Alzheimer}'s disease using deep survival
   analysis of {MRI} images.
 \newblock \emph{Brain Communications}, 2\penalty0 (1):\penalty0 fcaa057, 2020.
 \newblock \doi{10.1093/braincomms/fcaa057}.
 
-\bibitem[Li et~al.(2019{\natexlab{b}})Li, Fan, and Initiative]{li2019early}
-Hongming Li, Yong Fan, and Alzheimer's Disease~Neuroimaging Initiative.
+\bibitem[Li et~al.(2019{\natexlab{b}})Li, Fan, and {Alzheimer's Disease
+  Neuroimaging Initiative}]{li2019early}
+Hongming Li, Yong Fan, and {Alzheimer's Disease Neuroimaging Initiative}.
 \newblock Early prediction of {Alzheimer}'s disease dementia based on baseline
   hippocampal {MRI} and 1-year follow-up cognitive measures using deep
   recurrent neural networks.
@@ -263,16 +337,6 @@ Huitong Ding, Biqi Wang, Alexander~P. Hamel, Mark Melkonyan, Ting F.~A. Ang,
 \newblock \emph{Frontiers in Dementia}, 2:\penalty0 1271680, 2023.
 \newblock \doi{10.3389/frdem.2023.1271680}.
 
-\bibitem[Dong et~al.(2021)Dong, Xie, Das, Wang, Wisse, deFlores, Wolk, and
-  Yushkevich]{dong2021deepatrophy}
-Mengjin Dong, Long Xie, Sandhitsu~R. Das, Jiancong Wang, Laura E.~M. Wisse,
-  Robin deFlores, David~A. Wolk, and Paul~A. Yushkevich.
-\newblock {DeepAtrophy}: Teaching a neural network to detect progressive
-  changes in longitudinal {MRI} of the hippocampal region in {Alzheimer}'s
-  disease.
-\newblock \emph{NeuroImage}, 243:\penalty0 118514, 2021.
-\newblock \doi{10.1016/j.neuroimage.2021.118514}.
-
 \bibitem[Tang et~al.(2021)Tang, Wu, Liu, Wu, Song, Zhang, Guo, Feng, and
   Li]{tang2021individualized}
 Lin Tang, Xiaojia Wu, Huan Liu, Faqi Wu, Rao Song, Wei Zhang, Dajing Guo,
@@ -284,22 +348,13 @@ Lin Tang, Xiaojia Wu, Huan Liu, Faqi Wu, Rao Song, Wei Zhang, Dajing Guo,
   (5):\penalty0 1647--1657, 2021.
 \newblock \doi{10.1002/jmri.27689}.
 
-\bibitem[Jack et~al.(2008)Jack, Bernstein, Fox, Thompson, Alexander, Harvey,
-  et~al.]{jack2008adnimri}
-Clifford~R. Jack, Jr., Matt~A. Bernstein, Nick~C. Fox, Paul Thompson, Gene
-  Alexander, Danielle Harvey, et~al.
-\newblock The {Alzheimer's Disease Neuroimaging Initiative} ({ADNI}): {MRI}
-  methods.
-\newblock \emph{Journal of Magnetic Resonance Imaging}, 27\penalty0
-  (4):\penalty0 685--691, 2008.
-\newblock \doi{10.1002/jmri.21049}.
-
-\bibitem[Suissa(2008)]{suissa2008immortal}
-Samy Suissa.
-\newblock Immortal time bias in pharmacoepidemiology.
-\newblock \emph{American Journal of Epidemiology}, 167\penalty0 (4):\penalty0
-  492--499, 2008.
-\newblock \doi{10.1093/aje/kwm324}.
+\bibitem[{Alzheimer's Disease Neuroimaging Initiative}(n.d.)]{adnidxsum}
+{Alzheimer's Disease Neuroimaging Initiative}.
+\newblock Diagnostic information.
+\newblock {ADNI} documentation, n.d.
+\newblock
+  \thesisurl{https://adni.loni.usc.edu/quick-start-guide-asset/diagnostic.html}.
+\newblock Truy cập ngày 24/11/2026.
 
 \bibitem[Hoopes et~al.(2022)Hoopes, Mora, Dalca, Fischl, and
   Hoffmann]{hoopes2022synthstrip}
@@ -308,6 +363,37 @@ Andrew Hoopes, Jocelyn~S. Mora, Adrian~V. Dalca, Bruce Fischl, and Malte
 \newblock {SynthStrip}: Skull-stripping for any brain image.
 \newblock \emph{NeuroImage}, 260:\penalty0 119474, 2022.
 \newblock \doi{10.1016/j.neuroimage.2022.119474}.
+
+\bibitem[{McConnell Brain Imaging Centre, McGill
+  University}(n.d.)]{mcgill2009icbm}
+{McConnell Brain Imaging Centre, McGill University}.
+\newblock {ICBM152} nonlinear atlases (version 2009), n.d.
+\newblock
+  \thesisurl{https://www.mcgill.ca/bic/icbm152-152-nonlinear-atlases-version-2009}.
+\newblock Truy cập ngày 24/11/2026.
+
+\bibitem[Fonov et~al.(2009)Fonov, Evans, McKinstry, Almli, and
+  Collins]{fonov2009templates}
+V.~S. Fonov, A.~C. Evans, R.~C. McKinstry, C.~R. Almli, and D.~L. Collins.
+\newblock Unbiased nonlinear average age-appropriate brain templates from birth
+  to adulthood.
+\newblock \emph{NeuroImage}, 47\penalty0 (Suppl. 1):\penalty0 S102, 2009.
+\newblock \doi{10.1016/S1053-8119(09)70884-5}.
+
+\bibitem[Fonov et~al.(2011)Fonov, Evans, Botteron, Almli, McKinstry, Collins,
+  and {Brain Development Cooperative Group}]{fonov2011atlases}
+Vladimir Fonov, Alan~C. Evans, Kelly Botteron, C.~Robert Almli, Robert~C.
+  McKinstry, D.~Louis Collins, and {Brain Development Cooperative Group}.
+\newblock Unbiased average age-appropriate atlases for pediatric studies.
+\newblock \emph{NeuroImage}, 54\penalty0 (1):\penalty0 313--327, 2011.
+\newblock \doi{10.1016/j.neuroimage.2010.07.033}.
+
+\bibitem[Nyúl and Udupa(1999)]{nyul1999standardizing}
+László~G. Nyúl and Jayaram~K. Udupa.
+\newblock On standardizing the {MR} image intensity scale.
+\newblock \emph{Magnetic Resonance in Medicine}, 42\penalty0 (6):\penalty0
+  1072--1081, 1999.
+\newblock \thesisurl{https://pubmed.ncbi.nlm.nih.gov/10571928/}.
 
 \bibitem[Cardoso et~al.(2022)Cardoso, Li, Brown, Ma, Kerfoot, Wang,
   et~al.]{cardoso2022monai}
@@ -353,6 +439,22 @@ Jimmy~Lei Ba, Jamie~Ryan Kiros, and Geoffrey~E. Hinton.
 \newblock \emph{arXiv preprint arXiv:1607.06450}, 2016.
 \newblock \thesisurl{https://arxiv.org/abs/1607.06450}.
 
+\bibitem[{PyRadiomics developers}(n.d.{\natexlab{a}})]{pyradiomicsbins}
+{PyRadiomics developers}.
+\newblock Pipeline modules.
+\newblock {PyRadiomics} v3.1.0 documentation, n.d.{\natexlab{a}}.
+\newblock
+  \thesisurl{https://pyradiomics.readthedocs.io/en/stable/radiomics.html}.
+\newblock Truy cập ngày 24/11/2026.
+
+\bibitem[{PyRadiomics developers}(n.d.{\natexlab{b}})]{pyradiomicsfeatures}
+{PyRadiomics developers}.
+\newblock Radiomic features.
+\newblock {PyRadiomics} v3.1.0 documentation, n.d.{\natexlab{b}}.
+\newblock
+  \thesisurl{https://pyradiomics.readthedocs.io/en/stable/features.html}.
+\newblock Truy cập ngày 24/11/2026.
+
 \bibitem[Paszke et~al.(2019)Paszke, Gross, Massa, Lerer, Bradbury, Chanan,
   Killeen, Lin, Gimelshein, Antiga, Desmaison, Kopf, Yang, DeVito, Raison,
   Tejani, Chilamkurthy, Steiner, Fang, Bai, and Chintala]{paszke2019pytorch}
@@ -390,12 +492,28 @@ Xavier Glorot and Yoshua Bengio.
   2010.
 \newblock \thesisurl{https://proceedings.mlr.press/v9/glorot10a.html}.
 
-\bibitem[Kaplan and Meier(1958)]{kaplan1958nonparametric}
-E.~L. Kaplan and Paul Meier.
-\newblock Nonparametric estimation from incomplete observations.
-\newblock \emph{Journal of the American Statistical Association}, 53\penalty0
-  (282):\penalty0 457--481, 1958.
-\newblock \doi{10.1080/01621459.1958.10501452}.
+\bibitem[Mantel(1966)]{mantel1966survival}
+Nathan Mantel.
+\newblock Evaluation of survival data and two new rank order statistics arising
+  in its consideration.
+\newblock \emph{Cancer Chemotherapy Reports}, 50\penalty0 (3):\penalty0
+  163--170, 1966.
+\newblock \thesisurl{https://pubmed.ncbi.nlm.nih.gov/5910392/}.
+
+\bibitem[Grambsch and Therneau(1994)]{grambsch1994proportional}
+Patricia~M. Grambsch and Terry~M. Therneau.
+\newblock Proportional hazards tests and diagnostics based on weighted
+  residuals.
+\newblock \emph{Biometrika}, 81\penalty0 (3):\penalty0 515--526, 1994.
+\newblock \doi{10.1093/biomet/81.3.515}.
+
+\bibitem[Hung and Chiang(2010)]{hung2010time}
+Hung Hung and Chin-Tsang Chiang.
+\newblock Estimation methods for time-dependent {AUC} models with survival
+  data.
+\newblock \emph{Canadian Journal of Statistics}, 38\penalty0 (1):\penalty0
+  8--26, 2010.
+\newblock \doi{10.1002/cjs.10046}.
 
 \bibitem[P{\"o}lsterl(2020)]{polsterl2020scikit}
 Sebastian P{\"o}lsterl.
@@ -405,18 +523,28 @@ Sebastian P{\"o}lsterl.
   (212):\penalty0 1--6, 2020.
 \newblock \thesisurl{https://jmlr.org/papers/v21/20-729.html}.
 
-\bibitem[Hung and Chiang(2010)]{hung2010time}
-Hung Hung and Chin-Tsang Chiang.
-\newblock Estimation methods for time-dependent {AUC} models with survival
-  data.
-\newblock \emph{Canadian Journal of Statistics}, 38\penalty0 (1):\penalty0
-  8--26, 2010.
+\bibitem[{scikit-survival developers}(n.d.)]{sksurvauc}
+{scikit-survival developers}.
+\newblock {sksurv.metrics.cumulative\_dynamic\_auc}.
+\newblock scikit-survival documentation, n.d.
+\newblock
+  \thesisurl{https://scikit-survival.readthedocs.io/en/stable/api/generated/sksurv.metrics.cumulative_dynamic_auc.html}.
+\newblock Truy cập ngày 24/11/2026.
 
 \bibitem[Loshchilov and Hutter(2019)]{loshchilov2019adamw}
 Ilya Loshchilov and Frank Hutter.
 \newblock Decoupled weight decay regularization.
 \newblock In \emph{International Conference on Learning Representations}, 2019.
 \newblock \thesisurl{https://arxiv.org/abs/1711.05101}.
+
+\bibitem[Pascanu et~al.(2013)Pascanu, Mikolov, and
+  Bengio]{pascanu2013difficulty}
+Razvan Pascanu, Tomas Mikolov, and Yoshua Bengio.
+\newblock On the difficulty of training recurrent neural networks.
+\newblock In \emph{Proceedings of the 30th International Conference on Machine
+  Learning}, volume~28 of \emph{Proceedings of Machine Learning Research},
+  pages 1310--1318. PMLR, 2013.
+\newblock \thesisurl{https://proceedings.mlr.press/v28/pascanu13.html}.
 
 \bibitem[Micikevicius et~al.(2018)Micikevicius, Narang, Alben, Diamos, Elsen,
   Garcia, Ginsburg, Houston, Kuchaiev, Venkatesh, and
@@ -428,11 +556,19 @@ Paulius Micikevicius, Sharan Narang, Jonah Alben, Gregory Diamos, Erich Elsen,
 \newblock In \emph{International Conference on Learning Representations}, 2018.
 \newblock \thesisurl{https://arxiv.org/abs/1710.03740}.
 
-\bibitem[{PyTorch}(n.d.)]{pytorchReduceLROnPlateau}
-{PyTorch}.
+\bibitem[{PyTorch contributors}(n.d.)]{pytorchReduceLROnPlateau}
+{PyTorch contributors}.
 \newblock {ReduceLROnPlateau}.
-\newblock PyTorch Documentation, n.d.
+\newblock {PyTorch} documentation, n.d.
 \newblock
   \thesisurl{https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.ReduceLROnPlateau.html}.
+\newblock Truy cập ngày 24/11/2026.
+
+\bibitem[Kvamme et~al.(2019)Kvamme, Borgan, and Scheel]{kvamme2019time}
+Håvard Kvamme, Ørnulf Borgan, and Ida Scheel.
+\newblock Time-to-event prediction with neural networks and {Cox} regression.
+\newblock \emph{Journal of Machine Learning Research}, 20\penalty0
+  (129):\penalty0 1--30, 2019.
+\newblock \thesisurl{https://jmlr.org/papers/v20/18-424.html}.
 
 \end{thebibliography}

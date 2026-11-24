@@ -2,28 +2,24 @@
 \label{chap:background}
 
 \section{MCI, dữ liệu dọc và bài toán tiên lượng}
-Ở người mắc MCI, mức suy giảm nhận thức có thể ổn định, cải thiện hoặc tăng lên trong quá trình theo dõi \cite{petersen2018mci}. Các khung đánh giá bệnh Alzheimer cũng phân biệt biểu hiện nhận thức với bằng chứng bệnh lý từ dấu ấn sinh học \cite{jack2018niaaa}.
+Khung nghiên cứu NIA-AA năm 2018 mô tả bệnh Alzheimer (AD) theo các dấu ấn sinh học. Hệ thống AT(N) phân biệt dấu ấn lắng đọng amyloid-$\beta$ (A), tau bệnh lý (T) và tổn thương hoặc thoái hóa thần kinh (N). Trong khung này, A và T xác định bệnh lý Alzheimer, còn (N) có thể bất thường do nhiều nguyên nhân. Các biến đổi sinh học có thể xuất hiện trước khi biểu hiện sa sút trí tuệ bộc lộ trên lâm sàng \cite{jack2018niaaa}.
 
-Dữ liệu dọc cho phép quan sát cả trạng thái của người bệnh tại từng lần khám lẫn sự thay đổi giữa các lần khám. Với dữ liệu MRI cùng các đánh giá nhận thức và lâm sàng mà ADNI thu thập theo thời gian \cite{weiner2015impact}, mô hình có thể học diễn biến của người bệnh qua nhiều lần khám.
+Suy giảm nhận thức nhẹ (Mild Cognitive Impairment -- MCI) là tình trạng người bệnh có suy giảm ở một hoặc nhiều lĩnh vực nhận thức nhưng về cơ bản vẫn duy trì khả năng sinh hoạt độc lập. Trong các nghiên cứu theo dõi được Petersen và cộng sự tổng hợp, người có MCI có thể tiến triển thành sa sút trí tuệ, duy trì MCI hoặc trở về mức nhận thức bình thường ở lần đánh giá sau \cite{petersen2018mci}. Vì vậy, bài toán tiên lượng cần phân biệt những người có nguy cơ suy giảm tiếp trong thời gian theo dõi.
+
+Sáng kiến Hình ảnh Thần kinh Bệnh Alzheimer (ADNI) thu thập MRI lặp lại trong một nghiên cứu quan sát dọc đa trung tâm \cite{jack2008adnimri,weiner2015impact}. Khác với một lần chụp đơn lẻ, các lần chụp kế tiếp cung cấp thông tin về thay đổi trong cùng một người. Chẳng hạn, Dong và cộng sự dùng các cặp MRI dọc để học tín hiệu thay đổi ở vùng hồi hải mã \cite{dong2021deepatrophy}.
 
 \section{Phân tích sống còn và mô hình thời gian}
-\subsection{Biến cố, kiểm duyệt và Cox}
-Phân tích sống còn mô tả thời gian đến biến cố khi thời gian quan sát khác nhau giữa các cá thể. Trong khóa luận này, biến cố xảy ra khi người tham gia đạt ngưỡng MMSE hoặc CDR quy định ở Chương~\ref{chap:intro}. Chỉ báo $\delta_i$ bằng 1 nếu người thứ $i$ có biến cố và bằng 0 trong trường hợp kiểm duyệt phải, tức là người đó vẫn chưa có biến cố ở lần quan sát cuối cùng. Với điều kiện người tham gia chưa có biến cố trước $t$, mô hình Cox biểu diễn nguy cơ tức thời như sau \cite{cox1972regression}
+\subsection{Biến cố, kiểm duyệt và mô hình rủi ro tỷ lệ Cox}
+Trong nghiên cứu dọc, một số người bệnh ghi nhận biến cố trong thời gian theo dõi, còn một số kết thúc theo dõi trước khi quan sát được biến cố. Với nhóm thứ hai, dữ liệu cho biết họ chưa ghi nhận biến cố đến lần quan sát cuối cùng. Phân tích sống còn khai thác cả khoảng thời gian này và chỉ báo biến cố để xử lý hiện tượng \emph{kiểm duyệt phải} (right-censoring) \cite{kaplan1958nonparametric,cox1972regression}.
+
+Trong khóa luận, biến cố nghiên cứu được quy ước tại lần đánh giá hợp lệ đầu tiên sau mốc chọn mẫu có MMSE $<24$ hoặc CDR-global $\geq1$. Với mỗi người thứ $i$, chỉ báo $\delta_i$ nhận giá trị 1 nếu ghi nhận biến cố tại thời điểm quan sát $t_i$, và nhận giá trị 0 nếu người bệnh được kiểm duyệt phải tại lần đánh giá hợp lệ cuối cùng.
+
+Mô hình rủi ro tỷ lệ Cox (Cox proportional hazards model) \cite{cox1972regression} biểu diễn hàm nguy cơ tức thời $h_i(t)$ của người thứ $i$ tại thời điểm $t$ thông qua tích của hai thành phần:
 \begin{equation}
- h_i(t)=h_0(t)\exp(\eta_i).
+ h_i(t)=h_0(t)\exp(\eta_i),
+ \label{eq:cox-hazard}
 \end{equation}
-Hàm $h_0(t)$ biểu thị nguy cơ tức thời tại thời điểm $t$ khi $\eta=0$. Từ các đặc trưng đầu vào, mạng nơ-ron học điểm log-nguy cơ $\eta_i$ cho từng người tham gia. Theo mô hình Cox, tại cùng một thời điểm, điểm log-nguy cơ càng cao thì nguy cơ tức thời ước tính càng lớn. DeepSurv dùng mạng nơ-ron để học điểm nguy cơ phi tuyến trong cấu trúc Cox này \cite{katzman2018deepsurv}.
-
-Điểm $\eta_i$ đủ để xếp hạng nguy cơ, nhưng để chuyển điểm này thành xác suất tiến triển tại một thời hạn cụ thể, cần ước lượng nguy cơ tích lũy nền $H_0(t)$ từ thời gian theo dõi, biến cố và điểm nguy cơ trên tập huấn luyện. Độ hiệu chỉnh cho biết xác suất dự đoán phù hợp đến mức nào với tỷ lệ biến cố quan sát.
-
-Gọi $t_i$ là thời gian quan sát đến biến cố hoặc kiểm duyệt của người thứ $i$. Khi các thời điểm biến cố khác nhau, hàm mất mát Cox là giá trị âm của log-hợp lý riêng phần
-\begin{equation}
-\mathcal L_{\rm Cox}=-\sum_{i:\delta_i=1}\left[\eta_i-\log\sum_{j\in\mathcal R(t_i)}\exp(\eta_j)\right],
-\end{equation}
-trong đó $\mathcal R(t_i)$ gồm người còn được theo dõi và chưa có biến cố ngay trước $t_i$. Phương pháp Breslow xấp xỉ hợp lý riêng phần khi nhiều biến cố cùng thời điểm \cite{breslow1974covariance}. C-index đánh giá thứ tự nguy cơ trên các cặp so sánh được \cite{harrell1996multivariable}.
-
-Bên cạnh mô hình nguy cơ, phân tích sống còn cần một mốc bắt đầu theo dõi rõ ràng. Phương pháp dự đoán tại mốc xác định (landmarking) chọn người đủ điều kiện tại một thời điểm, rồi theo dõi biến cố từ thời điểm đó \cite{vanhouwelingen2007dynamic}. Mục~\ref{sec:study-design} trình bày hai mốc được dùng trong bộ dữ liệu của khóa luận.
-
+trong đó $h_0(t)$ là hàm nguy cơ nền (baseline hazard) hoàn toàn tự do theo thời gian, đại diện cho nguy cơ chung của quần thể khi điểm nguy cơ $\eta=0$; còn $\eta_i = f_\theta(x_i)$ là điểm log-nguy cơ (log-risk score) độc lập với thời gian, được ước lượng từ các đặc trưng đầu vào $x_i$ của cá thể thông qua mạng nơ-ron học sâu với bộ tham số $\theta$ (tương tự kiến trúc DeepSurv \cite{katzman2018deepsurv}). Tính chất then chốt của mô hình Cox là tỷ số nguy cơ (hazard ratio) giữa hai cá thể $i$ và $j$, tính bằng $\exp(\eta_i - \eta_j)$, hoàn toàn không phụ thuộc vào thời gian $t$. Do đó, việc ước lượng chính xác điểm $\eta_i$ cho phép xếp hạng thứ tự rủi ro tương đối giữa các bệnh nhân một cách nhất quán.
 
 \begin{figure}[H]
 \centering
@@ -32,15 +28,20 @@ Bên cạnh mô hình nguy cơ, phân tích sống còn cần một mốc bắt 
 \label{fig:concept-survival}
 \end{figure}
 
-\subsection{T-LSTM và attention}
-Để đưa lịch sử khám vào mô hình sống còn, LSTM tổng hợp chuỗi qua trạng thái ẩn, bộ nhớ và các cổng điều tiết \cite{hochreiter1997lstm}. Do khoảng cách giữa các lần khám không đều, T-LSTM bổ sung khoảng thời gian này vào phép điều chỉnh bộ nhớ \cite{baytas2017patient}. Tiếp theo, cơ chế chú ý cộng (additive attention) kết hợp các trạng thái ẩn bằng trọng số học được \cite{bahdanau2015attention}:
+Hình~\ref{fig:concept-survival} minh họa các trường hợp ghi nhận biến cố và kiểm duyệt phải. Để học điểm nguy cơ mà không cần tham số hóa hàm nền $h_0(t)$, mô hình cực tiểu hóa giá trị âm của log-hợp lý riêng phần Cox \cite{cox1972regression,katzman2018deepsurv}:
 \begin{equation}
- e_t=\bm v^\top\tanh(W_hh_t+b_h),\quad
- \alpha_t=\frac{\exp(e_t)}{\sum_k\exp(e_k)},\quad z=\sum_t\alpha_th_t.
+\mathcal L_{\rm Cox}=-\sum_{i:\delta_i=1}\left[\eta_i-\log\sum_{j\in\mathcal R(t_i)}\exp(\eta_j)\right],
+\label{eq:cox-loss}
 \end{equation}
-Tại lần khám $t$, mạng biến trạng thái ẩn $h_t$ thành điểm $e_t$ qua phép biến đổi có các tham số học được $W_h$, $b_h$ và $\bm v$. Sau khi chuẩn hóa các điểm attention qua các lần khám của cùng một người, mạng dùng trọng số $\alpha_t$ của lần khám $t$ để tính tổng có trọng số của các trạng thái ẩn, từ đó thu được vectơ $z$. Chương~\ref{chap:method} trình bày cấu hình T-LSTM và cách xử lý thời gian của RC-Free.
+trong đó $\mathcal R(t_i)=\{j:t_j\geq t_i\}$ là tập các cá thể còn có nguy cơ ngay trước $t_i$. Nếu nhiều biến cố cùng xảy ra tại một thời điểm, các số hạng tương ứng trong công thức dùng chung tập nguy cơ, theo xấp xỉ Breslow \cite{breslow1974covariance}. Chỉ số đồng thuận Harrell's C-index đánh giá thứ tự dự báo trên các cặp có thể xác định được thứ tự biến cố \cite{harrell1996multivariable}.
 
-Hình~\ref{fig:concept-longitudinal} minh họa cách khoảng thời gian giữa hai lần khám tác động đến cập nhật bộ nhớ, còn trọng số attention tác động đến bước tổng hợp chuỗi.
+Phương pháp dự đoán tại mốc xác định (landmarking) sử dụng thông tin sẵn có tới mốc dự báo để ước tính nguy cơ tiếp theo cho những người còn thuộc tập nguy cơ tại mốc đó \cite{vanhouwelingen2007dynamic}. Cửa sổ quan sát và quy tắc chọn mốc cụ thể của khóa luận được trình bày ở Chương~\ref{chap:method}.
+
+\subsection{Mạng nơ-ron thời gian T-LSTM và cơ chế chú ý}
+\label{sec:background-temporal}
+Mạng bộ nhớ dài ngắn hạn (LSTM) dùng trạng thái bộ nhớ và các cổng để học phụ thuộc qua nhiều bước của chuỗi \cite{hochreiter1997lstm}. Trong LSTM tiêu chuẩn, thứ tự hai lần khám liên tiếp xác định hai bước kế tiếp của mạng, nhưng khoảng thời gian thực tế giữa hai lần khám không xuất hiện trong phép cập nhật nếu không được đưa vào mô hình. Baytas và cộng sự nêu hạn chế này khi xử lý bệnh án có lịch khám không đều \cite{baytas2017patient}.
+
+Để khắc phục hạn chế trên, mạng T-LSTM (Time-Aware LSTM) \cite{baytas2017patient} bổ sung một cơ chế phân rã bộ nhớ dựa trên độ trễ thời gian $\Delta t$ giữa các lần khám. Cụ thể, trạng thái bộ nhớ dài hạn từ bước trước $c_{t-1}$ được phân tách thành hai thành phần: thành phần bộ nhớ dài hạn được bảo toàn và thành phần bộ nhớ ngắn hạn bị suy giảm thông qua một hàm phi tuyến tính theo $\Delta t$. Nhờ vậy, T-LSTM có thể điều chỉnh linh hoạt dòng thông tin truyền qua chuỗi thời gian phù hợp với khoảng cách thực tế giữa các mốc thăm khám.
 
 \begin{figure}[H]
 \centering
@@ -49,7 +50,17 @@ Hình~\ref{fig:concept-longitudinal} minh họa cách khoảng thời gian giữ
 \label{fig:concept-longitudinal}
 \end{figure}
 
+Để tổng hợp các trạng thái ẩn của mọi lần khám, khóa luận sử dụng cơ chế chú ý cộng. Bahdanau và cộng sự dùng điểm chú ý để tính tổng có trọng số các trạng thái của bộ mã hóa \cite{bahdanau2015attention}. Công thức dưới đây dùng một vectơ ngữ cảnh học được $\bm v$, theo dạng tổng hợp của Yang và cộng sự \cite{yang2016hierarchical}, với mỗi trạng thái $h_t$ tương ứng một lần khám:
+\begin{equation}
+ e_t=\bm v^\top\tanh(W_hh_t+b_h),\quad
+ \alpha_t=\frac{\exp(e_t)}{\sum_k\exp(e_k)},\quad z=\sum_t\alpha_th_t.
+ \label{eq:additive-attention}
+\end{equation}
+Hình~\ref{fig:concept-longitudinal} minh họa trực quan sự kết hợp giữa bước phân rã bộ nhớ theo độ trễ thời gian trong T-LSTM và bước tổng hợp có trọng số qua attention, tạo ra vectơ biểu diễn dọc $z$ sẵn sàng làm đầu vào cho khối tính điểm nguy cơ Cox.
+
 \section{Ba nguồn thông tin và biểu diễn}
+Tiên lượng suy giảm nhận thức trong bệnh Alzheimer đòi hỏi việc nhìn nhận người bệnh dưới nhiều lăng kính bổ trợ cho nhau. Bảng~\ref{tab:background-inputs} tóm tắt đặc điểm và vai trò của ba nguồn thông tin được khai thác trong nghiên cứu này.
+
 \begin{table}[H]
 \centering\small
 \caption[Ba nguồn thông tin trong bài toán]{Thông tin chính của ba nguồn dữ liệu.}
@@ -58,19 +69,12 @@ Hình~\ref{fig:concept-longitudinal} minh họa cách khoảng thời gian giữ
 \toprule
 \textbf{Nguồn} & \textbf{Thông tin chính} & \textbf{Điểm cần lưu ý} \\
 \midrule
-MRI cấu trúc & Hình thái não; CNN học biểu diễn không gian & Cần chuẩn hóa và kiểm tra khác biệt miền ảnh \\
-Radiomics & Phép đo hình dạng, cường độ và kết cấu & Phụ thuộc vùng não, chuẩn hóa và rời rạc hóa; có thể trùng thông tin MRI \\
-Lâm sàng & MMSE, CDR và khả năng sinh hoạt & Liên quan tiêu chí biến cố; cần phân biệt thời điểm đo đầu vào với kết cục \\
+MRI cấu trúc 3D & Hình thái giải phẫu vĩ mô; học sâu CNN 3D & Cần chuẩn hóa không gian, thang cường độ và tránh méo hình học \\
+Radiomics & Hình dạng, phân bố cường độ và kết cấu ảnh & Giá trị đặc trưng kết cấu phụ thuộc vào cách rời rạc hóa mức xám \cite{zwanenburg2020ibsi} \\
+Lâm sàng & Điểm số nhận thức (MMSE) và chức năng (CDR) & Liên quan trực tiếp tiêu chí biến cố; cần tách bạch đầu vào và kết cục \\
 \bottomrule
 \end{tabularx}
 \end{table}
-
-Đối với dữ liệu MRI, CNN 3D học các quan hệ không gian giữa những voxel trong thể tích ảnh, trong đó ResNet sử dụng kết nối phần dư để học phần hiệu chỉnh trên đầu vào \cite{he2016deep}. MedicalNet cung cấp các trọng số được tiền huấn luyện trên dữ liệu ảnh y khoa ba chiều \cite{chen2019med3d}, vì vậy tôi lựa chọn ResNet-18 3D làm bộ mã hóa MRI chung cho các đối chứng chính và sử dụng trọng số MedicalNet để khởi tạo mạng. Khác với Li và cộng sự, những người khảo sát giá trị tiên lượng của ảnh hồi hải mã tại một thời điểm trên hai bộ dữ liệu ADNI và AIBL \cite{li2019hippocampal}, tôi sử dụng bộ mã hóa để xử lý MRI toàn não tại từng lần khám.
-
-Khác với các đặc trưng được học trực tiếp từ ảnh, radiomics khai thác MRI thông qua những phép đo định lượng được xác định trước \cite{vangriethuysen2017computational}. Do nhiều đặc trưng có tương quan với nhau, tôi sử dụng phân tích thành phần chính (PCA) để tạo các tổ hợp tuyến tính theo những hướng có phương sai lớn, qua đó giảm số chiều của dữ liệu \cite{jolliffe2016pca}. Các thành phần chính được ước lượng chỉ trên tập huấn luyện, sau đó biểu diễn thu được được đưa vào mô hình sống còn để đánh giá giá trị tiên lượng.
-
-Hai thang MMSE và CDR bổ sung thông tin về tình trạng nhận thức và chức năng sinh hoạt của người tham gia \cite{folstein1975mmse,morris1993cdr}. Trong thiết kế nghiên cứu này, vai trò của chúng được xác định theo thời điểm đánh giá: các điểm số ghép với ngày chụp MRI được sử dụng làm đầu vào của mạng, trong khi những đánh giá sau mốc $L$ được dùng để xác định biến cố. Mục~\ref{sec:study-design} trình bày cụ thể mối quan hệ thời gian giữa hai nhóm số đo, còn Mục~\ref{sec:preprocessing} giải thích cách sử dụng chỉ báo quan sát để phân biệt giá trị đo thực tế với giá trị được điền khi dữ liệu bị thiếu.
-
 
 \begin{figure}[H]
 \centering
@@ -79,11 +83,18 @@ Hai thang MMSE và CDR bổ sung thông tin về tình trạng nhận thức và
 \label{fig:concept-sources}
 \end{figure}
 
+Hình~\ref{fig:concept-sources} trực quan hóa nguồn gốc và mối quan hệ của ba luồng dữ liệu tại mỗi lần khám:
+\begin{enumerate}
+\item \emph{Ảnh cộng hưởng từ cấu trúc 3D (MRI)}: MRI cấu trúc cung cấp thông tin về hình thái não tại từng lần chụp \cite{jack2008adnimri}. Khóa luận dùng kiến trúc phần dư ResNet \cite{he2016deep} ở dạng ResNet-18 3D, với trọng số tiền huấn luyện trên ảnh y khoa ba chiều từ MedicalNet \cite{chen2019med3d}. Trong khi Li và cộng sự khai thác ảnh vùng hồi hải mã \cite{li2019hippocampal}, mô hình trong khóa luận tiếp nhận toàn bộ thể tích não tại từng mốc quan sát.
+\item \emph{Đặc trưng radiomics định lượng}: IBSI chuẩn hóa định nghĩa và giá trị tham chiếu cho nhiều đặc trưng mô tả hình dạng, phân bố cường độ và kết cấu ảnh \cite{zwanenburg2020ibsi}. Khóa luận dùng PyRadiomics \cite{vangriethuysen2017computational} để trích xuất các đặc trưng này, chẳng hạn độ tương phản tính từ ma trận đồng xuất mức xám (GLCM). Phân tích thành phần chính (PCA) \cite{jolliffe2016pca} được khớp trên tập huấn luyện để giảm số chiều trước khi đưa đặc trưng vào mạng MLP.
+\item \emph{Dữ liệu lâm sàng và nhận thức}: MMSE đánh giá trạng thái nhận thức \cite{folstein1975mmse}. CDR-global tổng hợp mức suy giảm trên các lĩnh vực nhận thức và hoạt động hằng ngày \cite{morris1993cdr}. Trong thiết kế của khóa luận, điểm số đo trong cửa sổ quan sát là đặc trưng đầu vào, còn các đánh giá sau mốc chọn mẫu dùng để xác định biến cố nghiên cứu.
+\end{enumerate}
+
 \section{Hợp nhất thông tin và tham số hóa tương tác}
-Để kết hợp ba nguồn thông tin, trước hết mô hình cần đưa các biểu diễn về kích thước phù hợp \cite{baltrusaitis2019multimodal}. Trong đó, phép ghép nối tập hợp các tọa độ của hai vectơ thành một vectơ chung, còn phép tích ngoài tạo ra ma trận chứa tích của từng cặp tọa độ giữa hai vectơ \cite{zadeh2017tensor}. Cách biểu diễn tường minh các tích chéo này làm tăng số trọng số cần học, vì vậy tôi sử dụng phân rã CP để thu gọn tensor trọng số của lớp tương tác. Sau khi tạo đặc trưng tương tác, mô hình đưa chúng trở lại biểu diễn của từng nguồn thông qua kết nối phần dư có cổng điều tiết, nhờ đó kiểm soát được mức thông tin bổ sung cho mỗi nguồn.
+\label{sec:background-fusion}
+Sau khi ba bộ mã hóa tạo ra các vectơ đặc trưng tại mỗi lần khám, có nhiều cách kết hợp các biểu diễn này \cite{baltrusaitis2019multimodal}. Phép ghép nối (concatenation) tập hợp các tọa độ thành một vectơ dài hơn và không bổ sung tham số tại bước ghép. Bản thân phép ghép không tạo ra các tích chéo giữa các tọa độ. Khả năng học tương tác phụ thuộc vào các tầng xử lý tiếp theo.
 
-
-Hình~\ref{fig:concept-fusion} minh họa hai phép toán với hai vectơ hai chiều. Phép ghép nối tạo một vectơ bốn chiều, còn tích ngoài tạo một ma trận $2\times2$. Sau khi ma trận được trải thành vectơ, lớp tuyến tính tiếp theo ánh xạ các tích chéo thành đặc trưng tương tác dùng để xếp hạng nguy cơ.
+Ngược lại, phép tích ngoài (outer product) cho phép tạo ra tương tác song tuyến đầy đủ giữa mọi cặp tọa độ của hai vectơ đặc trưng \cite{zadeh2017tensor}. Hình~\ref{fig:concept-fusion} so sánh trực quan hai cơ chế này qua một ví dụ không gian hai chiều đơn giản: phép ghép nối tạo ra vectơ bốn chiều, trong khi phép tích ngoài tạo ra ma trận kích thước $2\times2$ chứa toàn bộ các tích chéo giữa hai nguồn dữ liệu.
 
 \begin{figure}[H]
 \centering
@@ -92,63 +103,60 @@ Hình~\ref{fig:concept-fusion} minh họa hai phép toán với hai vectơ hai c
 \label{fig:concept-fusion}
 \end{figure}
 
-\subsection{Từ tích ngoài đến CP}
-Vì tích ngoài tạo tương tác giữa mọi cặp đặc trưng của hai nguồn, số tổ hợp tăng theo tích số chiều, kéo theo số trọng số cần học tăng nhanh. CP (CANDECOMP/PARAFAC, phân rã tensor thành tổng các thành phần hạng một) giúp thu gọn bộ trọng số bằng các nhân tử hạng thấp. Hình~\ref{fig:cp-intro} minh họa hai cách tính, còn Chương~\ref{chap:method} trình bày cách áp dụng CP trong mô hình.
+\subsection{Từ tích ngoài đến phân rã tensor CP hạng thấp}
+Mặc dù phép tích ngoài song tuyến đầy đủ có khả năng biểu diễn tương tác chéo rất mạnh mẽ, cái giá phải trả là sự bùng nổ tham số nghiêm trọng. Xét hai vectơ đặc trưng $x\in\mathbb R^{d_x\times1}$ và $y\in\mathbb R^{d_y\times1}$, tích ngoài $xy^\top\in\mathbb R^{d_x\times d_y}$ sau khi trải phẳng và đưa qua một lớp biến đổi tuyến tính để ánh xạ lên không gian ẩn $d_o$ sẽ tương đương với một ánh xạ song tuyến có dạng:
+\begin{equation}
+ h_k=\sum_{i=1}^{d_x}\sum_{j=1}^{d_y}\mathcal W_{kij}x_i y_j+b_k,
+ \label{eq:full-bilinear}
+\end{equation}
+trong đó tensor trọng số $\mathcal W\in\mathbb R^{d_o\times d_x\times d_y}$ chứa $d_o d_x d_y$ tham số, chưa kể độ chệch. Chi phí biểu diễn tensor tăng theo tích các kích thước này, tạo động lực cho các cách hợp nhất hạng thấp \cite{liu2018lowrank}.
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{image/cp-concept-general.pdf}
 \caption{So sánh phép tích ngoài đầy đủ và tham số hóa CP hạng thấp}
 \label{fig:cp-intro}
 \end{figure}
-Với hai vectơ cột $x\in\mathbb R^{d_x\times1}$ và $y\in\mathbb R^{d_y\times1}$, tích ngoài $xy^\top\in\mathbb R^{d_x\times d_y}$ chứa mọi tích $x_iy_j$. Trải ma trận rồi áp dụng ánh xạ tuyến tính tương đương ánh xạ song tuyến:
-\begin{equation}
- h_k=\sum_{i=1}^{d_x}\sum_{j=1}^{d_y}W_{kij}x_iy_j+b_k.
-\end{equation}
-Tensor trọng số $W\in\mathbb R^{d_o\times d_x\times d_y}$ có $d_od_xd_y$ phần tử. CP biểu diễn tensor bằng tổng các thành phần hạng một \cite{carroll1970candecomp,kolda2009tensor}:
-\begin{equation}
- W_{kij}\approx\sum_{q=1}^Q O_{kq}A_{iq}B_{jq},\qquad
- h=O[(A^\top x)\odot(B^\top y)]+b.
-\end{equation}
-Với phân rã CP hạng $Q$, ba ma trận nhân tử có tổng cộng $Q(d_x+d_y+d_o)$ tham số. Giá trị $Q$ quyết định hạng của tensor trọng số mà mô hình có thể biểu diễn thông qua các nhân tử $A$, $B$ và $O$, vốn được học trực tiếp trong mạng. Cách tham số hóa bằng phân rã hạng thấp cũng được áp dụng trong các phương pháp hợp nhất đa nguồn khác. Cụ thể, Low-rank Multimodal Fusion (LMF) sử dụng các nhân tử hạng thấp \cite{liu2018lowrank}, trong khi Multimodal Tucker Fusion (MUTAN) sử dụng phân rã Tucker, với tensor lõi kết hợp các nhân tử theo từng chiều \cite{benyounes2017mutan}.
 
-\subsection{Kết nối phần dư có cổng điều tiết}
-Sau khi tạo các đặc trưng tương tác, mô hình cần xác định mức thông tin nên được đưa trở lại từng nguồn dữ liệu. Để thực hiện điều đó, kết nối phần dư duy trì đường biểu diễn gốc và bổ sung thông tin từ nhánh tương tác, trong khi cổng điều tiết học từ đầu vào để kiểm soát mức đóng góp của phần bổ sung đối với từng mẫu. Nguyên tắc kết hợp này được thể hiện trong hai nghiên cứu dưới đây, đồng thời là cơ sở để tôi phát triển cơ chế truyền thông tin theo cặp trong RC-Free.
-
-\paragraph{Ryumina và cộng sự: lấy văn bản làm nguồn neo.}
-Text Residual Fusion kết hợp văn bản, âm thanh, khuôn mặt và cảnh để nhận dạng sự lưỡng lự \cite{ryumina2026residual}. Sau phép chiếu riêng cho từng nguồn, $b=h_{\rm text}$ là biểu diễn văn bản và $h_m$ là biểu diễn của nguồn bổ sung thứ $m$. Công thức (13) của bài báo có dạng
+Để phá vỡ thế bế tắc này, kỹ thuật phân rã tensor Canonical Polyadic (CP) \cite{carroll1970candecomp,kolda2009tensor} được áp dụng để xấp xỉ tensor trọng số bậc ba thông qua tổng của $Q$ thành phần hạng một:
 \begin{equation}
- g_m=\sigma(\operatorname{MLP}([b;h_m])),\qquad
- z=\operatorname{LN}\left(b+\sum_{m\ne\mathrm{text}}g_m d_m(h_m)\right).
- \label{eq:ryumina-residual}
+ \mathcal W_{kij}\approx\sum_{q=1}^Q O_{kq}A_{iq}B_{jq}.
+ \label{eq:cp-concept-math}
 \end{equation}
-Ở đây, $[b;h_m]$ là phép ghép nối, $\sigma$ là hàm sigmoid và $d_m$ là MLP tạo phần dư. Cổng sử dụng thông tin từ cả nguồn neo và nguồn bổ sung để điều tiết phần dư của từng nguồn trước khi mô hình cộng chúng vào biểu diễn văn bản. Biểu diễn sau phép cộng được chuẩn hóa rồi đưa vào bộ phân loại, như minh họa ở Hình~\ref{fig:literature-gates}(a).
+Nhờ cấu trúc phân rã này, phép tính ánh xạ song tuyến phức tạp được chuyển đổi tương đương thành:
+\begin{equation}
+ h=O[(A^\top x)\odot(B^\top y)]+b,
+ \label{eq:cp-hadamard}
+\end{equation}
+trong đó $A\in\mathbb R^{d_x\times Q}$, $B\in\mathbb R^{d_y\times Q}$ và $O\in\mathbb R^{d_o\times Q}$ là ba ma trận nhân tử hạng thấp được học trực tiếp trong mạng, và $\odot$ là phép nhân từng phần tử (Hadamard product). Số lượng tham số cần học vì thế giảm mạnh từ $d_o d_x d_y$ xuống chỉ còn $Q(d_x + d_y + d_o)$. Hình~\ref{fig:cp-intro} minh họa sự chuyển dịch mang tính bản chất giữa hai cách tiếp cận. Ý tưởng tham số hóa hạng thấp này cũng chia sẻ triết lý với các mô hình hợp nhất đa phương thức tiên tiến như Low-rank Multimodal Fusion (LMF) \cite{liu2018lowrank} và Multimodal Tucker Fusion (MUTAN) \cite{benyounes2017mutan}.
 
-\paragraph{Liu và cộng sự: bổ sung chuyển động vào RGB.}
-DyFADet+ dùng hai nhánh RGB và bộ xương, tạo các mức đặc trưng thời gian tương ứng để phát hiện cử chỉ \cite{liu2026motion}. Tại mức $\ell$, công thức (1)--(2) của bài báo là
-\begin{align}
- G^{(\ell)}&=\sigma\left(\phi_\ell([F_r^{(\ell)};F_s^{(\ell)}])\right),\\
- F_f^{(\ell)}&=F_r^{(\ell)}+\alpha G^{(\ell)}\odot\psi_\ell(F_s^{(\ell)}).
- \label{eq:liu-residual}
-\end{align}
-$F_r$ và $F_s$ lần lượt biểu diễn RGB và bộ xương; $\phi_\ell$ là tích chập thời gian $1\times1$, còn $\psi_\ell$ là bộ chuyển đổi hai lớp tích chập với GELU. Cổng chọn mức bổ sung theo phần tử, còn $\alpha=0.5$ điều chỉnh cường độ chung. Các đặc trưng hợp nhất được đưa tới đầu phát hiện theo thời gian, như Hình~\ref{fig:literature-gates}(b).
+\subsection{Triết lý kết nối phần dư có cổng điều tiết động}
+Sau khi đã trích xuất được đặc trưng tương tác từ các khối CP, một câu hỏi kiến trúc cơ bản nảy sinh: \emph{Làm thế nào để đưa thông tin tương tác này trở lại biểu diễn của từng phương thức mà không làm suy hao hoặc sai lệch tín hiệu gốc?}
+
+Khóa luận khảo sát cơ chế \emph{kết nối phần dư có cổng điều tiết} (gated residual routing). Theo cách này, một biểu diễn có đường truyền trực tiếp, còn thông tin từ nguồn khác đi qua cổng trước khi được cộng vào biểu diễn đó. Hai bản thảo trên arXiv minh họa cơ chế này ở các bài toán ngoài lĩnh vực y sinh:
+\begin{enumerate}
+\item \emph{Text Residual Fusion của Ryumina và cộng sự (2026)} \cite{ryumina2026residual}: Để nhận dạng biểu hiện lưỡng lự hoặc do dự trong video, mô hình dùng biểu diễn văn bản làm nguồn neo. Âm thanh, khuôn mặt và bối cảnh đóng góp các phần dư theo cổng phụ thuộc vào đầu vào. Tổng này được chuẩn hóa trước khi đưa vào bộ phân loại (Hình~\ref{fig:literature-gates}(a)).
+\item \emph{DyFADet+ của Liu và cộng sự (2026)} \cite{liu2026motion}: Trong bài toán phát hiện vi cử chỉ, luồng RGB là đường truyền chính. Đặc trưng chuyển động từ bộ xương đi qua cổng và được nhân với hệ số cố định $\alpha=0{,}5$ trước khi cộng vào đặc trưng RGB (Hình~\ref{fig:literature-gates}(b)).
+\end{enumerate}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{image/literature-gates.pdf}
-\caption{Các cơ chế kết nối phần dư có cổng trong nghiên cứu liên quan}
+\caption[Các cơ chế kết nối phần dư có cổng]{Sơ đồ do tác giả tổng hợp. Phần (a) dựa trên mô hình của Ryumina và cộng sự \cite{ryumina2026residual}, phần (b) dựa trên mô hình của Liu và cộng sự \cite{liu2026motion}, phần (c) là kiến trúc của khóa luận.}
 \label{fig:literature-gates}
 \end{figure}
 
-Từ hai công trình trên, tôi kế thừa nguyên tắc điều tiết phần dư để đưa thông tin tương tác theo cặp trở lại từng nguồn. Mỗi nguồn giữ biểu diễn gốc $U_d$, còn đặc trưng tương tác CP của mỗi cặp $k$ được chiếu về không gian của nguồn đích $d$ để tạo biểu diễn $\widehat E_{k\to d}$. Cổng dựa trên cả biểu diễn gốc và đặc trưng đã chiếu để xác định mức đóng góp của nhánh. Sau khi cộng các phần đóng góp cùng đích vào $U_d$, mô hình chuẩn hóa kết quả theo công thức
+Kế thừa và nâng tầm triết lý điều tiết phần dư từ hai nghiên cứu trên, tôi phát triển cơ chế truyền tương tác theo cặp trong mô hình RC-Free. Thay vì chỉ neo vào một nguồn duy nhất, mỗi phương thức $d$ đều duy trì đường biểu diễn gốc $U_d$, đồng thời nhận các phần bổ chính tương tác từ các cặp tương tác còn hoạt động hướng tới nó. Mỗi nhánh truyền được trang bị một cổng điều tiết động $g_{k\to d} \in (0,1)$ học từ dữ liệu tại từng lần khám và một hệ số khuếch đại $\lambda_{k\to d}$ học được:
 \begin{equation}
- Z_d=\operatorname{LN}\left[U_d+\sum_{k\in\mathcal P(d)}\lambda_{k\to d}g_{k\to d}\widehat E_{k\to d}\right].
+ Z_d=\LN\left[U_d+\sum_{k\in\mathcal P(d)}\lambda_{k\to d}\,g_{k\to d}\,\widehat E_{k\to d}\right].
+ \label{eq:our-gated-residual-bg}
 \end{equation}
-Trong RC-Free, cặp MR (MRI--radiomics) truyền thông tin về hai nguồn MRI và radiomics, còn cặp MC (MRI--lâm sàng) truyền thông tin về MRI và lâm sàng. Với cách tổ chức phần dư này, cả ba nguồn đều giữ đường biểu diễn gốc và mỗi nhánh trong bốn nhánh bổ sung được học riêng.
+Khi các cổng tiến gần 0, đóng góp của các nhánh tương tác giảm và đầu ra tiến gần $\LN(U_d)$. Giá trị của cổng mô tả mức điều tiết trong mô hình đã học.
 
-$g_{k\to d}\in(0,1)$ là một số thay đổi theo người và lần khám, do MLP với sigmoid tạo ra. $\lambda_{k\to d}$ là tham số dùng chung của nhánh, khởi tạo bằng 0.1 và được học không ràng buộc dấu. Chẳng hạn, khi $\lambda=0.1$ và $g=0.2$, phần bổ sung trước phép cộng là $0.02\widehat E$; nếu $g=0.8$ thì thành $0.08\widehat E$. Như vậy, $\lambda$ đặt mức điều chỉnh chung, còn $g$ thay đổi theo đầu vào. Khi $\lambda$ âm, hướng bổ sung đảo lại. LayerNorm chuẩn hóa tổng sau phép cộng; Mục~\ref{sec:gated-routing} trình bày đầy đủ phép chiếu và MLP của cổng.
-
-\section{Nghiên cứu liên quan và hướng khảo sát}
+\section{Nghiên cứu liên quan và khoảng trống nghiên cứu}
 \label{sec:related-work}
+Bảng~\ref{tab:related} tổng hợp bức tranh toàn cảnh về các hướng nghiên cứu sử dụng học máy và học sâu cho tiên lượng bệnh Alzheimer, đồng thời chỉ rõ mối liên hệ kế thừa của khóa luận đối với từng nhóm công trình.
+
 \begin{table}[H]
 \centering\small
 \caption[Tổng hợp nghiên cứu liên quan]{Các hướng nghiên cứu, phương pháp và thành phần được kế thừa.}
@@ -158,21 +166,23 @@ $g_{k\to d}\in(0,1)$ là một số thay đổi theo người và lần khám, d
 \textbf{Hướng} & \textbf{Công trình và cách làm} & \textbf{Liên hệ với khóa luận} \\
 \midrule
 MRI đơn thời điểm & Li: biểu diễn hồi hải mã; Nakagawa: thể tích chất xám và mạng sống còn \cite{li2019hippocampal,nakagawa2020survival} & Cơ sở khảo sát biểu diễn ảnh và mục tiêu sống còn \\
-Dữ liệu dọc & Li và Fan, Ding và cộng sự: dữ liệu nhận thức hoặc MRI theo thời gian; Dong: học thay đổi từ cặp MRI \cite{li2019early,ding2023progression,dong2021deepatrophy} & Phân biệt học diễn biến với dự đoán biến cố tương lai \\
+Dữ liệu dọc & Li và Fan: MRI hồi hải mã ban đầu và điểm nhận thức dọc \cite{li2019early}. Ding: dữ liệu nhận thức và MRI qua nhiều lần khám \cite{ding2023progression}. Dong: học thay đổi từ cặp MRI \cite{dong2021deepatrophy} & Phân biệt học diễn biến với dự đoán biến cố tương lai \\
 Radiomics và lâm sàng & Tang và cộng sự: LASSO--Cox kết hợp đặc trưng ảnh, biến lâm sàng và kết quả xét nghiệm \cite{tang2021individualized} & Kiểm tra thông tin bổ sung trong cùng thiết lập \\
 MRI dọc học sâu & Aghajanian: CNN--PCA--T-LSTM và attention \cite{aghajanian2025longitudinal} & Quy trình tham chiếu và cách đánh giá phân tầng nguy cơ \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-Các công trình được tổng hợp trong Bảng~\ref{tab:related} khai thác MRI theo hai hướng chính. Trong khi những nghiên cứu sử dụng ảnh đơn thời điểm tập trung đánh giá giá trị tiên lượng của hình thái não, các nghiên cứu trên ảnh dọc có thể mô tả trực tiếp sự thay đổi giữa những lần chụp. Tuy nhiên, để liên hệ các thay đổi hình ảnh này với tiến triển nhận thức, mô hình không chỉ cần khai thác thứ tự quan sát mà còn phải xem xét thời gian đến biến cố và tình trạng kiểm duyệt của từng người tham gia.
+Aghajanian và cộng sự \cite{aghajanian2025longitudinal} chọn 228 người có MCI từ ADNI, với ít nhất ba lần chụp MRI T1 trong 18 tháng đầu. Nhóm dùng CNN trích xuất đặc trưng cho từng ảnh, khớp PCA trên tập huấn luyện với ngưỡng giữ 99\% phương sai và huấn luyện T-LSTM bằng hàm mất mát Cox. Nhóm cũng khảo sát attention trên các trạng thái ẩn. Trong các so sánh của bài báo, việc bổ sung radiomics chất xám không cải thiện rõ khả năng dự báo của mô hình dọc. Mô hình cuối dùng các đặc trưng CNN từ MRI.
 
-Aghajanian và cộng sự nghiên cứu 228 người mắc MCI có ít nhất ba lần chụp MRI trong 18 tháng \cite{aghajanian2025longitudinal}. Từ ba ảnh của từng người, nhóm tác giả dùng CNN đã huấn luyện để trích một vectơ 512 chiều cho mỗi ảnh, sau đó dùng PCA để giảm chiều sao cho giữ được 99\% phương sai trên tập huấn luyện. Chuỗi đặc trưng sau giảm chiều được tổng hợp bằng T-LSTM và attention. Nhóm tác giả đánh giá điểm nguy cơ bằng C-index, đường cong Kaplan--Meier và ROC theo thời hạn. Do việc bổ sung radiomics chất xám chưa cải thiện kết quả một cách nhất quán, mô hình cuối của công trình này dùng biểu diễn do CNN học.
-
-Dựa trên quy trình của Aghajanian và cộng sự, tôi xây dựng mô hình đối chứng \emph{Baseline Reproduction (CNN--PCA--T-LSTM)}, đồng thời điều chỉnh tiền xử lý và cấu hình huấn luyện để phù hợp với nhóm 359 người tham gia. Việc so sánh mô hình này với RC-Free cho phép đánh giá khả năng phân biệt nguy cơ của hai quy trình trên cùng nhóm người tham gia. Chương~\ref{chap:results} còn sử dụng các đối chứng có cùng cấu hình huấn luyện để khảo sát riêng ảnh hưởng của cách hợp nhất.
-
-\subsection{Từ bằng chứng trước đến thiết kế nghiên cứu}
+\subsection{Từ bằng chứng thực nghiệm đến khoảng trống nghiên cứu}
 \label{sec:research-gaps}
-Để khảo sát giá trị của các lần chụp trước, tôi so sánh mô hình chỉ dùng MRI cuối với các mô hình dùng chuỗi MRI. Đối chứng ba nguồn cho biết C-index thay đổi thế nào khi bổ sung radiomics và dữ liệu lâm sàng. Khi diễn giải sự thay đổi này, cần xét đến nguồn gốc và vai trò của các số đo. Radiomics và MRI xuất phát từ cùng một ảnh, trong khi các thang lâm sàng vừa cung cấp thông tin chức năng vừa tham gia định nghĩa biến cố.
+Kết quả của Aghajanian và cộng sự áp dụng cho quy trình ghép đặc trưng CNN với radiomics và giảm chiều mà nhóm đã thử \cite{aghajanian2025longitudinal}. Bài báo chưa xác định liệu cách hợp nhất có phải nguyên nhân khiến radiomics mang lại ít lợi ích. Khóa luận khảo sát câu hỏi hẹp hơn: hiệu năng thay đổi thế nào khi biểu diễn trực tiếp các tích chéo giữa nguồn ảnh và các nguồn còn lại?
 
-Ở cấp độ kiến trúc, phép ghép nối giữ các đặc trưng riêng của từng nguồn, trong khi lớp song tuyến biểu diễn tường minh các tích giữa những đặc trưng này. Tôi đối chiếu hai cách hợp nhất để đánh giá ảnh hưởng của chúng đến khả năng phân biệt nguy cơ, đồng thời khảo sát tác động của CP đối với số tham số và C-index. Cuối cùng, tôi loại bỏ tương tác trực tiếp giữa radiomics và lâm sàng để đánh giá mức độ ảnh hưởng của việc chỉ giữ lại hai cặp tương tác có chung nguồn MRI đối với khả năng phân biệt nguy cơ. Chương~\ref{chap:method} trình bày quy trình dữ liệu, kiến trúc RC-Free và cách đánh giá.
+Khóa luận kiểm tra hai lựa chọn thiết kế:
+\begin{enumerate}
+\item \emph{Tham số hóa tương tác}: Dùng phân rã CP để biểu diễn các tích chéo và kiểm soát số tham số bằng hạng $Q$.
+\item \emph{Chọn cặp tương tác}: Trong cấu hình \textbf{RC-Free}, MRI giữ liên kết trực tiếp với hai nguồn còn lại. Việc bỏ tương tác trực tiếp giữa radiomics và lâm sàng là giả thuyết kiến trúc được đánh giá bằng các mô hình đối chứng trong Chương~\ref{chap:results}.
+\end{enumerate}
+
+Những tiền đề lý thuyết và nhận định khoảng trống trên là cơ sở để Chương~\ref{chap:method} xây dựng chi tiết quy trình xử lý dữ liệu, thiết kế kiến trúc RC-Free và hệ thống đánh giá thực nghiệm.
