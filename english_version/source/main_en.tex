@@ -1,0 +1,195 @@
+\RequirePackage{fix-cm}
+\documentclass[oneside]{report}
+
+% Compiled with XeLaTeX + BibTeX or Tectonic.
+\usepackage[no-math]{fontspec}
+\newcommand{\ThesisTitle}{Longitudinal Learning with Tensor Fusion for Predicting Progression of Alzheimer’s Disease}
+\newcommand{\ThesisTitleVN}{Học trên dữ liệu theo dõi dọc với hợp nhất tensor để dự đoán tiến triển bệnh Alzheimer}
+\title{\ThesisTitle}
+\author{Nguyen Phuong Nam}
+\date{2026}
+
+\setmainfont{LibertinusSerif}[
+  Extension=.otf,
+  UprightFont=*-Regular,
+  BoldFont=*-Semibold,
+  ItalicFont=*-Italic,
+  BoldItalicFont=*-SemiboldItalic
+]
+
+\usepackage[a4paper,left=30mm,right=20mm,top=20mm,bottom=25mm]{geometry}
+\usepackage{graphicx}
+\usepackage{pdflscape}
+\graphicspath{{image/}{figures/}}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,fit,backgrounds,shapes.geometric,matrix}
+\usepackage{xcolor}
+\definecolor{uetblue}{HTML}{0B4F78}
+\definecolor{softblue}{HTML}{DCEEFF}
+\definecolor{softgreen}{HTML}{E2F3E7}
+\definecolor{softorange}{HTML}{FCE8D5}
+\definecolor{softpurple}{HTML}{EAE2F3}
+\definecolor{softgray}{HTML}{F3F4F6}
+\definecolor{darkgreen}{HTML}{247A3C}
+\definecolor{darkorange}{HTML}{B85C00}
+
+\usepackage{amsmath,mathtools}
+\usepackage[noOT1]{newtxmath}
+\usepackage{bm}
+\usepackage{booktabs,tabularx,longtable,multirow,array}
+\usepackage{float}
+\floatstyle{ruled}
+\newfloat{algorithm}{htbp}{loa}
+\floatname{algorithm}{Algorithm}
+\floatstyle{plain}
+\usepackage{caption}
+\usepackage{subcaption}
+\captionsetup{font=normalsize,labelfont=normalfont,textfont=normalfont,skip=6pt}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{microtype}
+\usepackage{scrextend}
+\usepackage{indentfirst}
+\usepackage{titlesec}
+\usepackage{tocloft}
+\usepackage{xurl}
+\usepackage{csquotes}
+
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{placeins}
+\usepackage{needspace}
+
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  urlcolor=blue,
+  pdftitle={\ThesisTitle},
+  pdfauthor={Nguyen Phuong Nam},
+  pdfsubject={Longitudinal multimodal survival prediction with RC-Free CP-factorized pairwise fusion},
+  pdfkeywords={Alzheimer, MCI, longitudinal learning, tensor fusion, CP, survival analysis}
+}
+
+\changefontsizes{13pt}
+\renewcommand{\baselinestretch}{1.30}
+\setlength{\parindent}{1cm}
+\setlength{\parskip}{4pt}
+\setlist{leftmargin=1cm,itemsep=0.2em,topsep=0.3em}
+\titlespacing*{\section}{0pt}{0.8\baselineskip}{0.35\baselineskip}
+\titlespacing*{\subsection}{0pt}{0.65\baselineskip}{0.25\baselineskip}
+\titlespacing*{\subsubsection}{0pt}{0.5\baselineskip}{0.2\baselineskip}
+
+\titleformat{\chapter}[display]{\normalfont\bfseries\huge}{\chaptername\ \thechapter}{8pt}{\Huge}
+\titlespacing*{\chapter}{0pt}{0pt}{18pt}
+\renewcommand{\chaptername}{Chapter}
+\renewcommand{\contentsname}{TABLE OF CONTENTS}
+\renewcommand{\listfigurename}{LIST OF FIGURES}
+\renewcommand{\listtablename}{LIST OF TABLES}
+\renewcommand{\figurename}{Figure}
+\renewcommand{\tablename}{Table}
+
+\renewcommand{\cftchappresnum}{Chapter~}
+\renewcommand{\cftchapleader}{\normalfont\cftdotfill{\cftdotsep}}
+\settowidth{\cftchapnumwidth}{Chapter~10\quad}
+\renewcommand{\cftfigpresnum}{Figure~}
+\settowidth{\cftfignumwidth}{Figure~10.10\quad}
+\renewcommand{\cfttabpresnum}{Table~}
+\settowidth{\cfttabnumwidth}{Table~10.10\quad}
+\settowidth{\cftsecnumwidth}{10.10\quad}
+\settowidth{\cftsubsecnumwidth}{10.10.10\quad}
+
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\T}{\mathsf{T}}
+\newcommand{\Had}{\odot}
+\newcommand{\concat}{\mathbin{\|}}
+\newcommand{\softplus}{\operatorname{softplus}}
+\newcommand{\LN}{\operatorname{LN}}
+\newcommand{\MLP}{\operatorname{MLP}}
+\newcommand{\diag}{\operatorname{diag}}
+\newcommand{\sigmoid}{\operatorname{sigmoid}}
+
+\lstdefinestyle{pythonstyle}{
+  language=Python,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue}\bfseries,
+  commentstyle=\color{gray},
+  stringstyle=\color{darkorange},
+  breaklines=true,
+  frame=single,
+  backgroundcolor=\color{softgray},
+  columns=fullflexible,
+  showstringspaces=false
+}
+
+\setlength{\emergencystretch}{2em}
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+
+\newcommand{\bestresult}[1]{\textbf{\boldmath #1}}
+
+\providecommand{\doi}[1]{\href{https://doi.org/#1}{DOI: \nolinkurl{#1}}}
+\newcommand{\thesisurl}[1]{\url{#1}}
+\renewcommand{\topfraction}{0.90}
+\renewcommand{\bottomfraction}{0.85}
+\renewcommand{\textfraction}{0.08}
+\renewcommand{\floatpagefraction}{0.72}
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{5}
+
+\begin{document}
+\special{pdf:minorversion 7}
+\nocite{aghajanian2025longitudinal}
+
+\hypersetup{pageanchor=false}
+\input{FrontMatter/CoverPages}
+\clearpage
+\hypersetup{pageanchor=true}
+
+\pagenumbering{roman}
+\setcounter{page}{3}
+\titleformat{name=\chapter,numberless}[display]{\normalfont\bfseries\large\filcenter}{}{0pt}{}
+\input{FrontMatter/AbstractVN}
+\input{FrontMatter_en/AbstractEN}
+\input{FrontMatter_en/Acknowledgements}
+\input{FrontMatter_en/Declaration}
+\titleformat{name=\chapter,numberless}[display]{\normalfont\bfseries\Huge}{}{0pt}{}
+\input{FrontMatter_en/Acronyms}
+\clearpage
+
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{1}
+\tableofcontents
+\clearpage
+\listoffigures
+\clearpage
+\listoftables
+\clearpage
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\input{chapters_en/chapter1}
+\input{chapters_en/chapter2}
+\input{chapters_en/chapter3}
+\input{chapters_en/chapter4}
+\input{chapters_en/chapter5}
+\input{chapters_en/appendix}
+
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{REFERENCES}
+\renewcommand{\bibname}{REFERENCES}
+\begingroup
+\renewcommand{\bibfont}{\renewcommand{\baselinestretch}{1.15}\fontsize{12}{14}\selectfont}
+\setlength{\bibsep}{0pt}
+\bibliographystyle{thesisrefs}
+\bibliography{references}
+\endgroup
+
+\end{document}

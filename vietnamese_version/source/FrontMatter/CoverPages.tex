@@ -1,0 +1,106 @@
+% Three covers follow the final Trang reference PDF, including its double frame.
+\newcommand{\ThesisCoverFrame}{%
+  \begin{tikzpicture}[overlay,remember picture]
+    \draw[line width=3pt] ($(current page.north west)+(2.0cm,-2.0cm)$) rectangle ($(current page.south east)+(-1.5cm,1.8cm)$);
+    \draw[line width=1pt] ($(current page.north west)+(2.15cm,-2.15cm)$) rectangle ($(current page.south east)+(-1.65cm,1.95cm)$);
+  \end{tikzpicture}%
+}
+
+\begin{titlepage}
+\setlength{\parskip}{0.5em}
+\ThesisCoverFrame
+\begin{center}
+  \vspace*{0cm}
+  \large
+  \textbf{VIETNAM NATIONAL UNIVERSITY, HANOI\\UNIVERSITY OF ENGINEERING AND TECHNOLOGY}
+
+  \vspace{1.5cm}
+  \includegraphics[width=0.3\textwidth]{UET.png}
+
+  \vspace{0.5cm}
+  \Large
+  \textbf{NGUYEN PHUONG NAM}
+
+  \vspace{1.5cm}
+  {\fontsize{16}{23}\selectfont
+  \textbf{LONGITUDINAL LEARNING WITH TENSOR FUSION\\FOR PREDICTING PROGRESSION OF ALZHEIMER’S DISEASE}\par}
+
+  \vspace{2.5cm}
+  \large
+  \textbf{BACHELOR THESIS}\\
+  \textbf{Major}: Artificial Intelligence
+
+  \vfill
+  \textbf{HA NOI - 2026}
+\end{center}
+\end{titlepage}
+
+\begin{titlepage}
+\setlength{\parskip}{0.5em}
+\ThesisCoverFrame
+\begin{center}
+  \vspace*{0cm}
+  \large
+  \textbf{ĐẠI HỌC QUỐC GIA HÀ NỘI\\TRƯỜNG ĐẠI HỌC CÔNG NGHỆ}
+
+  \vspace{3cm}
+  \Large
+  \textbf{NGUYỄN PHƯƠNG NAM}
+
+  \vspace{1.5cm}
+  \Large
+  \textbf{\MakeUppercase{\ThesisTitleVN}}
+
+  \vspace{1.5cm}
+  \large
+  \textbf{KHÓA LUẬN TỐT NGHIỆP CỬ NHÂN}\\
+  \textbf{Ngành}: Trí tuệ nhân tạo
+
+  \vspace{1cm}
+  \begin{flushleft}
+  \hspace*{0.2cm}%
+  \begin{tabular}{@{}l@{\hspace{0.4cm}}l@{}}
+    \textbf{Cán bộ hướng dẫn}: & GS. TS. Nguyễn Linh Trung\\[0.7cm]
+    \textbf{Cán bộ đồng hướng dẫn}: & TS. Nguyễn Thành Trung
+  \end{tabular}
+  \end{flushleft}
+
+  \vfill
+  \textbf{HÀ NỘI - 2026}
+\end{center}
+\end{titlepage}
+
+\begin{titlepage}
+\setlength{\parskip}{0.5em}
+\ThesisCoverFrame
+\begin{center}
+  \vspace*{0cm}
+  \large
+  \textbf{VIETNAM NATIONAL UNIVERSITY, HANOI\\UNIVERSITY OF ENGINEERING AND TECHNOLOGY}
+
+  \vspace{3cm}
+  \Large
+  \textbf{NGUYEN PHUONG NAM}
+
+  \vspace{1.5cm}
+  {\fontsize{16}{23}\selectfont
+  \textbf{LONGITUDINAL LEARNING WITH TENSOR FUSION\\FOR PREDICTING PROGRESSION OF ALZHEIMER’S DISEASE}\par}
+
+  \vspace{1.5cm}
+  \large
+  \textbf{BACHELOR THESIS}\\
+  \textbf{Major}: Artificial Intelligence
+
+  \vspace{1cm}
+  \begin{flushleft}
+  \hspace*{0.2cm}%
+  \begin{tabular}{@{}l@{\hspace{0.4cm}}l@{}}
+    \textbf{Supervisor}: & Prof. Nguyen Linh Trung\\[0.7cm]
+    \textbf{Co-Supervisor}: & Dr. Nguyen Thanh Trung
+  \end{tabular}
+  \end{flushleft}
+
+  \vfill
+  \textbf{HA NOI - 2026}
+\end{center}
+\end{titlepage}

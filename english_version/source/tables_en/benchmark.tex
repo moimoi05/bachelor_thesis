@@ -1,0 +1,16 @@
+\begin{table}[H]
+\centering\small
+\caption[Comparison of C-index and model complexity]{Validation C-index reported as mean $\pm$ SD across three random initializations.}
+\label{tab:standard-bench}
+\begin{tabularx}{\linewidth}{@{}Y r r c@{}}
+\toprule
+\textbf{Model} & \textbf{C-index $\uparrow$} & \textbf{Parameters} & \textbf{Pairs / routes} \\
+\midrule
+CNN--PCA--T-LSTM & $0.7417\pm0.0693$ & $33213122$ & 0 / 0 \\
+Full Outer-Product & $0.8344\pm0.0148$ & $33760941$ & 3 / 6 \\
+Full CP Pairwise & $0.8278\pm0.0250$ & $33534957$ & 3 / 6 \\
+RC-Free Pairwise & $\mathbf{0.8347\pm0.0237}$ & $33519497$ & 2 / 4 \\
+\bottomrule
+\end{tabularx}
+\caption*{\textit{Note.} All figures in this table are evaluated on the same validation set. The reference CNN--PCA--T-LSTM model follows the pipeline of Aghajanian et al.~\cite{aghajanian2025longitudinal} with the adaptations summarized in Table~\ref{tab:reference-methods}.}
+\end{table}

@@ -1,0 +1,12 @@
+\chapter*{ABSTRACT}
+\addcontentsline{toc}{chapter}{ABSTRACT}
+
+Mild cognitive impairment (MCI) is a pivotal intermediate stage with heterogeneous clinical trajectories: while some individuals progress rapidly to Alzheimer's dementia, many others remain stable over several years. This thesis develops a multimodal deep survival pipeline to rank progression risk from three longitudinal follow-up visits by integrating 3D structural magnetic resonance imaging (MRI), quantitative shape and texture descriptors (radiomics), and clinical cognitive and functional scores (MMSE and CDR).
+
+Architecturally, I propose \textbf{RC-Free Pairwise Fusion (RC-Free)} to explicitly model two MRI-centered bilinear pairwise interactions---MRI--Radiomics (MR) and MRI--Clinical (MC)---while omitting the direct Radiomics--Clinical (RC) interaction. To prevent parameter explosion on a modest medical cohort, each initial bilinear layer is parameterized via low-rank Canonical Polyadic (CP) tensor decomposition, and interaction features are routed back to enrich the original modality representations through dynamically gated residual connections. Across three irregularly spaced visits, a Time-Aware LSTM (T-LSTM) coupled with additive attention aggregates the visit sequence into a unified representation from which a Cox head estimates the log-risk score.
+
+Retrospective evaluation on 359 ADNI participants (251 training, 54 validation, and 54 post-hoc test) yields a mean validation C-index of $0.8347\pm0.0237$ across three random initializations. Stratifying risk groups by the training-set median cutoff produces statistically separated Kaplan--Meier survival curves (log-rank $p=0.0134$). Time-dependent IPCW-AUCs at 2, 3, and 5 years reach $0.9805\pm0.0149$, $0.9788\pm0.0162$, and $0.7889\pm0.0632$, based on 7, 7, and 12 cumulative cases, respectively.
+
+Applying CP decomposition reduces the parameter count of the three initial bilinear layers by 98.38\%. Across all seven surveyed CP architectures with pairwise interactions, RC-Free attains the highest mean validation C-index (0.8347), uses 15460 fewer parameters than Full CP, and preserves all three input modalities.
+
+\noindent\textbf{Keywords:} Alzheimer's disease, MCI, longitudinal MRI, radiomics, CP tensor fusion, survival analysis.

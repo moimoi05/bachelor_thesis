@@ -1,0 +1,20 @@
+\begin{table}[H]
+\centering\small
+\caption[Radiomics feature families]{Seven radiomics feature families extracted from the 3D MRI volume and whole-brain mask. Definitions and representative features follow PyRadiomics~\cite{pyradiomicsfeatures}. Feature counts reflect the extraction catalog of this thesis.}
+\label{tab:radiomics-groups}
+\begin{tabularx}{\linewidth}{@{}L{2.7cm}r Y Y@{}}
+\toprule
+Family & Count & Descriptive information & Representative examples \\
+\midrule
+Shape & 14 & Geometric properties of the whole-brain mask & MeshVolume, SurfaceArea \\
+First-order & 18 & Voxel intensity distribution within the mask & Mean, Variance, Entropy \\
+GLCM & 24 & Gray-level co-occurrence relationships across voxel pairs & Contrast, Correlation \\
+GLRLM & 16 & Run lengths of consecutive voxels sharing a gray level & ShortRunEmphasis, LongRunEmphasis \\
+GLSZM & 16 & Sizes of connected homogeneous gray-level zones & SmallAreaEmphasis, LargeAreaEmphasis \\
+GLDM & 14 & Gray-level dependency between a voxel and its neighborhood & DependenceEntropy, DependenceVariance \\
+NGTDM & 5 & Intensity difference between a voxel and its neighbors & Coarseness, Contrast, Busyness, Complexity, Strength \\
+\midrule
+Total & 107 & 104 retained after removing Maximum, Minimum, and Range & PCA retains 16 components \\
+\bottomrule
+\end{tabularx}
+\end{table}

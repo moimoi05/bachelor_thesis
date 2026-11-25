@@ -1,0 +1,14 @@
+\begin{table}[H]
+\centering\small
+\caption[Participant counts by outcome status and uncensored survival probability at each horizon]{At each horizon, the three counts denote cumulative cases up to the horizon, dynamic controls remaining under follow-up beyond the horizon, and subjects right-censored at or before the horizon, respectively. The uncensored probability $\widehat G(h)$ is estimated from the training set.}
+\label{tab:horizon-support}
+\begin{tabularx}{\linewidth}{@{}c Y Y r@{}}
+\toprule
+\textbf{Horizon (years)} & \textbf{Validation} & \textbf{Test (post-hoc)} & \textbf{$\widehat G(h)$} \\
+\midrule
+2 & 7 / 37 / 10 & 8 / 37 / 9 & $0.831$ \\
+3 & 7 / 34 / 13 & 11 / 29 / 14 & $0.697$ \\
+5 & 12 / 19 / 23 & 14 / 16 / 24 & $0.475$ \\
+\bottomrule
+\end{tabularx}
+\end{table}

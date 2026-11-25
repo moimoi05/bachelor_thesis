@@ -1,0 +1,12 @@
+\chapter*{TÓM TẮT}
+\addcontentsline{toc}{chapter}{TÓM TẮT}
+
+Suy giảm nhận thức nhẹ (MCI) có diễn biến lâm sàng rất khác nhau: một số người bệnh sớm chuyển biến thành sa sút trí tuệ do bệnh Alzheimer, trong khi nhiều người khác duy trì trạng thái ổn định qua nhiều năm. Khóa luận xây dựng quy trình học sâu phân tích sống còn đa phương thức nhằm xếp hạng nguy cơ tiến triển từ lịch sử ba lần thăm khám theo dõi dọc, kết hợp ba nguồn thông tin: ảnh cộng hưởng từ cấu trúc 3D (MRI), đặc trưng định lượng hình dạng và kết cấu trích từ ảnh (radiomics), cùng thang điểm nhận thức và chức năng lâm sàng (MMSE, CDR).
+
+Về mặt kiến trúc, tôi đề xuất mô hình \textbf{RC-Free Pairwise Fusion (RC-Free)} mô hình hóa tường minh hai tương tác song tuyến theo cặp quanh ảnh MRI gồm MRI--Radiomics (MR) và MRI--Lâm sàng (MC), đồng thời lược bỏ tương tác trực tiếp giữa radiomics và lâm sàng (RC). Để tránh bùng nổ tham số trên cỡ mẫu y tế hạn chế, mỗi lớp tương tác song tuyến đầu được tham số hóa bằng phân rã tensor Canonical Polyadic (CP) hạng thấp, sau đó truyền ngược lại biểu diễn gốc của từng nguồn qua kết nối phần dư có cổng điều tiết. Qua ba lần khám có khoảng cách thời gian không đều, mạng T-LSTM và cơ chế chú ý (attention) tổng hợp chuỗi đặc trưng thành một biểu diễn dọc để mô hình Cox tính điểm log-nguy cơ.
+
+Nghiên cứu đánh giá hồi cứu trên dữ liệu của 359 người tham gia từ ADNI (251 huấn luyện, 54 xác thực và 54 kiểm tra hậu nghiệm). Qua ba lần khởi tạo, RC-Free đạt chỉ số đồng thuận (C-index) xác thực trung bình $0.8347\pm0.0237$. Khi phân nhóm nguy cơ theo ngưỡng trung vị tập huấn luyện, hai đường cong Kaplan--Meier tách biệt có ý nghĩa thống kê (kiểm định log-rank, $p=0.0134$). Diện tích dưới đường cong ROC phụ thuộc thời gian (IPCW-AUC) tại 2, 3 và 5 năm lần lượt đạt $0.9805\pm0.0149$, $0.9788\pm0.0162$ và $0.7889\pm0.0632$, ứng với 7, 7 và 12 biến cố tích lũy.
+
+Phân rã CP giúp giảm 98.38\% tổng số tham số của ba lớp song tuyến đầu. Trong bảy cấu trúc CP có tương tác cặp, RC-Free đạt C-index xác thực trung bình cao nhất (0.8347), tiết kiệm thêm 15460 tham số so với Full CP mà vẫn giữ đủ cả ba nguồn đầu vào.
+
+\noindent\textbf{Từ khóa:} Bệnh Alzheimer, MCI, MRI dọc, radiomics, hợp nhất tensor CP, phân tích sống còn.

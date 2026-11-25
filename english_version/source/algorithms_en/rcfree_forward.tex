@@ -1,0 +1,20 @@
+\begin{algorithm}[H]
+\caption{Forward pass of the RC-Free Pairwise Fusion model}
+\label{alg:rcfree-forward}
+\small
+\textbf{Input:} A longitudinal sequence of three visits $(t=1,2,3)$ for an individual, consisting of preprocessed 3D MRI volumes, PCA-compressed radiomics feature vectors (16 dimensions), clinical vectors comprising nine standardized scores and nine observation indicators (18 dimensions), and elapsed inter-visit intervals $\Delta t_t$ (with $\Delta t_1=0$).\\
+\textbf{Output:} Individual log-risk score $\eta\in\mathbb R$.
+\begin{enumerate}[leftmargin=1.2em,label=\arabic*.,itemsep=0.2em]
+\item For each visit $t=1,2,3$:
+\begin{enumerate}[leftmargin=1.2em,label=\alph*.,itemsep=0.15em]
+\item Encode the three input sources at visit $t$ into $M_t\in\mathbb R^{128}$, $R_t\in\mathbb R^{64}$, and $C_t\in\mathbb R^{64}$ as detailed in Section~\ref{sec:preprocessing}; apply bias-free linear projections to obtain reduced representations $\widetilde M_t\in\mathbb R^{32}$, $\widetilde R_t\in\mathbb R^{32}$, and $\widetilde C_t\in\mathbb R^{16}$ via Eq.~(\ref{eq:input-projection}).
+\item Compute pairwise interaction representations $E_{\mathrm{MR},t}\in\mathbb R^{64}$ from $(\widetilde M_t,\widetilde R_t)$ and $E_{\mathrm{MC},t}\in\mathbb R^{64}$ from $(\widetilde M_t,\widetilde C_t)$ using two rank-$Q=8$ CP interaction blocks followed by their respective MLPs according to Eqs.~(\ref{eq:cp-lowrank})--(\ref{eq:cpblock}).
+\item For each active routing branch $k\to d\in\{\mathrm{MR}\to M,\mathrm{MR}\to R,\mathrm{MC}\to M,\mathrm{MC}\to C\}$, compute the target-aligned projection $\widehat E_{k\to d,t}$ via Eq.~(\ref{eq:target-projection}), the dynamic gating coefficient $g_{k\to d,t}$ via Eq.~(\ref{eq:dynamic-gate}), and the gated residual update $D_{k\to d,t}=\lambda_{k\to d}\,g_{k\to d,t}\,\widehat E_{k\to d,t}$.
+\item Apply residual updates and layer normalization according to Eqs.~(\ref{eq:rcfree-first})--(\ref{eq:rcfree-residual}) to obtain $M_{\mathrm{out},t}\in\mathbb R^{128}$, $R_{\mathrm{out},t}\in\mathbb R^{64}$, and $C_{\mathrm{out},t}\in\mathbb R^{64}$.
+\item Concatenate the updated modality vectors and project them into the fused visit representation: $F_t=\operatorname{MLP}_{\mathrm{out}}(M_{\mathrm{out},t}\concat R_{\mathrm{out},t}\concat C_{\mathrm{out},t})\in\mathbb R^{128}$ via Eq.~(\ref{eq:concat}).
+\end{enumerate}
+\item Initialize hidden and cell states to zero; pass the temporal sequence $(F_t,\Delta t_t)_{t=1}^3$ through the T-LSTM cell according to Eqs.~(\ref{eq:tlstm-first})--(\ref{eq:tlstm-state}) to obtain hidden states $h_1,h_2,h_3\in\mathbb R^{128}$.
+\item Compute additive attention weights $\alpha_t$ and the aggregated longitudinal representation $z=\sum_{t=1}^3\alpha_t h_t\in\mathbb R^{128}$ via Eq.~(\ref{eq:temporal-attention}).
+\item Pass $z$ through the Cox survival prediction MLP head ($128\to64\to1$) described in Section~\ref{sec:training-method} to output the scalar log-risk score $\eta$.
+\end{enumerate}
+\end{algorithm}
