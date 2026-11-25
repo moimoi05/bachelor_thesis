@@ -356,6 +356,13 @@ Lin Tang, Xiaojia Wu, Huan Liu, Faqi Wu, Rao Song, Wei Zhang, Dajing Guo,
   \thesisurl{https://adni.loni.usc.edu/quick-start-guide-asset/diagnostic.html}.
 \newblock Truy cập ngày 24/11/2026.
 
+\bibitem[Nyúl and Udupa(1999)]{nyul1999standardizing}
+László~G. Nyúl and Jayaram~K. Udupa.
+\newblock On standardizing the {MR} image intensity scale.
+\newblock \emph{Magnetic Resonance in Medicine}, 42\penalty0 (6):\penalty0
+  1072--1081, 1999.
+\newblock \thesisurl{https://pubmed.ncbi.nlm.nih.gov/10571928/}.
+
 \bibitem[Hoopes et~al.(2022)Hoopes, Mora, Dalca, Fischl, and
   Hoffmann]{hoopes2022synthstrip}
 Andrew Hoopes, Jocelyn~S. Mora, Adrian~V. Dalca, Bruce Fischl, and Malte
@@ -387,13 +394,6 @@ Vladimir Fonov, Alan~C. Evans, Kelly Botteron, C.~Robert Almli, Robert~C.
 \newblock Unbiased average age-appropriate atlases for pediatric studies.
 \newblock \emph{NeuroImage}, 54\penalty0 (1):\penalty0 313--327, 2011.
 \newblock \doi{10.1016/j.neuroimage.2010.07.033}.
-
-\bibitem[Nyúl and Udupa(1999)]{nyul1999standardizing}
-László~G. Nyúl and Jayaram~K. Udupa.
-\newblock On standardizing the {MR} image intensity scale.
-\newblock \emph{Magnetic Resonance in Medicine}, 42\penalty0 (6):\penalty0
-  1072--1081, 1999.
-\newblock \thesisurl{https://pubmed.ncbi.nlm.nih.gov/10571928/}.
 
 \bibitem[Cardoso et~al.(2022)Cardoso, Li, Brown, Ma, Kerfoot, Wang,
   et~al.]{cardoso2022monai}

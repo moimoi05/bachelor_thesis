@@ -5,6 +5,7 @@
 \titleformat{\chapter}[hang]{\normalfont\bfseries\Large}{\chaptername\ \thechapter.}{0.5em}{}
 \titlespacing*{\chapter}{0pt}{0pt}{12pt}
 \addtocontents{toc}{\protect\renewcommand{\protect\cftchappresnum}{Phụ lục~}}
+
 \begin{landscape}
 \chapter{Sơ đồ tổng hợp quy trình RC-Free}
 \label{app:master-pipeline}
@@ -15,4 +16,33 @@
 \label{fig:master-pipeline}
 \end{figure}
 \end{landscape}
+
+\clearpage
+\chapter{Kích thước đặc trưng của bộ mã hóa MRI 3D}
+\label{app:mri-shapes}
+Bảng~\ref{tab:mri-encoder-shapes} trình bày kích thước bản đồ đặc trưng qua từng tầng của bộ mã hóa ảnh MRI ResNet-18 3D (cài đặt trên MONAI phiên bản 1.5.2, khởi tạo từ trọng số MedicalNet \cite{chen2019med3d,cardoso2022monai}). Mỗi bản đồ đặc trưng có dạng $[B, C_{\mathrm{ch}}, D, H, W]$, trong đó $B$ là cỡ lô, $C_{\mathrm{ch}}$ là số kênh và $D, H, W$ là ba chiều không gian. Cả ba lần khám của một người dùng chung bộ mã hóa này; sau bước gộp trung bình toàn cục, ba vectơ 512 chiều được xếp thành chuỗi $[B, 3, 512]$ trước khi chiếu về $M_t\in\mathbb R^{128}$.
+
+\begin{table}[H]
+\centering
+\small
+\caption[Kích thước đặc trưng của bộ mã hóa ResNet-18 3D]{Kích thước đặc trưng qua từng tầng của bộ mã hóa ResNet-18 3D}
+\label{tab:mri-encoder-shapes}
+\begin{tabularx}{\textwidth}{@{}Y l@{}}
+\toprule
+\textbf{Bước} & \textbf{Kích thước đầu ra} \\
+\midrule
+MRI đầu vào & $[B,1,144,144,144]$ \\
+Tích chập $7^3$, bước 1, đệm 3; BN; ReLU & $[B,64,144,144,144]$ \\
+Gộp cực đại $3^3$, bước 2, đệm 1 & $[B,64,72,72,72]$ \\
+Tầng ResNet 1: hai khối cơ bản (BasicBlock) & $[B,64,72,72,72]$ \\
+Tầng 2: khối đầu có bước 2 & $[B,128,36,36,36]$ \\
+Tầng 3: khối đầu có bước 2 & $[B,256,18,18,18]$ \\
+Tầng 4: khối đầu có bước 2 & $[B,512,9,9,9]$ \\
+Gộp trung bình toàn cục; trải phẳng & $[B,512,1,1,1]\to[B,512]$ \\
+Xếp ba vectơ sau gộp theo chiều thời gian & $[B,3,512]$ \\
+Tuyến tính $512\to128$; GELU; Dropout 0.20; LayerNorm & $[B,3,128]$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
 \endgroup
