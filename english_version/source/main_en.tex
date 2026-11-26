@@ -160,15 +160,21 @@
 \input{FrontMatter_en/Acknowledgements}
 \input{FrontMatter_en/Declaration}
 \titleformat{name=\chapter,numberless}[display]{\normalfont\bfseries\Huge}{}{0pt}{}
-\input{FrontMatter_en/Acronyms}
-\clearpage
-
 \setcounter{secnumdepth}{2}
 \setcounter{tocdepth}{1}
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{\contentsname}
 \tableofcontents
 \clearpage
+\input{FrontMatter_en/Acronyms}
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{\listfigurename}
 \listoffigures
 \clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{\listtablename}
 \listoftables
 \clearpage
 
