@@ -42,7 +42,7 @@ As illustrated in Figure~\ref{fig:cohort}, starting from 899 participants with s
 \label{fig:cohort}
 \end{figure}
 
-\subsection{Outcome Events, Temporal Milestones, and Immortal Time Bias Considerations}
+\subsection{Outcome Events, Milestones, and Immortal Time Bias}
 \label{sec:evaluation-scope}
 Following the clinical criteria of Aghajanian et al. \cite{aghajanian2025longitudinal}, a progression event is recorded at the earliest valid clinical visit after milestone $L_i$ that satisfies either MMSE $<24$ or CDR-global $\geq 1$. If a participant never crosses these thresholds through the end of their available follow-up, they are treated as right-censored at their final valid clinical assessment. The survival time $t_i$ (measured in years) is computed from the third MRI scan date ($p_i = s_{i3}$) to the event or censoring date ($o_i$):
 \begin{equation}
@@ -57,23 +57,32 @@ Furthermore, the output $\eta_i$ of the Cox proportional hazards model represent
 
 \subsection{Dataset Partitioning and Information Leakage Control}
 \label{sec:data-split}
-To completely prevent data leakage across evaluation splits, dataset partitioning is performed strictly at the participant level (\texttt{RID}): the training set comprises 251 participants (74 events), the validation set comprises 54 participants (16 events), and the post-hoc test set comprises 54 participants (16 events), maintaining a consistent event rate of 29.5--29.6\% across all three splits. The validation set is used exclusively for hyperparameter tuning and architectural selection, whereas the test set is reserved strictly for post-hoc evaluation after the final model architecture and weights have been locked.
+A common pitfall in longitudinal medical imaging is splitting individual scans rather than patients across training and evaluation sets; if two visits from the same participant appear in different splits, a model can memorize subject-specific brain anatomy rather than learning generalizable progression patterns. To completely prevent such subject-level leakage, the 359 eligible participants are partitioned strictly by participant identifier (\texttt{RID}) into three mutually exclusive cohorts:
+\begin{itemize}[itemsep=0.2em,topsep=0.25em]
+\item \emph{Training set} ($N=251$, 74 progression events, 29.5\%): used to optimize all network weights and fit every data-dependent preprocessing statistic.
+\item \emph{Validation set} ($N=54$, 16 progression events, 29.6\%): used exclusively for early stopping, hyperparameter tuning, and selecting the final fusion topology.
+\item \emph{Post-hoc test set} ($N=54$, 16 progression events, 29.6\%): held out in a locked state until all architectural choices and model checkpoints are finalized, providing an unbiased check of generalization.
+\end{itemize}
+Stratifying by outcome status preserves a nearly identical event rate (29.5--29.6\%) across all three splits, ensuring that validation and test evaluations reflect comparable censoring proportions.
 
-Crucially, all tabular preprocessing parameters---including median imputation values, standardization means and standard deviations, and the PCA projection matrix---are fitted solely on the training set and applied without modification to the validation and test sets. The input feature vectors contain no diagnostic labels, event indicators, or survival durations.
+Equally important is preventing \emph{preprocessing leakage}, which occurs when summary statistics from validation or test subjects influence how training features are scaled or imputed. In this pipeline, every tabular transformation---including the median values used to impute missing clinical scores, the per-feature means and standard deviations used for $z$-score standardization of radiomics and clinical variables, and the Principal Component Analysis (PCA) projection matrix applied to radiomics features---is fitted solely on the 251 training participants. Once fitted, these exact transformation parameters are frozen and applied unchanged to the validation and test sets. Furthermore, the input tensors fed to the model contain only baseline-window imaging, radiomics, and clinical predictors, with no diagnostic labels, event indicators ($\delta_i$), or follow-up durations ($t_i$).
 
-Each MRI scan is matched to the nearest valid clinical assessment within a $\pm 90$-day window. In practice, across the 359 participants, 57 individuals have an MMSE or CDR measurement linked to their third MRI scan that was recorded after scan date $p_i$ (though still strictly prior to the outcome date $o_i$); this limitation is explicitly documented in Section~\ref{sec:study-limitations}. Table~\ref{tab:baseline-characteristics} summarizes demographic characteristics, baseline cognitive scores, and inter-visit intervals across the three dataset splits; statistical comparisons across the splits all yield $p > 0.05$, confirming well-balanced partitions.
+To align multimodal records collected on slightly different clinic dates, each MRI scan is paired with the nearest valid MMSE and CDR assessment within a $\pm 90$-day matching window. Because the third MRI scan date $p_i$ can fall near the end of the 18-month observation window, this symmetric window means that 57 of the 359 participants have an MMSE or CDR score linked to their third MRI that was actually recorded after date $p_i$ (though still strictly prior to the outcome event or censoring date $o_i$). This retrospective matching detail is explicitly noted as a study limitation in Section~\ref{sec:study-limitations}.
+
+Finally, Table~\ref{tab:baseline-characteristics} summarizes the baseline characteristics of all three splits at the first MRI scan, separated by stable ($\delta=0$) and progressing ($\delta=1$) participants. Across the training, validation, and test cohorts, participants have similar ages (mean $\approx 70$--$75$ years), education levels ($\approx 15$--$17$ years), baseline cognitive scores, and inter-visit scan intervals ($s_2-s_1 \approx 120$--$138$ days; $s_3-s_1 \approx 305$--$316$ days). Non-parametric Kruskal--Wallis and $\chi^2$ tests across the three splits all yield $p > 0.05$, confirming that the random participant-level partition produced well-balanced cohorts without systematic demographic or clinical bias.
 
 \input{tables_en/baseline_characteristics.tex}
 
-\section{Preprocessing and Encoding of the Three Input Modalities}
+\section{Preprocessing and Modality Encoding}
 \label{sec:preprocessing}
 Figure~\ref{fig:input-three-sources} illustrates the three information sources linked at each clinical visit prior to entering their respective modality-specific encoders.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{image_en/input-three-sources.pdf}
-\caption[Illustration of the three input modalities and their feature representations]{The three input data sources and their corresponding feature representations. The three orthogonal MRI planes are extracted by the author from a single preprocessed ADNI T1-weighted volume \cite{jack2008adnimri}.}
+\caption[Three input modalities and feature representations]{The three input modalities and their feature representations.}
 \label{fig:input-three-sources}
+\caption*{\textit{Note.} The three orthogonal MRI planes are extracted by the author from a single preprocessed ADNI T1-weighted volume~\cite{jack2008adnimri}.}
 \end{figure}
 
 \subsection{3D MRI Branch and Shared Volumetric Encoder}
@@ -82,8 +91,9 @@ In longitudinal 3D brain MRI analysis, even a slight head tilt between consecuti
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{image_en/mri-preprocessing.pdf}
-\caption[Preprocessing pipeline for longitudinal T1-weighted MRI volumes]{Preprocessing pipeline for longitudinal T1-weighted MRI sequences. The diagram reuses an ADNI slice from Figure~\ref{fig:input-three-sources} to illustrate each step.}
+\caption{Preprocessing pipeline for longitudinal T1-weighted MRI sequences.}
 \label{fig:mri-preprocessing}
+\caption*{\textit{Note.} The diagram reuses an ADNI slice from Figure~\ref{fig:input-three-sources} to illustrate each step.}
 \end{figure}
 
 \begin{enumerate}
@@ -96,8 +106,9 @@ In longitudinal 3D brain MRI analysis, even a slight head tilt between consecuti
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{image_en/mri-registration.pdf}
-\caption[Spatial registration workflow across longitudinal visits and to the MNI template]{Rigid spatial alignment across longitudinal visits and to the MNI template. Poses are illustrated by rotating the same ADNI slice shown in Figure~\ref{fig:input-three-sources}.}
+\caption[Spatial registration across visits and MNI template]{Rigid spatial alignment across visits and to the MNI template.}
 \label{fig:mri-registration}
+\caption*{\textit{Note.} Poses are illustrated by rotating the same ADNI slice shown in Figure~\ref{fig:input-three-sources}.}
 \end{figure}
 
 Following preprocessing, all three MRI volumes of each participant pass through a shared \textbf{3D ResNet-18} encoder implemented in MONAI version 1.5.2\footnote{MONAI source code: \url{https://github.com/Project-MONAI/MONAI/blob/1.5.2/monai/networks/nets/resnet.py}.} \cite{he2016deep,cardoso2022monai}, initialized with complete convolutional weights and BatchNorm statistics pretrained on 3D medical imaging datasets from MedicalNet \cite{chen2019med3d} (with the original classification head removed) and fine-tuned end-to-end from the first training epoch. The backbone consists of four sequential 3D residual stages (with 64, 128, 256, and 512 channels, respectively) using BatchNorm \cite{ioffe2015batchnorm} and ReLU activations \cite{nair2010rectified}. After global average pooling produces a 512-dimensional vector, a linear projection layer ($512\to128$) followed by GELU \cite{hendrycks2016gelu}, Dropout 0.20 \cite{srivastava2014dropout}, and LayerNorm \cite{ba2016layernorm} produces the anatomical representation $M_t\in\mathbb R^{128}$ for each visit. Detailed intermediate feature map dimensions across all layers are listed in Table~\ref{tab:mri-encoder-shapes}, Appendix~\ref{app:mri-shapes}.
@@ -124,7 +135,7 @@ Because an imputed value can numerically coincide with an observed clinical meas
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{image_en/clinical-18-inputs.pdf}
-\caption{Procedure for expanding nine clinical variables into an 18-dimensional input vector}
+\caption{Expanding nine clinical variables into an 18-dimensional input vector}
 \label{fig:clinical-18}
 \end{figure}
 
@@ -138,7 +149,7 @@ To isolate the added value of longitudinal temporal dynamics and establish a rig
 
 \begin{table}[H]
 \centering\small
-\caption[Distinction among the original reference study, the adapted re-implementation, and the proposed primary method]{Comparison of cohort data, configurations, and roles across the three methodologies.}
+\caption[Comparison across the three methodologies]{Comparison of cohort data, configurations, and roles across methodologies.}
 \label{tab:reference-methods}
 \begin{tabularx}{\textwidth}{@{}L{3.2cm}Y Y@{}}
 \toprule
@@ -180,18 +191,18 @@ For each pair $k\in\{\mathrm{MR},\mathrm{MC},\mathrm{RC}\}$, let $x\in\mathbb R^
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{image_en/mr-outer-product.pdf}
-\caption[Full outer-product operation and interaction MLP block]{Full outer-product operation and interaction MLP block (illustrated for the MR pair)}
+\caption{Full outer-product and interaction MLP block (MR pair)}
 \label{fig:mr-outer-product}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\linewidth]{image_en/pair-update-routes.pdf}
-\caption[Six update routing branches from three pairwise interactions]{Six update routing branches from all three pairwise interactions back to the three target modalities}
+\caption{Six update routing branches from three pairwise interactions}
 \label{fig:pair-update-routes}
 \end{figure}
 
-\subsection{Compressing Interaction Parameters via CP Tensor Decomposition}
+\subsection{CP Tensor Parameter Compression}
 \label{sec:cp-method}
 As analyzed in Section~\ref{sec:background-fusion}, the initial linear projection layer immediately following an outer product corresponds to a third-order weight tensor $\mathcal W\in\mathbb R^{d_h\times d_x\times d_y}$ requiring $d_h d_x d_y + d_h$ parameters, which is highly prone to overfitting on a training cohort of 251 patients. To eliminate this bottleneck, I apply rank-$Q$ CP tensor decomposition according to Eqs.~(\ref{eq:cp-concept-math})--(\ref{eq:cp-hadamard}) \cite{carroll1970candecomp,kolda2009tensor,liu2018lowrank}: the initial bilinear layer of each interaction pair $k$ is replaced by three low-rank factor matrices $A\in\mathbb R^{d_x\times Q}$, $B\in\mathbb R^{d_y\times Q}$ (without bias), and $O\in\mathbb R^{d_h\times Q}$ (with bias vector $b$):
 \begin{align}
@@ -204,7 +215,7 @@ Here, $\operatorname{PostMLP}_k$ retains the exact downstream architecture consi
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{image_en/outer-vs-cp.pdf}
-\caption[Rank-$Q=8$ CP interaction block for the MR pair]{Computational flow of the rank-$Q=8$ CP interaction block for the MR pair}
+\caption{Rank-$Q=8$ CP interaction block for the MR pair}
 \label{fig:cp-block}
 \end{figure}
 
@@ -279,7 +290,7 @@ Letting $D_{k\to d}=\lambda_{k\to d}\,g_{k\to d}\,\widehat E_{k\to d}$, the thre
 \end{align}
 The three updated vectors $M_{\rm out}\in\mathbb R^{128}$, $R_{\rm out}\in\mathbb R^{64}$, and $C_{\rm out}\in\mathbb R^{64}$ are then concatenated into a 256-dimensional vector and projected through the same $\operatorname{MLP}_{\rm out}$ layer ($256\to128$, identical to Eq.~(\ref{eq:concat})) to obtain the fused visit representation $F_t\in\mathbb R^{128}$ at visit $t$. By keeping this 128-dimensional output interface fixed, varying the active set of pairwise interactions requires no changes to the downstream temporal modeling or survival prediction layers.
 
-\section{Temporal Sequence Modeling and Cox Survival Objective}
+\section{Temporal Modeling and Cox Objective}
 \label{sec:temporal-method}
 \label{sec:training-method}
 The sequence of three fused visit representations $F_t\in\mathbb R^{128}$ ($t=1,2,3$) together with the actual elapsed time intervals between consecutive scans $\Delta t_t=(s_t-s_{t-1})/365.25$ (measured in years, with $\Delta t_1=0$ by convention) is fed into a single-layer unidirectional temporal modeling block (Figure~\ref{fig:temporal}).
@@ -303,7 +314,7 @@ The time-adjusted memory state $c_{t-1}^{*}$ then enters the standard LSTM forge
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{image_en/temporal-model.pdf}
-\caption{Temporal T-LSTM block, additive attention mechanism, and Cox prognostic head}
+\caption{Temporal T-LSTM block, additive attention, and Cox head}
 \label{fig:temporal}
 \end{figure}
 
@@ -332,7 +343,7 @@ A prognostic survival model must be evaluated simultaneously across three comple
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{image_en/evaluation-map.pdf}
-\caption{Three complementary evaluation perspectives for survival risk ranking and stratification}
+\caption{Three evaluation perspectives for survival risk ranking and stratification}
 \label{fig:evaluation-map}
 \end{figure}
 

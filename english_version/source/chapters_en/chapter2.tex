@@ -1,4 +1,4 @@
-\chapter[Theoretical Background and Related Work]{Theoretical Background and\\Related Work}
+\chapter{Background and Related Works}
 \label{chap:background}
 
 This chapter systematizes four foundational pillars that directly underpin the architectural design in Chapter~\ref{chap:method}: (1) the clinical pathology of MCI and the prognostic significance of longitudinal follow-up data; (2) the survival analysis framework alongside temporal modeling over irregularly spaced visit sequences; (3) the representational characteristics of the three multimodal input sources; and (4) the principles of multimodal fusion via low-rank CP tensor decomposition coupled with gated residual connections. At the end of the chapter, I review related approaches in the literature and highlight the core research gaps addressed by this thesis.
@@ -11,7 +11,7 @@ Clinically, mild cognitive impairment (MCI) lies at the transitional boundary be
 To capture this biological progression longitudinally, the Alzheimer's Disease Neuroimaging Initiative (ADNI) collects repeated MRI scans over time across multiple clinical centers \cite{jack2008adnimri,weiner2015impact}. Compared with examining a single cross-sectional scan, analyzing a sequence of repeated scans from the same patient enables a predictive model to quantify the velocity of micro- and macroscopic brain structural changes---exemplified by the rate of hippocampal atrophy in the longitudinal MRI pair approach of Dong et al. \cite{dong2021deepatrophy}.
 
 \section{Survival Analysis and Temporal Modeling}
-\subsection{Events, Right-Censoring, and the Cox Proportional Hazards Model}
+\subsection{Events, Censoring, and the Cox Model}
 In long-term longitudinal clinical studies, the practical question is not merely ``who will experience cognitive decline,'' but more importantly from a temporal perspective: ``who is at risk of progressing \emph{earlier}?'' Suppose a study participant is followed for 2 years and subsequently withdraws while still cognitively stable: we cannot know whether they would have converted to dementia in year 3, but we know with certainty that no progression event occurred during the first 2 years. This partial observation phenomenon is termed \emph{right-censoring} \cite{kaplan1958nonparametric,cox1972regression}. Forcing this problem into a traditional binary Yes/No classification framework would require either mislabeling or discarding censored individuals, introducing severe selection bias. Survival analysis resolves this limitation directly by modeling two variables simultaneously for each individual $i$: the observed follow-up time $t_i$ and the event indicator $\delta_i$ ($\delta_i=1$ if a progression event is recorded at $t_i$, and $\delta_i=0$ if the participant is right-censored at their final valid visit). Figure~\ref{fig:concept-survival} illustrates these two clinical scenarios.
 
 \begin{figure}[H]
@@ -55,16 +55,16 @@ Here, the attention weight $\alpha_t \in (0,1)$ quantifies the relative informat
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{image_en/concept-longitudinal.pdf}
-\caption{Principle of aggregating irregularly spaced longitudinal visit sequences via T-LSTM and additive attention}
+\caption{Aggregating irregularly spaced visits via T-LSTM and attention}
 \label{fig:concept-longitudinal}
 \end{figure}
 
-\section{The Three Information Sources and Feature Representations}
+\section{Multimodal Sources and Representations}
 This thesis integrates three standard and widely adopted data modalities in Alzheimer's disease research: 3D structural MRI scans, whole-brain radiomics features, and clinical assessment scores. Table~\ref{tab:background-inputs} and Figure~\ref{fig:concept-sources} summarize the informational nature and specific technical considerations of each modality.
 
 \begin{table}[H]
 \centering\small
-\caption[The three information sources in the prognostic task]{Informational nature and technical considerations of the three input modalities.}
+\caption{Information nature and technical considerations of the three modalities.}
 \label{tab:background-inputs}
 \begin{tabularx}{\linewidth}{@{}L{2.5cm}Y Y@{}}
 \toprule
@@ -80,7 +80,7 @@ Clinical scores & Cognitive test (MMSE) and functional rating (CDR) scores & Dir
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{image_en/concept-sources.pdf}
-\caption{Provenance and relationships among the three data representation streams at each visit}
+\caption{Provenance and relationships among the three data streams at each visit}
 \label{fig:concept-sources}
 \end{figure}
 
@@ -100,7 +100,7 @@ In contrast, the \emph{outer product} multiplies every coordinate of the first m
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{image_en/concept-fusion.pdf}
-\caption{Comparison between feature concatenation and outer-product interaction on a two-dimensional example}
+\caption{Concatenation versus outer-product interaction on a 2D example}
 \label{fig:concept-fusion}
 \end{figure}
 
@@ -127,7 +127,7 @@ where $A\in\mathbb R^{d_x\times Q}$, $B\in\mathbb R^{d_y\times Q}$, and $O\in\ma
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{image_en/cp-concept-general.pdf}
-\caption{Comparison between full bilinear projection and low-rank CP parameterization}
+\caption{Full bilinear projection versus low-rank CP parameterization}
 \label{fig:cp-intro}
 \end{figure}
 
@@ -142,9 +142,10 @@ This principle has demonstrated effectiveness across diverse application domains
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{image_en/literature-gates.pdf}
-\caption[Gated residual fusion mechanisms]{Illustration of gated residual connection principles synthesized by the author: (a) following Ryumina et al.~\cite{ryumina2026residual}, (b) following Liu et al.~\cite{liu2026motion}, and (c) the modality-specific gated residual routing scheme adopted in this thesis.}
+\includegraphics[width=0.88\textwidth]{image_en/literature-gates.pdf}
+\caption[Gated residual fusion mechanisms]{Gated residual connection mechanisms and our routing scheme.}
 \label{fig:literature-gates}
+\caption*{\textit{Note.} (a) Following Ryumina et al.~\cite{ryumina2026residual}; (b) following Liu et al.~\cite{liu2026motion}; (c) modality-specific gated residual routing scheme adopted in this thesis.}
 \end{figure}
 
 Unlike the two aforementioned designs that anchor residual updates onto a single dominant stream, in the architecture proposed in this thesis, every input modality preserves its own dedicated representation pathway and receives pairwise interaction residuals through independent dynamic gates paired with learnable scaling coefficients (schematically illustrated in Figure~\ref{fig:literature-gates}(c)). The mathematical formulation and detailed architectural structure of this mechanism are presented in Section~\ref{sec:gated-routing} of Chapter~\ref{chap:method}.
@@ -156,11 +157,11 @@ In recent years, numerous machine learning and deep learning methodologies have 
 \begin{table}[H]
 \centering\small
 \renewcommand{\arraystretch}{1.02}
-\caption[Summary of related work]{Major research directions, representative studies, and connections to this thesis.}
+\caption{Summary of related research directions and connections to this thesis.}
 \label{tab:related}
 \begin{tabularx}{\linewidth}{@{}L{2.8cm}Y Y@{}}
 \toprule
-\textbf{Approach} & \textbf{Representative Studies and Methods} & \textbf{Connection to This Thesis} \\
+\textbf{Approach} & \textbf{Representative Studies} & \textbf{Connection to This Thesis} \\
 \midrule
 Single-timepoint MRI & Li: hippocampal patches; Nakagawa: gray-matter volumes and deep survival network \cite{li2019hippocampal,nakagawa2020survival} & MRI representation learning within a survival analysis formulation \\
 Longitudinal data & Li \& Fan: baseline MRI and longitudinal cognition \cite{li2019early}; Ding: cognitive and MRI sequences \cite{ding2023progression}; Dong: atrophy from longitudinal MRI pairs \cite{dong2021deepatrophy} & Exploiting temporal change dynamics for clinical prognosis \\

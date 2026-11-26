@@ -168,17 +168,7 @@ z
 " clip-path="url(#p202ec0b7a6)" style="fill: #eae2f5; stroke: #172c46; stroke-width: 0.7; stroke-linejoin: miter"/>
    </g>
    <g id="patch_15">
-    <path d="M 248.64192 107.37792 
-C 251.369549 107.37792 253.985828 106.023297 255.914553 103.612391 
-C 257.843278 101.201485 258.926976 97.931136 258.926976 94.5216 
-C 258.926976 91.112064 257.843278 87.841715 255.914553 85.430809 
-C 253.985828 83.019903 251.369549 81.66528 248.64192 81.66528 
-C 245.914291 81.66528 243.298012 83.019903 241.369287 85.430809 
-C 239.440562 87.841715 238.356864 91.112064 238.356864 94.5216 
-C 238.356864 97.931136 239.440562 101.201485 241.369287 103.612391 
-C 243.298012 106.023297 245.914291 107.37792 248.64192 107.37792 
-z
-" clip-path="url(#p202ec0b7a6)" style="fill: #ffffff; stroke: #eae2f5; stroke-width: 1.2; stroke-linejoin: miter"/>
+    <circle cx="248.64192" cy="94.5216" r="11.5" clip-path="url(#p202ec0b7a6)" style="fill: #ffffff; stroke: #eae2f5; stroke-width: 1.2"/>
    </g>
    <g id="text_1">
     <text style="font-weight: 700; font-size: 10px; font-family: 'Arial', 'DejaVu Sans'; text-anchor: start; fill: #28313c" x="21.5136" y="23.852993" transform="rotate(-0 21.5136 23.852993)">(a) Two rank-8 linear projections</text>
@@ -277,12 +267,9 @@ z
     </g>
    </g>
    <g id="text_9">
-    <!-- $\odot$ -->
-    <g style="fill: #28313c" transform="translate(242.76192 98.144647)">
-     <text>
-      <tspan x="0" y="-0" style="font-size: 14px; font-family: 'DejaVu Sans'; fill: #28313c">⊙</tspan>
-     </text>
-    </g>
+    <!-- centered vector Hadamard symbol -->
+    <circle cx="248.64192" cy="94.5216" r="4.8" style="fill: none; stroke: #28313c; stroke-width: 1.15"/>
+    <circle cx="248.64192" cy="94.5216" r="1.15" style="fill: #28313c"/>
    </g>
    <g id="text_10">
     <text style="font-size: 9px; font-family: 'Arial', 'DejaVu Sans'; fill: #28313c" transform="translate(227.633248 45.731696)">Hadamard</text>

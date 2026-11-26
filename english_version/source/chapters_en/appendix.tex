@@ -18,14 +18,14 @@
 \end{landscape}
 
 \clearpage
-\chapter{Feature Map Dimensions of the 3D MRI Encoder}
+\chapter{3D MRI Encoder Feature Dimensions}
 \label{app:mri-shapes}
 Table~\ref{tab:mri-encoder-shapes} details the intermediate feature map dimensions across each stage of the 3D ResNet-18 MRI encoder (implemented in MONAI version 1.5.2 and initialized from MedicalNet pretrained weights \cite{chen2019med3d,cardoso2022monai}). Each 3D feature map has shape $[B, C_{\mathrm{ch}}, D, H, W]$, where $B$ denotes the batch size, $C_{\mathrm{ch}}$ denotes the number of channels, and $D, H, W$ represent the three spatial dimensions. All three visits of a participant share this encoder; following global average pooling, the three 512-dimensional vectors are stacked along the temporal axis into $[B, 3, 512]$ before being linearly projected to $M_t\in\mathbb R^{128}$.
 
 \begin{table}[H]
 \centering
 \small
-\caption[Feature map dimensions of the 3D ResNet-18 encoder]{Feature map dimensions across layers of the 3D ResNet-18 volumetric encoder}
+\caption{Feature map dimensions of the 3D ResNet-18 volumetric encoder}
 \label{tab:mri-encoder-shapes}
 \begin{tabularx}{\textwidth}{@{}Y l@{}}
 \toprule

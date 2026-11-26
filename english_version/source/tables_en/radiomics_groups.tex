@@ -1,6 +1,6 @@
 \begin{table}[H]
 \centering\small
-\caption[Radiomics feature families]{Seven radiomics feature families extracted from the 3D MRI volume and whole-brain mask. Definitions and representative features follow PyRadiomics~\cite{pyradiomicsfeatures}. Feature counts reflect the extraction catalog of this thesis.}
+\caption{Seven radiomics feature families extracted from the 3D MRI volume.}
 \label{tab:radiomics-groups}
 \begin{tabularx}{\linewidth}{@{}L{2.7cm}r Y Y@{}}
 \toprule
@@ -17,4 +17,5 @@ NGTDM & 5 & Intensity difference between a voxel and its neighbors & Coarseness,
 Total & 107 & 104 retained after removing Maximum, Minimum, and Range & PCA retains 16 components \\
 \bottomrule
 \end{tabularx}
+\caption*{\textit{Note.} Definitions and representative features follow PyRadiomics~\cite{pyradiomicsfeatures}. Feature counts reflect the extraction catalog of this thesis.}
 \end{table}

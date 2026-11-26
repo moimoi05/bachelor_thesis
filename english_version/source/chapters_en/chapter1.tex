@@ -4,7 +4,7 @@
 \section{Research Motivation}
 Alzheimer's disease (AD) is currently the leading cause of dementia worldwide, progressively eroding memory, cognitive reasoning, and functional autonomy in daily living \cite{cdc2024alzheimers}. Prior to developing overt dementia, the majority of patients pass through a pivotal intermediate stage known as \emph{mild cognitive impairment} (MCI): at this stage, memory or specific cognitive faculties have declined noticeably relative to age-normative expectations, yet individuals retain independence across most basic daily activities and primarily experience difficulties with complex cognitive tasks \cite{jack2018niaaa}. Notably, the clinical trajectories of individuals with MCI are remarkably heterogeneous: some patients convert rapidly to dementia within a short period, whereas others remain clinically stable for many years or even exhibit cognitive improvement \cite{petersen2018mci}. Motivated by this clinical reality, this thesis addresses a core research question: \emph{Given the longitudinal clinical history of an individual with MCI, can we accurately rank whether that patient faces an earlier or later risk of progression?}
 
-To answer this question thoroughly, observing a patient at a single cross-sectional time point is insufficient. Indeed, a single structural brain magnetic resonance imaging (MRI) scan only reflects anatomical morphology on the exact day of acquisition, much like a static photograph that cannot convey the velocity or trajectory of tissue degeneration. Conversely, tracking a sequence of repeated scans from the same individual over time provides the necessary foundation for a model to capture the rate of anatomical atrophy, such as the pace of hippocampal volume loss \cite{dong2021deepatrophy}. Crucially, in real-world clinical follow-up data, the time intervals between consecutive visits are not uniform but vary considerably across patients (Table~\ref{tab:baseline-characteristics}). Consequently, I employ a Time-Aware Long Short-Term Memory (T-LSTM) network, which incorporates the actual elapsed time intervals between consecutive visits directly into the recurrent state update equations \cite{baytas2017patient}.
+A single scan can support risk prediction, but measuring within-person anatomical change requires observations at more than one time point. Indeed, a single structural brain magnetic resonance imaging (MRI) scan only reflects anatomical morphology on the exact day of acquisition, much like a static photograph that cannot convey the velocity or trajectory of tissue degeneration. Conversely, tracking a sequence of repeated scans from the same individual over time provides the necessary foundation for a model to capture the rate of anatomical atrophy, such as the pace of hippocampal volume loss \cite{dong2021deepatrophy}. Crucially, in real-world clinical follow-up data, the time intervals between consecutive visits are not uniform but vary considerably across patients (Table~\ref{tab:baseline-characteristics}). Consequently, I employ a Time-Aware Long Short-Term Memory (T-LSTM) network, which incorporates the actual elapsed time intervals between consecutive visits directly into the recurrent state update equations \cite{baytas2017patient}.
 
 Furthermore, at each clinical visit, this thesis does not rely solely on a single MRI modality but actively harnesses three deeply complementary sources of information:
 \begin{enumerate}
@@ -48,26 +48,26 @@ Developing a multimodal deep survival model over longitudinal medical sequences 
 To overcome these challenges, within the scope of this thesis, I conduct a controlled empirical investigation across three core architectural design choices. First, I perform a head-to-head comparison between traditional feature concatenation and bilinear outer-product fusion. Second, I quantify the parameter reduction and performance trade-off achieved by applying CP tensor decomposition. Third, I systematically evaluate all seven pairwise interaction topologies to validate the proposed RC-Free design. All primary experiments share an identical participant-level data partition and are repeated across three independent random initializations (seeds). Model performance is objectively evaluated using three complementary survival metrics: Harrell's concordance index (C-index), inverse-probability-of-censoring-weighted time-dependent ROC curves (IPCW-ROC), and Kaplan--Meier survival curves.
 
 \section{Research Questions}
-To guide the empirical evaluations in Chapter~\ref{chap:results} along a coherent scientific progression, I structure the investigation around five research questions (RQ1--RQ5), summarized in Table~\ref{tab:rq}. Specifically, the first two questions examine the prognostic value of longitudinal temporal sequences and the complementary contribution of radiomics and clinical scores; RQ3 directly contrasts feature concatenation against outer-product interaction; finally, RQ4 and RQ5 evaluate the parameter-compression efficiency of CP decomposition and the effectiveness of the streamlined RC-Free topology.
+To guide the empirical evaluations in Chapter~\ref{chap:results}, I structure the investigation around five research questions (RQ1--RQ5), summarized in Table~\ref{tab:rq}, spanning temporal modeling (RQ1), multimodal fusion (RQ2--RQ3), CP compression (RQ4), and pairwise interaction pruning (RQ5).
 
 \begin{table}[H]
-\centering\small
+\centering\footnotesize
 \caption[Research questions and verification methodology]{Research questions and verification methodology.}
 \label{tab:rq}
-\setlength{\tabcolsep}{6pt}
-\renewcommand{\arraystretch}{1.12}
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.02}
 \begin{tabularx}{\textwidth}{@{}Y Y@{}}
 \toprule
 \textbf{Research Question} & \textbf{Verification Methodology} \\
 \midrule
 \textbf{RQ1.} Do longitudinal multi-timepoint MRI scans provide superior risk discrimination compared with using only the final MRI scan? & Compare the \textit{Last-MRI} baseline against \textit{Longitudinal MRI + T-LSTM} and \textit{Longitudinal MRI + T-LSTM + Attention} to isolate the contribution of temporal dynamics. \\
-\addlinespace
+\addlinespace[2pt]
 \textbf{RQ2.} Does incorporating radiomics and clinical scores improve risk discrimination over using MRI alone? & Compare \textit{Longitudinal MRI + T-LSTM + Attention} against \textit{Three-Modality Concatenation} combining MRI, radiomics, and clinical features. \\
-\addlinespace
+\addlinespace[2pt]
 \textbf{RQ3.} Is pairwise bilinear interaction more effective than simple feature concatenation? & Compare Concatenation and Full Outer-Product across three random seeds under identical training protocols and matched initial weights for all shared modules. \\
-\addlinespace
+\addlinespace[2pt]
 \textbf{RQ4.} How many interaction-layer parameters does CP decomposition reduce, and how does it affect the C-index? & Compare Full Outer-Product and Full CP in terms of parameter counts across architectural scopes and validation C-index across three random seeds. \\
-\addlinespace
+\addlinespace[2pt]
 \textbf{RQ5.} Can redundant pairwise interactions be pruned while preserving risk discrimination performance? & Benchmark all seven CP topologies containing at least one active pairwise interaction (single-pair, two-pair variants including RC-Free, MR-Free, MC-Free, and three-pair Full CP). \\
 \bottomrule
 \end{tabularx}

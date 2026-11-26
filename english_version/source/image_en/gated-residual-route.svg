@@ -31,16 +31,16 @@ z
   <g id="axes_1">
    <g id="patch_2">
     <path d="M 51.732864 41.0157 
-Q 198.916992 41.0157 344.815381 41.0157 
+Q 198.916992 41.0157 344.281152 41.0157 
 " style="fill: none; stroke: #28313c; stroke-width: 1.15; stroke-linecap: round"/>
-    <path d="M 340.415381 38.8157 
-L 344.815381 41.0157 
-L 340.415381 43.2157 
+    <path d="M 339.881152 38.8157 
+L 344.281152 41.0157 
+L 339.881152 43.2157 
 z
 " style="fill: #28313c; stroke: #28313c; stroke-width: 1.15; stroke-linecap: round"/>
    </g>
    <g id="patch_3">
-    <path d="M 365.261184 41.0157 
+    <path d="M 366.781152 41.0157 
 Q 390.517632 41.0157 414.488341 41.0157 
 " style="fill: none; stroke: #28313c; stroke-width: 1.15; stroke-linecap: round"/>
     <path d="M 410.088341 38.8157 
@@ -121,11 +121,11 @@ L 355.681152 146.86812
    </g>
    <g id="patch_10">
     <path d="M 355.681152 146.86812 
-Q 355.681152 98.731926 355.681152 51.881471 
+Q 355.681152 98.731926 355.681152 52.4157 
 " style="fill: none; stroke: #28313c; stroke-width: 1.15; stroke-linecap: round"/>
-    <path d="M 353.481152 56.281471 
-L 355.681152 51.881471 
-L 357.881152 56.281471 
+    <path d="M 353.481152 56.8157 
+L 355.681152 52.4157 
+L 357.881152 56.8157 
 z
 " style="fill: #28313c; stroke: #28313c; stroke-width: 1.15; stroke-linecap: round"/>
    </g>
@@ -162,17 +162,7 @@ z
 " clip-path="url(#p5ad1c4c0b2)" style="fill: #eae2f5; stroke: #172c46; stroke-width: 0.7; stroke-linejoin: miter"/>
    </g>
    <g id="patch_15">
-    <path d="M 355.681152 52.286326 
-C 358.221806 52.286326 360.658744 51.098782 362.455258 48.985236 
-C 364.251771 46.87169 365.261184 44.004705 365.261184 41.0157 
-C 365.261184 38.026695 364.251771 35.15971 362.455258 33.046164 
-C 360.658744 30.932618 358.221806 29.745074 355.681152 29.745074 
-C 353.140498 29.745074 350.70356 30.932618 348.907046 33.046164 
-C 347.110533 35.15971 346.10112 38.026695 346.10112 41.0157 
-C 346.10112 44.004705 347.110533 46.87169 348.907046 48.985236 
-C 350.70356 51.098782 353.140498 52.286326 355.681152 52.286326 
-z
-" clip-path="url(#p5ad1c4c0b2)" style="fill: #ffffff; stroke: #172c46; stroke-width: 1.2; stroke-linejoin: miter"/>
+    <circle cx="355.681152" cy="41.0157" r="10.5" clip-path="url(#p5ad1c4c0b2)" style="fill: #ffffff; stroke: #172c46; stroke-width: 1.2"/>
    </g>
    <g id="text_1">
     <text style="font-size: 10px; font-family: 'Arial', 'DejaVu Sans'; text-anchor: middle; fill: #28313c" x="39.10464" y="23.527505" transform="rotate(-0 39.10464 23.527505)">Original</text>
@@ -187,12 +177,8 @@ z
     </g>
    </g>
    <g id="text_3">
-    <!-- $+$ -->
-    <g style="fill: #28313c" transform="translate(350.221152 44.379958)">
-     <text>
-      <tspan x="0" y="-0.84375" style="font-size: 13px; font-family: 'DejaVu Sans'; fill: #28313c">+</tspan>
-     </text>
-    </g>
+    <!-- centered vector + -->
+    <path d="M 351.481152 41.0157 L 359.881152 41.0157 M 355.681152 36.8157 L 355.681152 45.2157" style="fill: none; stroke: #28313c; stroke-width: 1.45; stroke-linecap: round"/>
    </g>
    <g id="text_4">
     <text style="font-size: 9.5px; font-family: 'Arial', 'DejaVu Sans'; text-anchor: middle; fill: #28313c" x="390.517632" y="25.929503" transform="rotate(-0 390.517632 25.929503)">LayerNorm</text>
@@ -228,8 +214,8 @@ z
       <tspan x="111.208496" y="-0.09375" style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #28313c">]</tspan>
       <tspan x="115.5" y="-0.09375" style="font-size: 11px; font-family: 'DejaVu Sans'; fill: #28313c">)</tspan>
       <tspan x="84.992188" y="1.556245" style="font-style: oblique; font-size: 7.7px; font-family: 'DejaVu Sans'; fill: #28313c">d</tspan>
-      <tspan x="112.398926" y="-5.5" style="font-size: 7.091214px; font-family: 'STIXSizeTwoSym'; fill: #28313c">̂</tspan>
      </text>
+     <path d="M 105.0 -9.6 L 108.1 -11.5 L 111.2 -9.6" style="fill: none; stroke: #28313c; stroke-width: 0.9; stroke-linecap: round; stroke-linejoin: round"/>
     </g>
    </g>
    <g id="text_7">
@@ -248,9 +234,9 @@ z
     <!-- $\widehat{E}$ -->
     <g style="fill: #28313c" transform="translate(198.996096 151.605425)">
      <text>
-      <tspan x="8.890625" y="-5.984375" style="font-size: 7.743351px; font-family: 'STIXSizeTwoSym'; fill: #28313c">̂</tspan>
       <tspan x="0" y="-0.09375" style="font-style: oblique; font-size: 12px; font-family: 'DejaVu Sans'; fill: #28313c">E</tspan>
      </text>
+     <path d="M 1.0 -10.4 L 4.3 -12.4 L 7.6 -10.4" style="fill: none; stroke: #28313c; stroke-width: 0.95; stroke-linecap: round; stroke-linejoin: round"/>
     </g>
    </g>
    <g id="text_10">
@@ -260,8 +246,8 @@ z
       <tspan x="0" y="-0.09375" style="font-style: oblique; font-size: 12px; font-family: 'DejaVu Sans'; fill: #28313c">λ</tspan>
       <tspan x="9.049844" y="-0.09375" style="font-style: oblique; font-size: 12px; font-family: 'DejaVu Sans'; fill: #28313c">g</tspan>
       <tspan x="18.615312" y="-0.09375" style="font-style: oblique; font-size: 12px; font-family: 'DejaVu Sans'; fill: #28313c">E</tspan>
-      <tspan x="27.505937" y="-5.984375" style="font-size: 7.743351px; font-family: 'STIXSizeTwoSym'; fill: #28313c">̂</tspan>
      </text>
+     <path d="M 19.6 -10.4 L 22.9 -12.4 L 26.2 -10.4" style="fill: none; stroke: #28313c; stroke-width: 0.95; stroke-linecap: round; stroke-linejoin: round"/>
     </g>
    </g>
    <g id="text_11">

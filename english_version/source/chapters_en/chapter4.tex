@@ -1,4 +1,4 @@
-\chapter[Experiments, Results, and Analysis]{Experiments,\\Results, and Analysis}
+\chapter{Experiments and Results}
 \label{chap:results}
 
 This chapter presents a comprehensive empirical evaluation designed to verify each architectural hypothesis formulated in Chapter~\ref{chap:method}, strictly following the sequence of five research questions (RQ1--RQ5) established in Table~\ref{tab:rq}. To ensure scientific transparency and rigor, the experiments progress systematically from simple baselines to the complete proposed model: (1) evaluating the prognostic contribution of longitudinal temporal sequences and multimodal data integration (RQ1--RQ2); (2) testing the advantage of pairwise bilinear interactions over standard feature concatenation (RQ3); (3) quantifying the parameter compression achieved by CP decomposition and validating the streamlined RC-Free topology against all seven pairwise interaction combinations as well as the literature reference pipeline (RQ4--RQ5); and (4) verifying the practical survival stratification capability of RC-Free via time-dependent IPCW-AUC and Kaplan--Meier survival curves.
@@ -18,7 +18,7 @@ Because 3D volumetric MRI sequences consume substantial GPU memory whereas the C
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{image_en/empirical-training.pdf}
-\caption{Training convergence dynamics of the RC-Free model across three random initializations}
+\caption{Training convergence dynamics of RC-Free across three seeds}
 \label{fig:empirical-training}
 \captionsetup{justification=raggedright}
 \caption*{Panel (a): batch-averaged training Cox loss (solid curves, left axis) and full-set validation Cox loss (dashed curves, right axis). Panel (b): validation C-index across epochs; star markers denote selected best checkpoints, and square markers denote early-stopping epochs.}
@@ -26,12 +26,12 @@ Because 3D volumetric MRI sequences consume substantial GPU memory whereas the C
 
 The training trajectories in Figure~\ref{fig:empirical-training} demonstrate that across all three runs, the training loss decreases smoothly (from 1.33--1.37 down to 0.22--0.31), whereas the validation loss exhibits a gradual upward trend after the early epochs (from 3.24--3.28 to 3.99--4.53)---a classic signature of overfitting when optimizing deep neural networks on a modest clinical cohort. It is important to emphasize that the absolute magnitudes of the two loss axes should not be compared directly, because the Cox partial log-likelihood scales with the size of the risk set \cite{kvamme2019time} (at most 6 participants per training mini-batch versus all 54 participants on the full validation set). Because the primary objective of the task is risk ranking, I select the optimal checkpoint based on the peak validation C-index (Panel b): the three runs select checkpoints at epochs 16, 7, and 25 (achieving validation C-indices of 0.8417, 0.8542, and 0.8083, respectively) and trigger early stopping at epochs 36, 30, and 30.
 
-\section{Role of Longitudinal Dynamics and Multimodal Integration (RQ1--RQ2)}
+\section{Longitudinal and Multimodal Ablation (RQ1--RQ2)}
 First, to establish a solid empirical foundation, I conduct an exploratory ablation study addressing the first two research questions: whether longitudinal information from repeated MRI scans and the addition of radiomics and clinical scores genuinely improve risk-ranking concordance. Table~\ref{tab:exploratory} summarizes the validation C-index across progressively enriched input configurations (evaluated on seed 20260727).
 
 \begin{table}[H]
 \centering\small
-\caption[Comparison of input configurations for RQ1--RQ2]{Validation C-index across progressively enriched input configurations (seed 20260727).}
+\caption{Validation C-index across input configurations (seed 20260727).}
 \label{tab:exploratory}
 \begin{tabularx}{\linewidth}{@{}Y r@{}}
 \toprule
@@ -47,13 +47,13 @@ Three-Modality Concatenation (MRI + Radiomics + Clinical) & \textbf{0.8125} \\
 
 The empirical results reveal two distinct performance leaps. First, relying solely on the final hidden state of the T-LSTM over three MRI scans fails to outperform the single-timepoint Last-MRI baseline (both achieving 0.7333); however, once the additive attention mechanism is incorporated to aggregate all three visits with learned weights, the validation C-index jumps from 0.7333 to 0.7833 (+0.0500). This finding confirms that the prognostic value of longitudinal imaging is unlocked only when the model can adaptively balance contributions across visits rather than passively depending on the final recurrent state. Second, incorporating whole-brain radiomics and clinical assessment scores via simple feature concatenation further elevates the C-index to \textbf{0.8125} (+0.0292 over the best MRI-only configuration). Building upon this clear empirical evidence, all subsequent architectural experiments retain all three input modalities together with the T-LSTM and additive attention backbone.
 
-\section{Concatenation versus Outer-Product Interaction (RQ3)}
+\section{Concatenation vs. Outer-Product (RQ3)}
 \label{sec:matched-fusion}
 Having confirmed the indispensable contribution of all three longitudinal modalities, I next investigate the third research question (RQ3): whether explicitly modeling bilinear pairwise interactions via the outer product outperforms traditional feature concatenation. To strictly isolate the pure effect of the fusion mechanism, I hold all other architectural components fixed (including the 3D ResNet-18 backbone, 128-dimensional T-LSTM, additive attention, Breslow Cox objective, and all training hyperparameters) and ensure \emph{identical initial weights} for all shared modules across each random seed (Table~\ref{tab:matched-fusion}).
 
 \begin{table}[H]
 \centering\small
-\caption[Comparison between feature concatenation and full outer-product fusion]{Validation C-index of Concatenation versus Full Outer-Product under matched initial weights for shared modules (mean $\pm$ SD across three runs).}
+\caption{Validation C-index of Concatenation vs. Full Outer-Product (mean $\pm$ SD).}
 \label{tab:matched-fusion}
 \begin{tabularx}{\linewidth}{@{}Y r@{}}
 \toprule
@@ -67,7 +67,7 @@ Full Outer-Product & $\mathbf{0.8285\pm0.0272}$ \\
 
 Under strictly matched initialization conditions, the Full Outer-Product variant achieves a mean validation C-index of \textbf{0.8285}, outperforming the 0.8149 achieved by standard feature concatenation (a mean gain of \textbf{0.0135} computed on unrounded values). This consistent improvement demonstrates that explicitly constructing second-order cross-products enables the neural network to exploit inter-modality relationships more effectively. This finding establishes Full Outer-Product as the reference starting point for two subsequent architectural refinements: compressing interaction parameters via CP decomposition and pruning redundant pairwise interactions.
 
-\section{CP Decomposition, RC-Free Topology, and Benchmarking (RQ4--RQ5)}
+\section{CP Compression and Topology Search (RQ4--RQ5)}
 \label{sec:cp-results}
 \label{sec:ablation-results}
 \label{sec:rcfree-multiseed}
@@ -82,7 +82,7 @@ When transitioning from Full Outer-Product to Full CP, all modality encoders, ga
 
 \begin{table}[H]
 \centering\small
-\caption[Interaction-module and whole-network parameter counts]{Parameter counts of Full Outer-Product and Full CP across three architectural scopes (including bias terms).}
+\caption{Parameter counts of Full Outer-Product and Full CP across scopes.}
 \label{tab:interaction-parameters}
 \begin{tabularx}{\linewidth}{@{}Y r r@{}}
 \toprule
@@ -97,13 +97,13 @@ Entire network & 33760941 & \textbf{33534957} \\
 
 The figures in Table~\ref{tab:interaction-parameters} highlight the dramatic local compression achieved by CP decomposition: across the three initial bilinear layers, the number of learnable parameters drops from 229696 down to just 3712, representing a \textbf{98.38\% reduction}; when accounting for the entire interaction blocks (including their downstream MLPs), the parameter reduction remains an impressive \textbf{90.90\%}. By contrast, at the whole-network scale, the relative reduction is approximately 0.67\% because the 3D ResNet-18 backbone of the MRI branch dominates the total parameter budget and remains unchanged. In exchange for this substantial structural compression at the interaction layer, the mean validation C-index of Full CP (0.8278) trails Full Outer-Product (0.8344) by only a minor margin of 0.0066 on the main benchmark suite (Table~\ref{tab:standard-bench}). Rather than stopping at Full CP, the next step examines whether pruning redundant pairwise interactions can simultaneously save additional parameters and fully recover ranking concordance.
 
-\subsection{Benchmarking Seven Pairwise Topologies and Selecting RC-Free (RQ5)}
+\subsection{Seven-Topology Benchmark and RC-Free (RQ5)}
 \label{sec:new-topology}
 To test the hypothesis that retaining all three pairwise interactions is unnecessary, I systematically evaluate all seven CP topologies containing at least one active interaction pair (comprising three single-pair variants, three two-pair variants, and the three-pair Full CP model). Crucially, \emph{every topology retains all three input modalities and their direct representation pathways}; the only difference lies in which pairwise bilinear interactions are activated. Table~\ref{tab:new-topology} reports the empirical results across the three random initializations.
 
 \begin{table}[H]
 \centering\small
-\caption[Comparison of seven pairwise CP interaction topologies]{Total network parameters and validation C-index across all seven pairwise CP topologies (mean $\pm$ SD across three random initializations).}
+\caption{Parameters and validation C-index across seven CP topologies (mean $\pm$ SD).}
 \label{tab:new-topology}
 \begin{tabularx}{\linewidth}{@{}Y c r r@{}}
 \toprule
@@ -145,7 +145,7 @@ On the validation set, RC-Free achieves strong discrimination at the earlier hor
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{image_en/empirical-ipcw-roc.pdf}
-\caption{IPCW time-dependent ROC curves of RC-Free at the 2-, 3-, and 5-year horizons}
+\caption{IPCW time-dependent ROC curves of RC-Free at 2, 3, and 5 years}
 \label{fig:empirical-roc}
 \captionsetup{justification=raggedright}
 \caption*{Top row: validation set; bottom row: post-hoc test set. Thin curves and circular markers represent individual seeds; bold curves denote the across-seed mean; shaded bands indicate $\pm1$ SD. The diagonal dashed line represents random guessing.}
@@ -158,7 +158,7 @@ Figure~\ref{fig:survival-km} and Table~\ref{tab:km-statistics} evaluate the mode
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{image_en/survival-km.pdf}
-\caption{Kaplan--Meier survival curves across consensus risk groups produced by RC-Free}
+\caption{Kaplan--Meier survival curves across RC-Free risk groups}
 \label{fig:survival-km}
 \captionsetup{justification=raggedright}
 \caption*{Panel (a): validation set; Panel (b): post-hoc test set. Shaded bands represent 95\% confidence intervals; vertical tick marks indicate right-censoring times. The tables below the horizontal axes report the number of subjects remaining at risk at each time horizon.}
@@ -170,12 +170,12 @@ The two survival curves separate clearly across both dataset splits, confirming 
 
 \section{Answers to the Research Questions}
 \label{sec:rq-results}
-Synthesizing the complete sequence of empirical investigations above, the five research questions posed in Table~\ref{tab:rq} are answered as follows:
+Synthesizing the empirical investigations presented throughout this chapter, the five research questions posed in Table~\ref{tab:rq} are restated and answered in detail below:
 
-\begin{description}[leftmargin=1.35cm,labelwidth=1.1cm,itemsep=.3em]
-\item[RQ1.] \emph{Longitudinal data}: A three-visit MRI sequence substantially improves risk discrimination over using only the final MRI scan when T-LSTM is combined with additive attention, increasing the validation C-index from 0.7333 to \textbf{0.7833} (Table~\ref{tab:exploratory}).
-\item[RQ2.] \emph{Multimodal integration}: Incorporating whole-brain radiomics and clinical scores via feature concatenation further elevates the validation C-index to \textbf{0.8125} (+0.0292 over the best MRI-only configuration, Table~\ref{tab:exploratory}).
-\item[RQ3.] \emph{Pairwise interaction versus concatenation}: Under matched initial weights for all shared modules, outer-product fusion achieves a higher mean validation C-index than feature concatenation by \textbf{0.0135} (0.8285 versus 0.8149, Table~\ref{tab:matched-fusion}).
-\item[RQ4.] \emph{CP decomposition}: CP factorization reduces the parameter count of the three initial bilinear layers by \textbf{98.38\%} (90.90\% across the three interaction blocks; 0.67\% across the entire network, Table~\ref{tab:interaction-parameters}), trading off only a minor 0.0066 C-index difference between Full CP and Full Outer-Product (Table~\ref{tab:standard-bench}).
-\item[RQ5.] \emph{Streamlining into RC-Free}: Both feasible and highly effective. Pruning the direct RC pair saves an additional \textbf{15460 parameters} relative to Full CP, reduces gated routing branches from six to four, achieves the highest mean validation C-index among all seven CP topologies (\textbf{0.8347}, Table~\ref{tab:new-topology}), and produces statistically significant risk stratification on Kaplan--Meier survival curves (Table~\ref{tab:km-statistics}).
+\begin{description}[leftmargin=1.35cm,labelwidth=1.1cm,itemsep=.4em]
+\item[RQ1.] \emph{Do longitudinal multi-timepoint MRI scans provide superior risk discrimination compared with using only the final MRI scan?} Yes, provided that the visit sequence is aggregated via adaptive attention. Relying solely on the final T-LSTM state matches the single-scan \emph{Last-MRI} baseline (validation C-index 0.7333), whereas adding additive attention across all three irregularly spaced visits raises the C-index to \textbf{0.7833} (+0.0500, Table~\ref{tab:exploratory}), capturing within-person atrophy dynamics.
+\item[RQ2.] \emph{Does incorporating radiomics and clinical scores improve risk discrimination over using MRI alone?} Yes. Adding whole-brain PyRadiomics descriptors (16 PCA components) and clinical MMSE/CDR assessments (9 scores with 9 missingness indicators) elevates the validation C-index from 0.7833 to \textbf{0.8125} (+0.0292, Table~\ref{tab:exploratory}), confirming complementary value across macroscopic anatomy, tissue texture statistics, and cognitive-functional scales.
+\item[RQ3.] \emph{Is pairwise bilinear interaction more effective than simple feature concatenation?} Yes. Under matched initial weights for all shared modules across three random seeds, \emph{Full Outer-Product} fusion achieves a mean validation C-index of \textbf{0.8285} versus 0.8149 for \emph{Concatenation}---a mean gain of \textbf{0.0135} on unrounded values (Table~\ref{tab:matched-fusion})---by explicitly modeling second-order cross-modal products through gated residual routes.
+\item[RQ4.] \emph{How many interaction-layer parameters does CP decomposition reduce, and how does it affect the C-index?} Low-rank CP factorization ($Q=8$ for MR and MC; $Q=4$ for RC) reduces the three initial bilinear layers by \textbf{98.38\%} (from 229696 to 3712 parameters) and the three complete interaction blocks by \textbf{90.90\%} (0.67\% whole-network reduction, Table~\ref{tab:interaction-parameters}), while incurring only a minor 0.0066 difference in mean validation C-index between \emph{Full CP} (0.8278) and \emph{Full Outer-Product} (0.8344, Table~\ref{tab:standard-bench}).
+\item[RQ5.] \emph{Can redundant pairwise interactions be pruned while preserving risk discrimination performance?} Yes---pruning the direct RC pair while keeping MRI as the central hub in \textbf{RC-Free (MR+MC)} reduces gated routes from six to four, saves \textbf{15460 parameters} over \emph{Full CP} (241444 over \emph{Full Outer-Product}), and attains the highest mean validation C-index among all seven CP topologies (\textbf{0.8347}, Table~\ref{tab:new-topology}; post-hoc test \textbf{0.8466}, Table~\ref{tab:survival-metrics}), with significant Kaplan--Meier separation on validation ($p=0.0134$, $\mathrm{HR}=3.79$) and post-hoc test ($p<0.001$, $\mathrm{HR}=16.17$, Table~\ref{tab:km-statistics}).
 \end{description}
